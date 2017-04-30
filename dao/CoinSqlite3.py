@@ -48,13 +48,13 @@ class CoinSqlite3(object):
     def _init_table_block(self):
         SQL = """create table if not exists BlockInfo (
                 hash text primary key,
-                version text not null,
+                version integer not null,
                 previous_block_hash text not null,
                 merkle_root text not null,
-                timestamp text not null,
-                difficulty text not null,
-                nonce text not null,
-                state text not null
+                timestamp integer not null,
+                difficulty integer not null,
+                nonce integer not null,
+                state integer not null
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()   
@@ -62,10 +62,11 @@ class CoinSqlite3(object):
     def _init_table_tx(self):
         SQL = """create table if not exists TransactionInfo (
                 hash text primary key,
-                version text not null,
-                lock_time text not null,
-                parentBlockId integer not null,
-                state text not null
+                version integer not null,
+                lock_time integer not null,
+                parentBlockId text not null,
+                unspents text not null,
+                state integer not null
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()   
@@ -74,23 +75,23 @@ class CoinSqlite3(object):
         SQL = """create table if not exists TransactionInfoIn (
                 id integer primary key,
                 previous_hash text not null,
-                previous_index text not null,
+                previous_index integer not null,
                 script text not null,
-                sequence text not null,
-                parentBlockId integer not null,
-                parentTxId integer not null,
-                state text not null
+                sequence integer not null,
+                parentBlockId text not null,
+                parentTxId text not null,
+                state integer not null
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()   
     def _init_table_tx_out(self):
         SQL = """create table if not exists TransactionInfoOut (
                 id integer primary key,
-                coin_value text not null,
+                coin_value integer not null,
                 script text not null,
-                parentBlockId integer not null,
-                parentTxId integer not null,
-                state text not null
+                parentBlockId text not null,
+                parentTxId text not null,
+                state integer not null
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()

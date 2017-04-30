@@ -184,8 +184,23 @@ class Transaction(object):
 
     ALLOW_SEGWIT = True
 
+    def __init__(self, version, txs_in, txs_out, lock_time=0, unspents=None, state = 0):
+        """
+        The part of a Tx that specifies where the Bitcoin comes from.
+        """
+        self.version = version
+        self.txs_in = txs_in
+        self.txs_out = txs_out
+        self.lock_time = lock_time
+        self.state = state
+        self.unspents = unspents or []
+        for tx_in in self.txs_in:
+            assert type(tx_in) == self.TransactionIn
+        for tx_out in self.txs_out:
+            assert type(tx_out) == self.TransactionOut
+
     @classmethod
-    def coinbase_tx(cls, public_key_sec, coin_value, coinbase_bytes=b'', version=1, lock_time=0):
+    def coinbase_tx(cls, public_key_sec, coin_value, coinbase_bytes=b'', version=1, lock_time=0, state=0):
         """
         Create the special "first in block" transaction that includes the mining fees.
         """
@@ -194,7 +209,7 @@ class Transaction(object):
         script_text = COINBASE_SCRIPT_OUT % b2h(public_key_sec)
         script_bin = tools.compile(script_text)
         tx_out = cls.TransactionOut(coin_value, script_bin)
-        return cls(version, [tx_in], [tx_out], lock_time)
+        return cls(version, [tx_in], [tx_out], lock_time, state)
 
     @classmethod
     def parse(class_, f, allow_segwit=None):
@@ -259,17 +274,6 @@ class Transaction(object):
                       category=DeprecationWarning, stacklevel=2)
         warnings.simplefilter('default', DeprecationWarning)
         return cls.from_hex(hex_string)
-
-    def __init__(self, version, txs_in, txs_out, lock_time=0, unspents=None):
-        self.version = version
-        self.txs_in = txs_in
-        self.txs_out = txs_out
-        self.lock_time = lock_time
-        self.unspents = unspents or []
-        for tx_in in self.txs_in:
-            assert type(tx_in) == self.TransactionIn
-        for tx_out in self.txs_out:
-            assert type(tx_out) == self.TransactionOut
 
     def stream(self, f, blank_solutions=False, include_unspents=False, include_witness_data=True):
         """Stream a Bitcoin transaction Tx to the file-like object f."""

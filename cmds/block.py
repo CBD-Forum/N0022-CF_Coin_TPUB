@@ -38,7 +38,10 @@ def main():
 
     for f in args.block_bin:
         block = Block.parse(f)  
-        BlockchainDao.insertOrUpdate(block)
+        BlockchainDao.save(block)
+        print(block.hash())
+        tmp = BlockchainDao.search(block.hash())
+        print(tmp.hash())
 #         dump_block(block)
         print('')
 

@@ -3,24 +3,44 @@ Created on 2017��4��29��
 
 @author: Administrator
 '''
-from _overlapped import NULL
-
-import Datacenter
 from dao import TransactionInDao, TransactionOutDao
+from dao.CoinSqlite3 import CoinSqlite3
+from model.Transaction import Transaction
 
-
-CoinSqlite3 = Datacenter.conn_
-
-def search():   
-    return NULL
+def search(parentBlockId):   
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where parentBlockId = ?', parentBlockId)
+    txs = []
+    for tmp in c.fetchall():
+        parentBlockId = tmp[3]
+        parentTxId = tmp[0]
+        txs_in = TransactionInDao.search(parentBlockId, parentTxId)
+        txs_out = TransactionOutDao.search(parentBlockId, parentTxId)
+        tx = Transaction(tmp[1], txs_in, txs_out, tmp[2], tmp[4].split(','), tmp[5])
+        txs.append(tx)
+        
+    return txs
     
-def save():
-    return NULL
-    
-def insertOrUpdate(tx):
-    CoinSqlite3.execute("")
+def save(tx):
+    if isExist(tx):
+        update(tx)
+    else:
+        insert(tx)
+
+def insert(tx):
+    CoinSqlite3().exec_sql('INSERT INTO TransactionInfo(hash, version,lock_time,parentBlockId,unspents,state) VALUES (?,?,?,?,?,?)', tx.hash(), tx.version, tx.lock_time, tx.block.hash(),','.join(tx.unspents),tx.state)
     for txIn in tx.txs_in:
-        TransactionInDao.insertOrUpdate(txIn)
+        TransactionInDao.save(txIn, tx)
     for txOut in tx.txs_out:
-        TransactionOutDao.insertOrUpdate(txOut)
-    
+        TransactionOutDao.save(txOut, tx)  
+              
+def update(tx):
+    CoinSqlite3().exec_sql('Update TransactionInfo set `version`=?,`lock_time`=?,`parentBlockId`=?,`unspents`=?,`state`=? where hash = ?', tx.version, tx.lock_time, tx.block.hash(), ','.join(tx.unspents), tx.state, tx.hash())
+    for txIn in tx.txs_in:
+        TransactionInDao.save(txIn, tx)
+    for txOut in tx.txs_out:
+        TransactionOutDao.save(txOut, tx)  
+                
+def isExist(tx):
+    tmp = CoinSqlite3()._exec_sql('Select * from TransactionInfo where hash = ?', tx.hash())
+    s = tmp.fetchone()
+    return s != None
