@@ -18,11 +18,11 @@ def search(parentBlockId, parentTxId):
         txOuts.append(txOut)
     return txOuts
     
-def save(txOut, tx):
-    deleteOld(txOut, tx)
-    CoinSqlite3().exec_sql('INSERT INTO TransactionInfoOut(coin_value, script, parentBlockId,parentTxId,state) VALUES (?,?,?,?,?)', txOut.coin_value, txOut.script, TransactionDao.getBlockHash(tx), tx.hash(), txOut.state)
+def save(txOut, tx, index):
+    deleteOld(tx)
+    CoinSqlite3().exec_sql('INSERT INTO TransactionInfoOut(coin_value, script, parentBlockId,parentTxId,state, `index`) VALUES (?,?,?,?,?,?)', txOut.coin_value, txOut.script, TransactionDao.getBlockHash(tx), tx.hash(), txOut.state, index)
 
-def deleteOld(txOut, tx):   
+def deleteOld(tx):   
     CoinSqlite3().exec_sql('Delete from TransactionInfoOut where parentBlockId = ? And parentTxId = ?', TransactionDao.getBlockHash(tx), tx.hash())
 
 """create table if not exists TransactionInfoOut (

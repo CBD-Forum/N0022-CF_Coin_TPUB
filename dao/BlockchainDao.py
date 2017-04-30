@@ -69,7 +69,6 @@ def isExist(blockChain):
     tmp = CoinSqlite3()._exec_sql('Select * from BlockInfo where hash = ?', blockChain.hash())
     s = tmp.fetchone()
     return s != None
-    
 
 def save(blockChain):    
     if isExist(blockChain):

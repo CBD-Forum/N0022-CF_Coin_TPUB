@@ -46,17 +46,17 @@ def getBlockHash(tx):
 
 def insert(tx):
     CoinSqlite3().exec_sql('INSERT INTO TransactionInfo(hash, version,lock_time,parentBlockId,unspents,state) VALUES (?,?,?,?,?,?)', tx.hash(), tx.version, tx.lock_time, getBlockHash(tx),','.join(tx.unspents),tx.state)
-    for txIn in tx.txs_in:
-        TransactionInDao.save(txIn, tx)
-    for txOut in tx.txs_out:
-        TransactionOutDao.save(txOut, tx)  
+    for index, txIn in enumerate(tx.txs_in):
+        TransactionInDao.save(txIn, tx, index)
+    for index, txOut in enumerate(tx.txs_out):
+        TransactionOutDao.save(txOut, tx, index)  
               
 def update(tx):
     CoinSqlite3().exec_sql('Update TransactionInfo set `version`=?,`lock_time`=?,`parentBlockId`=?,`unspents`=?,`state`=? where hash = ?', tx.version, tx.lock_time, getBlockHash(tx), ','.join(tx.unspents), tx.state, tx.hash())
-    for txIn in tx.txs_in:
-        TransactionInDao.save(txIn, tx)
-    for txOut in tx.txs_out:
-        TransactionOutDao.save(txOut, tx)  
+    for index, txIn in enumerate(tx.txs_in):
+        TransactionInDao.save(txIn, tx, index)
+    for index, txOut in enumerate(tx.txs_out):
+        TransactionOutDao.save(txOut, tx, index)  
                 
 def isExist(tx):
     tmp = CoinSqlite3()._exec_sql('Select * from TransactionInfo where hash = ?', tx.hash())

@@ -8,13 +8,14 @@ import json
 
 from pycoin.serialize import b2h, h2b
 
-from dao import NetNodeDao, BlockchainDao
+from dao import NetNodeDao, BlockchainDao, TransactionDao
 from model.Block import Block
 from model.NetNode import NetNode
 from model.Transaction import Transaction
 from utils import BlockchainUtils, TransactionUtils
 from socketInfo import ConstantMessage
 from socketInfo import CoinSocket
+from _ast import If
 
 
 def handleReceiMsg(message, addr):
@@ -48,7 +49,8 @@ def handleReceiMsg(message, addr):
         block_as_hex = data
         block = Block.parse(io.BytesIO(h2b(block_as_hex)))
         BlockchainUtils.verify(block)
-        BlockchainUtils.save(block)
+        if not BlockchainDao.isExist(block):    #只有block不存在时保存
+            BlockchainUtils.save(block)
         if TTL < 0:
             forwardMessage = json.dumps({"type":type, "data":data, "ttl":TTL - 1})
             CoinSocket.SendSocket.forward(forwardMessage, addr, NetNodeDao.searchAddrs())
@@ -58,6 +60,8 @@ def handleReceiMsg(message, addr):
         tc = Transaction.parse(io.BytesIO(h2b(tc_as_hex)))
         TransactionUtils.verify(tc)
         TransactionUtils.save(tc)
+        if not TransactionDao.isExist(tc):    #只有tc不存在时保存
+            TransactionDao.save(tc)
         if TTL > 0:
             forwardMessage = json.dumps({"type":type, "data":data, "ttl":TTL - 1})
             CoinSocket.SendSocket.forward(forwardMessage, addr, NetNodeDao.searchAddrs())

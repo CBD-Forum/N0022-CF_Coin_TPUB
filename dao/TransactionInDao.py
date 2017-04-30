@@ -17,9 +17,9 @@ def search(parentBlockId, parentTxId):
         txIns.append(txIn)
     return txIns
 
-def save(txIn, tx):
-    deleteOld(txIn, tx)
-    CoinSqlite3().exec_sql('INSERT INTO TransactionInfoIn(previous_hash, previous_index,script,sequence, parentBlockId,parentTxId,state) VALUES (?,?,?,?,?,?,?)', txIn.previous_hash, txIn.previous_index, txIn.script, txIn.sequence, TransactionDao.getBlockHash(tx), tx.hash(), txIn.state)
+def save(txIn, tx, index):
+    deleteOld(tx)
+    CoinSqlite3().exec_sql('INSERT INTO TransactionInfoIn(previous_hash, previous_index,script,sequence, parentBlockId,parentTxId,state,`index`) VALUES (?,?,?,?,?,?,?,?)', txIn.previous_hash, txIn.previous_index, txIn.script, txIn.sequence, TransactionDao.getBlockHash(tx), tx.hash(), txIn.state, index)
 
-def deleteOld(txIn, tx):   
+def deleteOld(tx):   
     CoinSqlite3().exec_sql('Delete from TransactionInfoIn where parentBlockId = ? And parentTxId = ?', TransactionDao.getBlockHash(tx), tx.hash())

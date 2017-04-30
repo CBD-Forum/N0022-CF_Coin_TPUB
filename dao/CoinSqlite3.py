@@ -80,7 +80,8 @@ class CoinSqlite3(object):
                 sequence integer not null,
                 parentBlockId text,
                 parentTxId text not null,
-                state integer not null
+                state integer not null,
+                `index` integer not null
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()   
@@ -91,7 +92,8 @@ class CoinSqlite3(object):
                 script text not null,
                 parentBlockId text,
                 parentTxId text not null,
-                state integer not null
+                state integer not null,
+                `index` integer not null
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()
