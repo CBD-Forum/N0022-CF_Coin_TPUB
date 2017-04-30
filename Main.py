@@ -39,6 +39,8 @@ def findBlockChain():
         merkle_root = 0
     else:
         merkle_root = merkle([tx.hash() for tx in txs], double_sha256)
+        if 0 == merkle_root:
+            return
     for block in unlinkedBlock: 
         previous_block_hash = block.hash()
         for nonce in range(0, 0xFFFFFFFF):

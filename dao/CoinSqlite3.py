@@ -43,7 +43,19 @@ class CoinSqlite3(object):
         self._init_table_tx_out()
         self._init_table_net()
         self._init_table_addr()
+        self._init_table_secretkey()
         self._init_other_tables()
+    
+        
+    def _init_table_secretkey(self):
+        SQL = """create table if not exists SecretKeyInfo (
+                publicKey integer primary key,
+                privateKey integer,
+                pubicAddress integer not null
+                );"""
+        c = self._exec_sql(SQL)
+        self.db.commit()   
+                
     
     def _init_table_block(self):
         SQL = """create table if not exists BlockInfo (
@@ -93,7 +105,10 @@ class CoinSqlite3(object):
                 parentBlockId text,
                 parentTxId text not null,
                 state integer not null,
-                `index` integer not null
+                `index` integer not null,
+                pubicAddress integer,
+                isToMe integer,
+                usedState integer
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()

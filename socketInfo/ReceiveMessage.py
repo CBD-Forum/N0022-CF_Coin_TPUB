@@ -48,9 +48,9 @@ def handleReceiMsg(message, addr):
         TTL = json_receive.get("ttl")
         block_as_hex = data
         block = Block.parse(io.BytesIO(h2b(block_as_hex)))
-        BlockchainUtils.verify(block)
-        if not BlockchainDao.isExist(block):    #只有block不存在时保存
-            BlockchainUtils.save(block)
+        if BlockchainUtils.verify(block):
+            if not BlockchainDao.isExist(block):    #只有block不存在时保存
+                BlockchainUtils.save(block)
         if TTL < 0:
             forwardMessage = json.dumps({"type":type, "data":data, "ttl":TTL - 1})
             CoinSocket.SendSocket.forward(forwardMessage, addr, NetNodeDao.searchAddrs())
@@ -58,10 +58,9 @@ def handleReceiMsg(message, addr):
         TTL = json_receive.get("ttl")
         tc_as_hex = data
         tc = Transaction.parse(io.BytesIO(h2b(tc_as_hex)))
-        TransactionUtils.verify(tc)
-        TransactionUtils.save(tc)
-        if not TransactionDao.isExist(tc):    #只有tc不存在时保存
-            TransactionDao.save(tc)
+        if TransactionUtils.verify(tc):
+            if not TransactionDao.isExist(tc):    #只有tc不存在时保存
+                TransactionDao.save(tc)
         if TTL > 0:
             forwardMessage = json.dumps({"type":type, "data":data, "ttl":TTL - 1})
             CoinSocket.SendSocket.forward(forwardMessage, addr, NetNodeDao.searchAddrs())
