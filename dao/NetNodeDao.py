@@ -10,7 +10,7 @@ def search():
     return NULL
     
 def searchAddrs():   
-    return NULL
+    return [('127.0.0.1', 8082)]
 
 def save():
     return NULL

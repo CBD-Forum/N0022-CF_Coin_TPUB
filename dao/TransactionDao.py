@@ -1,5 +1,4 @@
 '''
-Created on 2017��4��29��
 
 @author: Administrator
 '''
@@ -21,7 +20,7 @@ def search(parentBlockId):
     return txs
     
 def searchUnChainedTx():   
-    c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where parentBlockId == ''')
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where parentBlockId = \'\'')
     txs = []
     for tmp in c.fetchall():
         parentBlockId = tmp[3]
@@ -39,15 +38,21 @@ def save(tx):
     else:
         insert(tx)
 
+def getBlockHash(tx):
+    if hasattr(tx, 'block'):
+        return tx.block.hash()
+    else:
+        return ''
+
 def insert(tx):
-    CoinSqlite3().exec_sql('INSERT INTO TransactionInfo(hash, version,lock_time,parentBlockId,unspents,state) VALUES (?,?,?,?,?,?)', tx.hash(), tx.version, tx.lock_time, tx.block.hash(),','.join(tx.unspents),tx.state)
+    CoinSqlite3().exec_sql('INSERT INTO TransactionInfo(hash, version,lock_time,parentBlockId,unspents,state) VALUES (?,?,?,?,?,?)', tx.hash(), tx.version, tx.lock_time, getBlockHash(tx),','.join(tx.unspents),tx.state)
     for txIn in tx.txs_in:
         TransactionInDao.save(txIn, tx)
     for txOut in tx.txs_out:
         TransactionOutDao.save(txOut, tx)  
               
 def update(tx):
-    CoinSqlite3().exec_sql('Update TransactionInfo set `version`=?,`lock_time`=?,`parentBlockId`=?,`unspents`=?,`state`=? where hash = ?', tx.version, tx.lock_time, tx.block.hash(), ','.join(tx.unspents), tx.state, tx.hash())
+    CoinSqlite3().exec_sql('Update TransactionInfo set `version`=?,`lock_time`=?,`parentBlockId`=?,`unspents`=?,`state`=? where hash = ?', tx.version, tx.lock_time, getBlockHash(tx), ','.join(tx.unspents), tx.state, tx.hash())
     for txIn in tx.txs_in:
         TransactionInDao.save(txIn, tx)
     for txOut in tx.txs_out:

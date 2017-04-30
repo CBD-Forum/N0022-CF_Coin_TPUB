@@ -6,6 +6,7 @@ Created on 2017��4��29��
 
 from dao.CoinSqlite3 import CoinSqlite3
 from model.TransactionIn import TransactionIn
+from dao import TransactionDao
 
 
 def search(parentBlockId, parentTxId):   
@@ -18,7 +19,7 @@ def search(parentBlockId, parentTxId):
 
 def save(txIn, tx):
     deleteOld(txIn, tx)
-    CoinSqlite3().exec_sql('INSERT INTO TransactionInfoIn(previous_hash, previous_index,script,sequence, parentBlockId,parentTxId,state) VALUES (?,?,?,?,?,?,?)', txIn.previous_hash, txIn.previous_index, txIn.script, txIn.sequence, tx.block.hash(), tx.hash(), txIn.state)
+    CoinSqlite3().exec_sql('INSERT INTO TransactionInfoIn(previous_hash, previous_index,script,sequence, parentBlockId,parentTxId,state) VALUES (?,?,?,?,?,?,?)', txIn.previous_hash, txIn.previous_index, txIn.script, txIn.sequence, TransactionDao.getBlockHash(tx), tx.hash(), txIn.state)
 
 def deleteOld(txIn, tx):   
-    CoinSqlite3().exec_sql('Delete from TransactionInfoIn where parentBlockId = ? And parentTxId = ?', tx.block.hash(), tx.hash())
+    CoinSqlite3().exec_sql('Delete from TransactionInfoIn where parentBlockId = ? And parentTxId = ?', TransactionDao.getBlockHash(tx), tx.hash())

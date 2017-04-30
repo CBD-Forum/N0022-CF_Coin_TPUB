@@ -156,3 +156,6 @@ class Block(BlockHeader):
     def __repr__(self):
         return "%s [%s] (previous %s) [tx count:%d] %s" % (
             self.__class__.__name__, self.id(), self.previous_block_id(), len(self.txs), self.txs)
+
+    def check_pow(self):
+        return True

@@ -1,5 +1,4 @@
 '''
-# Created on 2017��4��29��
 
 @author: Administrator
 '''
@@ -9,14 +8,13 @@ import json
 
 from pycoin.serialize import b2h, h2b
 
+from socketInfo import CoinSocket
 from dao import NetNodeDao, BlockchainDao
 from model.Block import Block
 from model.NetNode import NetNode
 from model.Transaction import Transaction
-from socketInfo import SendMessage, ConstantMessage
-from socketInfo.CoinSocket import CoinSocket
-import socketInfo.ConstantMessage
 from utils import BlockchainUtils, TransactionUtils
+from socketInfo import ConstantMessage
 
 
 def handleReceiMsg(message, addr):
@@ -33,18 +31,18 @@ def handleReceiMsg(message, addr):
             replyData.append(netNode_as_hex)
         
         json_reply = json.dump({"data": replyData, "type": ConstantMessage.REPLYBLOCKMSG})
-        CoinSocket.sendMsg(json_reply, addr)
+        CoinSocket.CoinSocket.sendMsg(json_reply, addr)
     elif(ConstantMessage.SEARCHBLOCKMSG == type):
-        block = BlockchainDao.searchByID(data)
+        block = BlockchainDao.search(data)
         s = io.BytesIO()
         block.stream(s)
         block_as_hex = b2h(s.getvalue())        
         json_reply = json.dump({"data": block_as_hex, "type":ConstantMessage.REPLYBLOCKMSG})
-        CoinSocket.sendMsg(json_reply, addr)
+        CoinSocket.CoinSocket.sendMsg(json_reply, addr)
     elif(ConstantMessage.SEARCHBLOCKIDSMSG == type):
         ids = BlockchainDao.searchIDs()
         json_reply = json.dump({"data": ids, "type":ConstantMessage.REPLYBLOCKIDSMSG})
-        CoinSocket.sendMsg(json_reply, addr)
+        CoinSocket.CoinSocket.sendMsg(json_reply, addr)
     elif(ConstantMessage.BROADCASTBLOCKMSG == type):
         TTL = json_receive.get("ttl")
         block_as_hex = data
@@ -53,7 +51,7 @@ def handleReceiMsg(message, addr):
         BlockchainUtils.save(block)
         if TTL < 0:
             forwardMessage = json.dumps({"type":type, "data":data, "ttl":TTL - 1})
-            CoinSocket.forward(forwardMessage, addr, NetNodeDao.searchAddrs())
+            CoinSocket.CoinSocket.forward(forwardMessage, addr, NetNodeDao.searchAddrs())
     elif(ConstantMessage.BROADCASTTRANSACTIONMSG == type):
         TTL = json_receive.get("ttl")
         tc_as_hex = data
@@ -62,7 +60,7 @@ def handleReceiMsg(message, addr):
         TransactionUtils.save(tc)
         if TTL > 0:
             forwardMessage = json.dumps({"type":type, "data":data, "ttl":TTL - 1})
-            CoinSocket.forward(forwardMessage, addr, NetNodeDao.searchAddrs())
+            CoinSocket.CoinSocket.forward(forwardMessage, addr, NetNodeDao.searchAddrs())
     elif(ConstantMessage.REPLYNETNODEMSG == type): 
         lstNetnode = []       
         for netnode_as_hex in data:

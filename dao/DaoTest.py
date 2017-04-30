@@ -3,7 +3,6 @@
 '''
 from dao import CoinSqlite3 , BlockchainDao
 from pip._vendor.distlib import database
-import Datacenter
 from model.Block import Block
 
 

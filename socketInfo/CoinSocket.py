@@ -1,45 +1,50 @@
 '''
-Created on 2017��4��29��
 
 @author: Administrator
 '''
 import socket
 from socketInfo import ReceiveMessage
 from time import sleep
+from _thread import start_new_thread
+from urllib.parse import urlencode
+import asyncio
+import threading
 
+s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 class CoinSocket(object):
-    '''
-    classdocs
-    '''
-    
-    def __init__(self, srcPort):
-        self.port = srcPort
-        
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.s.bind(('', self.port))
+    def receive(self):
         print('waiting......')
         while True:
-#             ���ղ�����������Ϣ
-            data, addr = self.s.recvfrom()
+            byte, addr = s.recvfrom(1024)
+            data = bytes.decode(byte)  
             ReceiveMessage.handleReceiMsg(data, addr)
             sleep(100)
+        
+    def __init__(self, srcPort):
+        self.port = srcPort
+#         self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.bind(('',self.port))
+        t =threading.Thread(target=self.receive,args=())
+        t.start()
+        print('going......')
     
+    @classmethod
+    def sendMsg(cls, json_reply, addr):
+#         s.sendto(strjson_reply, addr)
+        s.sendto(str.encode(json_reply), addr)
     
-    def sendMsg(self, json_reply, addr):
-        '''ת������ ���͵���ָ��url��������ڵ�'''
-        self.s.sendto(json_reply, addr)
-    
-    def broadcastMsg(self, json_reply, addrs):
-        '''ת������ ���͵���ָ��url��������ڵ�'''
+    @classmethod
+    def broadcastMsg(cls, json_reply, addrs):
+        print('broadcastMsg......')
         for addr in addrs:
-            self.s.sendto(json_reply, addr)
+            s.sendto(str.encode(json_reply), addr)
     
-    def forward(self, json_reply, addr, addrs):   
-        '''ת������ ���͵���ָ��url��������ڵ�'''
+    @classmethod
+    def forward(cls, json_reply, addr, addrs):   
         for tmpUrl in addrs:
             if addr != tmpUrl:
-                self.s.sendto(json_reply, tmpUrl)
+                s.sendto(str.encode(json_reply), tmpUrl)
         
 
   

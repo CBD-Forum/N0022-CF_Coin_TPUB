@@ -5,10 +5,10 @@ Created on 2017��4��29��
 '''
 
 
-from _overlapped import NULL
-
+from dao import TransactionDao
 from dao.CoinSqlite3 import CoinSqlite3
 from model.TransactionOut import TransactionOut
+
 
 def search(parentBlockId, parentTxId):   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where parentBlockId = ? And parentTxId = ?', parentBlockId, parentTxId)
@@ -20,10 +20,10 @@ def search(parentBlockId, parentTxId):
     
 def save(txOut, tx):
     deleteOld(txOut, tx)
-    CoinSqlite3().exec_sql('INSERT INTO TransactionInfoOut(coin_value, script, parentBlockId,parentTxId,state) VALUES (?,?,?,?,?)', txOut.coin_value, txOut.script, tx.block.hash(), tx.hash(), txOut.state)
+    CoinSqlite3().exec_sql('INSERT INTO TransactionInfoOut(coin_value, script, parentBlockId,parentTxId,state) VALUES (?,?,?,?,?)', txOut.coin_value, txOut.script, TransactionDao.getBlockHash(tx), tx.hash(), txOut.state)
 
 def deleteOld(txOut, tx):   
-    CoinSqlite3().exec_sql('Delete from TransactionInfoOut where parentBlockId = ? And parentTxId = ?', tx.block.hash(), tx.hash())
+    CoinSqlite3().exec_sql('Delete from TransactionInfoOut where parentBlockId = ? And parentTxId = ?', TransactionDao.getBlockHash(tx), tx.hash())
 
 """create table if not exists TransactionInfoOut (
                 id integer primary key,
