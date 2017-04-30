@@ -18,15 +18,15 @@ def searchNetNodeMsg(addr):
     message = json.dumps({"type":ConstantMessage.SEARCHNETNODEMSG})
     CoinSocket.sendMsg(message, addr)
     
-def searchBlockMsg(id, url):
+def searchBlockMsg(id, addr):
 #     ���Ͳ�ѯ�������� ids��Ϊ��Ϊָ������ Ϊ�ղ�ѯ����
     message = json.dumps({"type":ConstantMessage.SEARCHBLOCKMSG, "data":id})
-    CoinSocket.sendMsg(message, url)
+    CoinSocket.sendMsg(message, addr)
 
-def searchBlockMsgID(url):
+def searchBlockMsgID(addr):
 #     ���Ͳ�ѯ�������� ids��Ϊ��Ϊָ������ Ϊ�ղ�ѯ����
     message = json.dumps({"type":ConstantMessage.SEARCHBLOCKIDSMSG, "data":""})
-    CoinSocket.sendMsg(message, url)
+    CoinSocket.sendMsg(message, addr)
     
 def broadcastBlockMsg(block): 
 #     ���͹�����������

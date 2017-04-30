@@ -64,7 +64,7 @@ class CoinSqlite3(object):
                 hash text primary key,
                 version integer not null,
                 lock_time integer not null,
-                parentBlockId text not null,
+                parentBlockId text,
                 unspents text not null,
                 state integer not null
                 );"""
@@ -78,7 +78,7 @@ class CoinSqlite3(object):
                 previous_index integer not null,
                 script text not null,
                 sequence integer not null,
-                parentBlockId text not null,
+                parentBlockId text,
                 parentTxId text not null,
                 state integer not null
                 );"""
@@ -89,7 +89,7 @@ class CoinSqlite3(object):
                 id integer primary key,
                 coin_value integer not null,
                 script text not null,
-                parentBlockId text not null,
+                parentBlockId text,
                 parentTxId text not null,
                 state integer not null
                 );"""

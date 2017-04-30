@@ -20,6 +20,19 @@ def search(parentBlockId):
         
     return txs
     
+def searchUnChainedTx():   
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where parentBlockId == ''')
+    txs = []
+    for tmp in c.fetchall():
+        parentBlockId = tmp[3]
+        parentTxId = tmp[0]
+        txs_in = TransactionInDao.search(parentBlockId, parentTxId)
+        txs_out = TransactionOutDao.search(parentBlockId, parentTxId)
+        tx = Transaction(tmp[1], txs_in, txs_out, tmp[2], tmp[4].split(','), tmp[5])
+        txs.append(tx)
+        
+    return txs
+    
 def save(tx):
     if isExist(tx):
         update(tx)

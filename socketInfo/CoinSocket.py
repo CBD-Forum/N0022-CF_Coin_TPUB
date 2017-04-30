@@ -1,5 +1,5 @@
 '''
-Created on 2017Äê4ÔÂ29ÈÕ
+Created on 2017ï¿½ï¿½4ï¿½ï¿½29ï¿½ï¿½
 
 @author: Administrator
 '''
@@ -13,31 +13,30 @@ class CoinSocket(object):
     classdocs
     '''
     
-    def __init__(self, srcIp, srcPort):
-        self.ip = srcIp
+    def __init__(self, srcPort):
         self.port = srcPort
         
         self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.s.bind(('', self.port))
         print('waiting......')
         while True:
-#             ½ÓÊÕ²¢´¦ÀíÇëÇóÏûÏ¢
+#             ï¿½ï¿½ï¿½Õ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
             data, addr = self.s.recvfrom()
             ReceiveMessage.handleReceiMsg(data, addr)
             sleep(100)
     
     
     def sendMsg(self, json_reply, addr):
-        '''×ª·¢Çø¿é ·¢ËÍµ½³ýÖ¸¶¨urlÍâµÄÆäËû½Úµã'''
+        '''×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½Ö¸ï¿½ï¿½urlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½'''
         self.s.sendto(json_reply, addr)
     
     def broadcastMsg(self, json_reply, addrs):
-        '''×ª·¢Çø¿é ·¢ËÍµ½³ýÖ¸¶¨urlÍâµÄÆäËû½Úµã'''
+        '''×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½Ö¸ï¿½ï¿½urlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½'''
         for addr in addrs:
             self.s.sendto(json_reply, addr)
     
     def forward(self, json_reply, addr, addrs):   
-        '''×ª·¢Çø¿é ·¢ËÍµ½³ýÖ¸¶¨urlÍâµÄÆäËû½Úµã'''
+        '''×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½Ö¸ï¿½ï¿½urlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½'''
         for tmpUrl in addrs:
             if addr != tmpUrl:
                 self.s.sendto(json_reply, tmpUrl)

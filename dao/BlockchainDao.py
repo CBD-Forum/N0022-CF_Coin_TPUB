@@ -24,6 +24,17 @@ def search(hash):
 def searchIDs():   
     return NULL
 
+def searchAll(): 
+    c = CoinSqlite3()._exec_sql('Select * from BlockInfo')
+    blocks = []
+    for tmp in c.fetchall():
+        txs = TransactionDao.search(hash)
+        block = Block(tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], txs, tmp[7])
+        for tx in txs:
+            tx.block = block
+        blocks.append(block)
+    return blocks
+
 # def save(blockChain):    
 #     pass
 
