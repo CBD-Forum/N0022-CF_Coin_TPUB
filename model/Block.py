@@ -130,6 +130,20 @@ class Block(BlockHeader):
         self.nonce = nonce
         self.txs = txs
         self.state = state
+        
+        
+        target = self.difficulty
+        a=(target & 0xff000000)>>24
+        b=(target & 0x00ff0000)>>16
+        c=(target & 0x0000ff00)>>8
+        d=(target & 0x000000ff)
+        num = (c << 16) + (b << 8 ) + a
+        exp = d
+        max = num * 256 ** (d-3)
+        #max = (target & 0xffffff) * 256 ** (((target & 0xff000000) >> 24 )-3)
+        max = ('%064s' % hex(max)[2:]).replace(' ', '0')
+        self.max = max
+        
         self.check_merkle_hash()
 
     def as_blockheader(self):
@@ -158,4 +172,7 @@ class Block(BlockHeader):
             self.__class__.__name__, self.id(), self.previous_block_id(), len(self.txs), self.txs)
 
     def check_pow(self):
-        return True
+        tmphash = b2h_rev(self.hash())
+        if self.max > tmphash:
+            return True
+        return False

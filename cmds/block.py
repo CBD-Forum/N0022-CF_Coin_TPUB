@@ -2,9 +2,10 @@
 
 import argparse
 import datetime
+import io
 
 from pycoin.networks.default import get_current_netcode
-from pycoin.serialize import stream_to_bytes, b2h_rev, b2h
+from pycoin.serialize import stream_to_bytes, b2h_rev, b2h, h2b
 
 from dao import BlockchainDao
 from dao.CoinSqlite3 import CoinSqlite3
@@ -37,12 +38,15 @@ def main():
     args = parser.parse_args()
 
     for f in args.block_bin:
-        block = Block.parse(f)  
+        block = Block.parse(f) 
+        
+        
+         
         BlockchainDao.save(block)
         print(block.hash())
         tmp = BlockchainDao.search(block.hash())
         print(tmp.hash())
-#         dump_block(block)
+        dump_block(block)
         print('')
 
 if __name__ == '__main__':
