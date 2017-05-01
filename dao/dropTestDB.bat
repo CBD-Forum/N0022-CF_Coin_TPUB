@@ -1,0 +1,2 @@
+del C:\Users\Administrator\workspace\python\test\crowd_funding_coin\dao\test.db
+copy C:\Users\Administrator\AppData\Local\Android\sdk\platform-tools\test.db C:\Users\Administrator\workspace\python\test\crowd_funding_coin\dao\test.db

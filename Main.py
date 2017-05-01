@@ -48,7 +48,7 @@ def findBlockChain():
             if tmpBlock.check_pow():
                 for tx in tmpBlock.txs:
                     tx.block = tmpBlock                
-#                 BlockchainDao.save(tmpBlock)
+                BlockchainDao.save(tmpBlock)
                 SendMessage.broadcastBlockMsg(tmpBlock)
 
 def main():

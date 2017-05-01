@@ -20,9 +20,11 @@ class SecretKey(object):
         if '' != privateKey:            
             self.key_obj = Key(public_pair=[publicKey, privateKey])
             self.pubicAddress = self.key_obj.address()
-        
-    def create(self, sec_num):
+    
+    @classmethod    
+    def create(cls, sec_num):
         key_obj = Key(secret_exponent=sec_num)
-        self.publicKey, self.privateKey = key_obj._public_pair
-        self.pubicAddress = key_obj.address()
-        self.key_obj = key_obj
+        publicKey, privateKey = key_obj._public_pair
+        return cls(publicKey, privateKey)
+#         self.pubicAddress = key_obj.address()
+#         self.key_obj = key_obj

@@ -39,7 +39,7 @@ def save(tx):
 
 def insert(tx):
     if TransactionUtils.isCFTransation(tx):
-        CoinSqlite3().exec_sql('INSERT INTO TransactionInfo(hash, version,lock_time,parentBlockId,unspents,state,type,original_hash, unit_coin, pubkey, end_time, pre_hash, total) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', tx.hash(), tx.version, tx.lock_time, tx.getBlockHash(), ','.join(tx.unspents), tx.state, 2, tx.cf_header.original_hash, tx.cf_header.unit_coin, tx.cf_header.pubkey, tx.cf_header.end_time, tx.cf_header.pre_hash, tx.cf_header.total)
+        CoinSqlite3().exec_sql('INSERT INTO TransactionInfo(hash, version,lock_time,parentBlockId,unspents,state,type,original_hash, target_amount, pubkey, end_time, pre_hash, total) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', tx.hash(), tx.version, tx.lock_time, tx.getBlockHash(), ','.join(tx.unspents), tx.state, 2, tx.cf_header.original_hash, tx.cf_header.target_amount, tx.cf_header.pubkey, tx.cf_header.end_time, tx.cf_header.pre_hash, tx.cf_header.total)
     else:
         CoinSqlite3().exec_sql('INSERT INTO TransactionInfo(hash, version,lock_time,parentBlockId,unspents,state,type) VALUES (?,?,?,?,?,?,?)', tx.hash(), tx.version, tx.lock_time, tx.getBlockHash(), ','.join(tx.unspents), tx.state, 1)
         
@@ -50,7 +50,7 @@ def insert(tx):
           
 def update(tx):
     if TransactionUtils.isCFTransation(tx):
-        CoinSqlite3().exec_sql('Update TransactionInfo set `version`=?,`lock_time`=?,`parentBlockId`=?,`unspents`=?,`state`=?, `type` = ? ,original_hash = ?, unit_coin = ?, pubkey = ?, end_time = ?, pre_hash = ?, total = ? where hash = ?', tx.version, tx.lock_time, tx.getBlockHash(), ','.join(tx.unspents), tx.state, 2, tx.cf_header.original_hash, tx.cf_header.unit_coin, tx.cf_header.pubkey, tx.cf_header.end_time, tx.cf_header.pre_hash, tx.cf_header.total, tx.hash())
+        CoinSqlite3().exec_sql('Update TransactionInfo set `version`=?,`lock_time`=?,`parentBlockId`=?,`unspents`=?,`state`=?, `type` = ? ,original_hash = ?, target_amount = ?, pubkey = ?, end_time = ?, pre_hash = ?, total = ? where hash = ?', tx.version, tx.lock_time, tx.getBlockHash(), ','.join(tx.unspents), tx.state, 2, tx.cf_header.original_hash, tx.cf_header.target_amount, tx.cf_header.pubkey, tx.cf_header.end_time, tx.cf_header.pre_hash, tx.cf_header.total, tx.hash())
     else:    
         CoinSqlite3().exec_sql('Update TransactionInfo set `version`=?,`lock_time`=?,`parentBlockId`=?,`unspents`=?,`state`=?, `type` = ? where hash = ?', tx.version, tx.lock_time, tx.getBlockHash(), ','.join(tx.unspents), tx.state, 1, tx.hash())
 

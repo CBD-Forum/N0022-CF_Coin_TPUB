@@ -70,7 +70,7 @@ def dump_tx(tx, netcode, verbose_signature, disassembly_level, do_trace, use_pdb
 #     print("Tx_type:%2d" % tx.tx_type) 
     if TransactionUtils.isCFTransation(tx):
         print("original_hash : %s" % tx.cf_header.original_hash)
-        print("unit_coin : %s" % tx.cf_header.unit_coin)
+        print("target_amount : %s" % tx.cf_header.target_amount)
         print("pubkey : %s" % tx.cf_header.pubkey)
         print("end_time : %s" % tx.cf_header.end_time)
         print("pre_hash : %s" % tx.cf_header.pre_hash)
@@ -297,7 +297,7 @@ class Transaction(object):
         if TransactionUtils.isCFTransation(self):
             stream_struct("L", f, 2)
             stream_struct("#", f, self.cf_header.original_hash)
-            stream_struct("Q", f, self.cf_header.unit_coin)
+            stream_struct("Q", f, self.cf_header.target_amount)
             stream_struct("S", f, self.cf_header.pubkey)
             stream_struct("L", f, self.cf_header.end_time)
             stream_struct("#", f, self.cf_header.pre_hash)

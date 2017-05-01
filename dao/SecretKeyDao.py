@@ -1,20 +1,17 @@
 '''
-Created on 2017��4��29��
 
 @author: Administrator
 '''
 
-from dao import TransactionDao
 from dao.CoinSqlite3 import CoinSqlite3
 from model import SecretKey
-from model.TransactionIn import TransactionIn
 
 
 def search():   
     c = CoinSqlite3()._exec_sql('Select * from SecretKeyInfo')
     secrets = []
     for tmp in c.fetchall():
-        secret = SecretKey(tmp[0], tmp[1], tmp[2])
+        secret = SecretKey(tmp[0], tmp[1])
         secrets.append(secret)
     return secrets
 
@@ -27,7 +24,7 @@ def searchMySecrets():
     c = CoinSqlite3()._exec_sql('Select * from SecretKeyInfo Where privateKey != \'\'')
     secrets = []
     for tmp in c.fetchall():
-        secret = SecretKey(tmp[0], tmp[1], tmp[2])
+        secret = SecretKey(tmp[0], tmp[1])
         secrets.append(secret)
     return secrets
 
@@ -39,12 +36,12 @@ def save(secret):
 
 
 def insert(secret):
-    CoinSqlite3().exec_sql('INSERT INTO SecretKeyInfo(publicKey, privateKey,pubicAddress) VALUES (?,?,?)', secret.publicKey, secret.privateKey, secret.pubicAddress) 
+    CoinSqlite3().exec_sql('INSERT INTO SecretKeyInfo(publicKey, privateKey,pubicAddress) VALUES (?,?,?)', str(secret.publicKey), str(secret.privateKey), str(secret.pubicAddress)) 
               
 def update(secret):
     pass
                 
 def isExist(secret):
-    tmp = CoinSqlite3()._exec_sql('Select * from SecretKeyInfo where publicKey = ?', secret.publicKey)
+    tmp = CoinSqlite3()._exec_sql('Select * from SecretKeyInfo where publicKey = ?', str(secret.publicKey))
     s = tmp.fetchone()
     return s != None
