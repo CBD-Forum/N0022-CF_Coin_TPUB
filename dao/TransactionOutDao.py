@@ -18,6 +18,12 @@ def searchAll():
         txOuts.append(txOut)
     return txOuts
 
+def searchById(id):   
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where id = ? ', id)
+    tmp = c.fetchone()
+    txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9])
+    return txOut
+
 def searchByIndex(parentTxId, index):   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where parentTxId = ? And `index` = ?', parentTxId, index)
     tmp = c.fetchone()
@@ -36,6 +42,12 @@ def save(txOut, tx, index):
     deleteOld(tx)
     pubicAddress = txOut.address()
     CoinSqlite3().exec_sql('INSERT INTO TransactionInfoOut(coin_value, script, parentBlockId,parentTxId,state, `index`, pubicAddress, isToMe, usedState) VALUES (?,?,?,?,?,?,?,?,?)', txOut.coin_value, txOut.script, TransactionDao.getBlockHash(tx), tx.hash(), txOut.state, index, pubicAddress, SecretKeyDao.isMypubicAddress(pubicAddress), 0)
+  
+def updateState(tx_out, tx_out_id):
+    CoinSqlite3().exec_sql('Update TransactionInfoOut set `usedState`=? where `id` = ?', tx_out.state, tx_out_id)
+  
+def setStateUsed(hash, index):
+    CoinSqlite3().exec_sql('Update TransactionInfoOut set `usedState`=1 where `hash` = ? and `index` = ?', hash, index)
 
 def deleteOld(tx):   
     CoinSqlite3().exec_sql('Delete from TransactionInfoOut where parentBlockId = ? And parentTxId = ?', TransactionDao.getBlockHash(tx), tx.hash())
