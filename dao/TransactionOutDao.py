@@ -9,6 +9,7 @@ from dao import TransactionDao, SecretKeyDao
 from dao.CoinSqlite3 import CoinSqlite3
 from model.TransactionOut import TransactionOut
 from model.SecretKey import SecretKey
+from pycoin.tx.Spendable import Spendable
 
 def searchAll():   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut')
@@ -23,6 +24,12 @@ def searchById(id):
     tmp = c.fetchone()
     txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9])
     return txOut
+
+def searchSpendById(id):   
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where id = ? ', id)
+    tmp = c.fetchone()
+    spend = Spendable(tmp[1], tmp[2], tmp[4], tmp[6])
+    return spend
 
 def searchByIndex(parentTxId, index):   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where parentTxId = ? And `index` = ?', parentTxId, index)

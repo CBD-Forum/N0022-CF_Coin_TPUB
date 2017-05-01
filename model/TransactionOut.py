@@ -30,7 +30,6 @@ from pycoin.serialize.bitcoin_streamer import stream_struct, parse_struct
 from pycoin.tx.pay_to import script_obj_from_script
 from pycoin.tx.script import tools
 
-
 class TransactionOut(object):
 
     COIN_VALUE_CAST_F = int
