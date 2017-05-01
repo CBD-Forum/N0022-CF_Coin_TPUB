@@ -49,10 +49,10 @@ from pycoin.tx.script.der import UnexpectedDER
 from pycoin.tx.script.disassemble import disassemble_scripts, \
     sighash_type_to_string
 from pycoin.tx.script.tools import opcode_list
+
 from model.TransactionIn import TransactionIn
 from model.TransactionOut import TransactionOut
-
-
+from utils import TransactionUtils
 
 MAX_MONEY = 21000000 * SATOSHI_PER_COIN
 MAX_BLOCK_SIZE = 1000000
@@ -67,14 +67,14 @@ ZERO32 = b'\0' * 32
 def dump_tx(tx, netcode, verbose_signature, disassembly_level, do_trace, use_pdb):
     address_prefix = address_prefix_for_netcode(netcode)
     tx_bin = stream_to_bytes(tx.stream)
-    print("Tx_type:%2d" % tx.tx_type) 
-    if tx.tx_type == 2:
-        print("original_hash : %s" % tx.tx_header[0])
-        print("unit_coin : %s" % tx.tx_header[1])
-        print("pubkey : %s" % tx.tx_header[2])
-        print("end_time : %s" % tx.tx_header[3])
-        print("pre_hash : %s" % tx.tx_header[4])
-        print("total : %s" % tx.tx_header[5])
+#     print("Tx_type:%2d" % tx.tx_type) 
+    if TransactionUtils.isCFTransation(tx):
+        print("original_hash : %s" % tx.cf_header.original_hash)
+        print("unit_coin : %s" % tx.cf_header.unit_coin)
+        print("pubkey : %s" % tx.cf_header.pubkey)
+        print("end_time : %s" % tx.cf_header.end_time)
+        print("pre_hash : %s" % tx.cf_header.pre_hash)
+        print("total : %s" % tx.cf_header.total)
     print("Version: %2d  tx hash %s  %d bytes   " % (tx.version, tx.id(), len(tx_bin)))
     print("TransactionIn count: %d; TransactionOut count: %d" % (len(tx.txs_in), len(tx.txs_out)))
     if tx.lock_time == 0:
@@ -206,8 +206,7 @@ class Transaction(object):
             assert type(tx_in) == self.TransactionIn
         for tx_out in self.txs_out:
             assert type(tx_out) == self.TransactionOut
-        self.tx_type = 0x01
-        self.tx_header = []
+#         self.tx_type = 0x01
     @classmethod
     def coinbase_tx(cls, public_key_sec, coin_value, coinbase_bytes=b'', version=1, lock_time=0, state=0):
         """
@@ -259,6 +258,13 @@ class Transaction(object):
         lock_time, = parse_struct("L", f)
         return class_(version, txs_in, txs_out, lock_time)
 
+    def getBlockHash(self):
+        if hasattr(self, 'block'):
+            return self.block.hash()
+        else:
+            return ''
+
+
     @classmethod
     def from_bin(cls, blob):
         """Return the Tx for the given binary blob."""
@@ -287,6 +293,18 @@ class Transaction(object):
     def stream(self, f, blank_solutions=False, include_unspents=False, include_witness_data=True):
         """Stream a Bitcoin transaction Tx to the file-like object f."""
         include_witnesses = include_witness_data and self.has_witness_data()
+        ####
+        if TransactionUtils.isCFTransation(self):
+            stream_struct("L", f, 2)
+            stream_struct("#", f, self.cf_header.original_hash)
+            stream_struct("Q", f, self.cf_header.unit_coin)
+            stream_struct("S", f, self.cf_header.pubkey)
+            stream_struct("L", f, self.cf_header.end_time)
+            stream_struct("#", f, self.cf_header.pre_hash)
+            stream_struct("Q", f, self.cf_header.total)
+        else:
+            stream_struct("L", f, 1)
+        ####
         stream_struct("L", f, self.version)
         if include_witnesses:
             f.write(b'\0\1')
@@ -305,6 +323,7 @@ class Transaction(object):
         stream_struct("L", f, self.lock_time)
         if include_unspents and not self.missing_unspents():
             self.stream_unspents(f)
+
 
     def as_bin(self, include_unspents=False, include_witness_data=True):
         """Return the transaction as binary."""
@@ -793,3 +812,4 @@ class Transaction(object):
                 raise BadSpendableError("unspents[%d] script mismatch!" % idx)
 
         return self.fee()
+

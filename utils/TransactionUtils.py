@@ -13,6 +13,7 @@ from model.TransactionOut import TransactionOut
 from socketInfo import SendMessage
 from pycoin.tx import tx_utils
 from pycoin.tx.Spendable import Spendable
+from model.TransactionCF import TransactionCF
 
 
 def insert(tx):
@@ -101,7 +102,5 @@ def createTransaction(pre_out_ids, publicAddrToValueDict):
         return Spendable.from_dict(s)
         
             
-    def produce_out_script(hash160):
-        script_obj = ScriptPayToAddress(hash160)
-        out_script = script_obj.script()
-        return out_script
+def isCFTransation(tx):
+    return isinstance(tx, TransactionCF)

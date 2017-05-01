@@ -48,6 +48,14 @@ SIGHASH_ANYONECANPAY = 0x80
 
 ZERO32 = b'\0' * 32
 
+class CFHeader():
+    def __init__(self, original_hash, unit_coin, pubkey, end_time, pre_hash, total):
+        self.original_hash=original_hash
+        self.unit_coin=unit_coin
+        self.pubkey=pubkey
+        self.end_time=end_time
+        self.pre_hash=pre_hash
+        self.total=total
 
 class TransactionCF(Transaction):
     TxIn = TransactionIn
@@ -72,7 +80,6 @@ class TransactionCF(Transaction):
         txs_in = []
         txs_out = []
         original_hash, unit_coin, pubkey, end_time, pre_hash, total = parse_struct("#QSL#Q", f)
-        
             
         version, = parse_struct("L", f)
         v1 = ord(f.read(1))
@@ -104,14 +111,14 @@ class TransactionCF(Transaction):
                     stack.append(parse_bc_string(f))
                 tx_in.witness = stack
         lock_time, = parse_struct("L", f)
-        return class_([original_hash, unit_coin, pubkey, end_time, pre_hash, total], version, txs_in, txs_out, lock_time)
+        return class_(CFHeader(original_hash, unit_coin, pubkey, end_time, pre_hash, total), version, txs_in, txs_out, lock_time)
 
 
 
-    def __init__(self, tx_header,version, txs_in, txs_out, lock_time=0, unspents=None ):
-        super().__init__(version, txs_in, txs_out, lock_time=0, unspents=None)
-        self.tx_header = tx_header
-        self.tx_type = 0x02
+    def __init__(self, cf_header,version, txs_in, txs_out, lock_time=0, unspents=None, state = 0):
+        super().__init__(version, txs_in, txs_out, lock_time=0, unspents=None, state = 0)
+        self.cf_header = cf_header
+#         self.tx_type = 0x02
         
 
  

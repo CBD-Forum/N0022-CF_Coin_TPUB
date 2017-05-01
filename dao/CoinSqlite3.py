@@ -78,7 +78,15 @@ class CoinSqlite3(object):
                 lock_time integer not null,
                 parentBlockId text,
                 unspents text not null,
-                state integer not null
+                state integer not null,                
+                type integer not null,
+                
+                original_hash text,
+                unit_coin integer,
+                pubkey integer,
+                end_time integer,
+                pre_hash text,
+                total integer
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()   
@@ -108,7 +116,8 @@ class CoinSqlite3(object):
                 `index` integer not null,
                 pubicAddress integer,
                 isToMe integer,
-                usedState integer
+                usedState integer,                
+                end_time integer
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()
