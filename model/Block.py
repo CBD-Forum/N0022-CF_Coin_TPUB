@@ -27,7 +27,7 @@ class BlockHeader(object):
         that blocks are sent in the network (well, except we ignore the
         transaction information)."""
         (version, previous_block_hash, merkle_root,
-            timestamp, difficulty, nonce) = struct.unpack("<L32s32sLLL", f.read(4+32+32+4*3))
+            timestamp, difficulty, nonce) = struct.unpack("<L32s32sLLL", f.read(4 + 32 + 32 + 4 * 3))
         return cls(version, previous_block_hash, merkle_root, timestamp, difficulty, nonce)
 
     @classmethod
@@ -42,7 +42,7 @@ class BlockHeader(object):
         self.timestamp = timestamp
         self.difficulty = difficulty
         self.nonce = nonce
-        self.state=state
+        self.state = state
 
     def set_nonce(self, nonce):
         self.nonce = nonce
@@ -137,19 +137,20 @@ class Block(BlockHeader):
         self.nonce = nonce
         self.txs = txs
         self.state = state
+        self.max = self.difficulty_max_mask_for_bits()
         
-        
-        target = self.difficulty
-        a=(target & 0xff000000)>>24
-        b=(target & 0x00ff0000)>>16
-        c=(target & 0x0000ff00)>>8
-        d=(target & 0x000000ff)
-        num = (c << 16) + (b << 8 ) + a
-        exp = d
-        max = num * 256 ** (d-3)
-        #max = (target & 0xffffff) * 256 ** (((target & 0xff000000) >> 24 )-3)
-        max = ('%064s' % hex(max)[2:]).replace(' ', '0')
-        self.max = max
+#         target = self.difficulty
+#         a=(target & 0xff000000)>>24
+#         b=(target & 0x00ff0000)>>16
+#         c=(target & 0x0000ff00)>>8
+#         d=(target & 0x000000ff)
+#         num = (c << 16) + (b << 8 ) + a
+#         exp = d
+#         max = num * 256 ** (d-3)
+#         #max = (target & 0xffffff) * 256 ** (((target & 0xff000000) >> 24 )-3)
+#         max = ('%064s' % hex(max)[2:]).replace(' ', '0')
+#         self.max = max
+
         
         self.check_merkle_hash()
 
@@ -168,7 +169,7 @@ class Block(BlockHeader):
         """Raise a BadMerkleRootError if the Merkle hash of the
         transactions does not match the Merkle hash included in the block."""
 #         calculated_hash = merkle([tx.hash() for tx in self.txs], double_sha256)
-        ###
+        # ##
         return True
 #         if calculated_hash != self.merkle_root:
 #             raise BadMerkleRootError(
@@ -176,11 +177,14 @@ class Block(BlockHeader):
             
     def check_pow(self):
         tmphash = b2h_rev(self.hash())
-        if self.max > tmphash:
-            return True
-        return False
-        
-        
+        return self.max > tmphash
+    
+    def difficulty_max_mask_for_bits(self):
+        bits = self.difficulty
+        prefix = bits >> 24
+        mask = (bits & 0x7ffff) << (8 * (prefix - 3))
+        return mask
+    
 
     def __repr__(self):
         return "%s [%s] (previous %s) [tx count:%d] %s" % (

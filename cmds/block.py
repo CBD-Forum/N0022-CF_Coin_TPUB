@@ -27,7 +27,7 @@ def dump_block(block, netcode=None):
     print("%d transaction%s" % (len(block.txs), "s" if len(block.txs) != 1 else ""))
     for idx, tx in enumerate(block.txs):
         print("Tx #%d:" % idx)
-        dump_tx(tx, netcode=netcode, verbose_signature=False , disassembly_level=0, do_trace=False, use_pdb=False)
+        dump_tx(tx, netcode=netcode, verbose_signature=1 , disassembly_level=1, do_trace=1, use_pdb=1)
 
 
 def main():

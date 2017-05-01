@@ -64,10 +64,17 @@ SIGHASH_ANYONECANPAY = 0x80
 
 ZERO32 = b'\0' * 32
 
-
 def dump_tx(tx, netcode, verbose_signature, disassembly_level, do_trace, use_pdb):
     address_prefix = address_prefix_for_netcode(netcode)
     tx_bin = stream_to_bytes(tx.stream)
+    print("Tx_type:%2d" % tx.tx_type) 
+    if tx.tx_type == 2:
+        print("original_hash : %s" % tx.tx_header[0])
+        print("unit_coin : %s" % tx.tx_header[1])
+        print("pubkey : %s" % tx.tx_header[2])
+        print("end_time : %s" % tx.tx_header[3])
+        print("pre_hash : %s" % tx.tx_header[4])
+        print("total : %s" % tx.tx_header[5])
     print("Version: %2d  tx hash %s  %d bytes   " % (tx.version, tx.id(), len(tx_bin)))
     print("TransactionIn count: %d; TransactionOut count: %d" % (len(tx.txs_in), len(tx.txs_out)))
     if tx.lock_time == 0:
@@ -168,6 +175,7 @@ def dump_tx(tx, netcode, verbose_signature, disassembly_level, do_trace, use_pdb
     print(    "Total output %12.5f mBTC" % satoshi_to_mbtc(tx.total_out()))
     if not missing_unspents:
         print("Total fees   %12.5f mBTC" % satoshi_to_mbtc(tx.fee()))
+
 
 class Transaction(object):
     TransactionIn = TransactionIn
