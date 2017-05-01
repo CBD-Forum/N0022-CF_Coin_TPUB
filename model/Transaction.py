@@ -198,7 +198,8 @@ class Transaction(object):
             assert type(tx_in) == self.TransactionIn
         for tx_out in self.txs_out:
             assert type(tx_out) == self.TransactionOut
-
+        self.tx_type = 0x01
+        self.tx_header = []
     @classmethod
     def coinbase_tx(cls, public_key_sec, coin_value, coinbase_bytes=b'', version=1, lock_time=0, state=0):
         """

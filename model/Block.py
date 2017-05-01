@@ -10,6 +10,7 @@ from pycoin.serialize import b2h_rev, b2h
 from pycoin.serialize.bitcoin_streamer import parse_struct, stream_struct
 
 from model.Transaction import Transaction
+from model.TransactionCF import TransactionCF
 
 
 class BlockHeader(object):
@@ -17,7 +18,8 @@ class BlockHeader(object):
     complete Merkle tree database, it can be reconstructed from the
     merkle_root."""
 
-#     Tx = Tx
+    Transaction = Transaction
+    TransactionCF = TransactionCF
 
     @classmethod
     def parse(cls, f):
@@ -111,7 +113,12 @@ class Block(BlockHeader):
         for i in range(count):
             if include_offsets:
                 offset_in_block = f.tell()
-            tx = Transaction.parse(f)
+            tx_type, = parse_struct("L", f)
+#            tx = cls.Transaction.parse(f)
+            if 0x01 == tx_type:
+                tx = cls.Transaction.parse(f)
+            elif 0x02 == tx_type:
+                tx = cls.TransactionCF.parse(f)
             txs.append(tx)
             if include_offsets:
                 tx.offset_in_block = offset_in_block
@@ -161,18 +168,20 @@ class Block(BlockHeader):
         """Raise a BadMerkleRootError if the Merkle hash of the
         transactions does not match the Merkle hash included in the block."""
 #         calculated_hash = merkle([tx.hash() for tx in self.txs], double_sha256)
-        return
         ###
+        return True
 #         if calculated_hash != self.merkle_root:
 #             raise BadMerkleRootError(
 #                 "calculated %s but block contains %s" % (b2h(calculated_hash), b2h(self.merkle_root)))
-
-    def __repr__(self):
-        return "%s [%s] (previous %s) [tx count:%d] %s" % (
-            self.__class__.__name__, self.id(), self.previous_block_id(), len(self.txs), self.txs)
-
+            
     def check_pow(self):
         tmphash = b2h_rev(self.hash())
         if self.max > tmphash:
             return True
         return False
+        
+        
+
+    def __repr__(self):
+        return "%s [%s] (previous %s) [tx count:%d] %s" % (
+            self.__class__.__name__, self.id(), self.previous_block_id(), len(self.txs), self.txs)
