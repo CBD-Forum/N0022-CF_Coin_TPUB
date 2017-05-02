@@ -2,11 +2,9 @@
 
 @author: Administrator
 '''
-import time
 
-from pycoin.tx import tx_utils
-from pycoin.tx.Spendable import Spendable
 from pycoin.tx.pay_to import ScriptPayToAddress
+# from pycoin.tx.pay_to import ScriptPayToAddressCF
 from pycoin.ui import standard_tx_out_script
 
 import Constants
@@ -45,7 +43,6 @@ def verify(transaction):
             isNeedVerify = False
         
     # 脚本验证    
-    pay = 0 
     # in对应的out是否存在，且没有被转出
     for tx_in in transaction.txs_in:
         if tx_in.previous_hash != ZERO_HASH:
@@ -54,30 +51,13 @@ def verify(transaction):
                 return False;
             if pre_tx_out.usedState == 1:
                 return False;
-            pay += pre_tx_out.coin_value
         else:
-            isNeedVerify = False;
-    for tx_out in transaction.txs_out:
-        pay -= tx_out.coin_value       
+            isNeedVerify = False;    
 
     if isNeedVerify:
-        return pay >= 0
+        return transaction.fee() >= 0
     else:
         return True
-        
-def getPay(transaction):
-    # 脚本验证    
-    # in对应的out是否存在，且没有被转出
-    pay = 0 
-    for tx_in in transaction.txs_in:
-        if tx_in.previous_hash != ZERO_HASH:
-            pre_tx_out = TransactionOutDao.searchByIndex(tx_in.previous_hash, tx_in.previous_index)
-            if pre_tx_out != None:
-                pay += pre_tx_out.coin_value
-    for tx_out in transaction.txs_out:
-        pay -= tx_out.coin_value
-    return pay
-
 
 def __get_tx_ins(pre_out_ids):
     pre_out_txs = []
@@ -128,11 +108,20 @@ def createTransaction(pre_out_ids, publicAddrToValueDict):
         SendMessage.broadcastTransactionMsg(tx)
 
 
-def createCFTransaction(pre_out_ids, cf_header, spendValue, publicAddrToValueDict):
+def createCFTransaction(pre_out_ids, cf_header, spendValue, publicAddrToValueDict, refund_addr=None):
     tx_ins = __get_tx_ins(pre_out_ids)
     
     cfscript = b''
-    outValue = cf_header.target_amount if cf_header.total == 0 else spendValue
+    if cf_header.total == 0:#CF suceess
+        outValue = cf_header.target_amount
+        cfript = ScriptPayToAddress(cf_header.pubkey).script()
+    elif cf_header.total == cf_header.target_amount:#CF start
+        outValue = 0
+        cfscript = ScriptPayToAddress(cf_header.pubkey).script()
+    else:#CF ing
+        outValue = spendValue
+#         cfript = ScriptPayToAddressCF(refund_addr).script()
+    #outValue = cf_header.target_amount if cf_header.total == 0 else spendValue
     cfout = TransactionOut(outValue, cfscript, 0, 0, cf_header.end_time)
     tx_outs = __get_tx_outs(publicAddrToValueDict)
     tx_outs.insert(0, cfout)

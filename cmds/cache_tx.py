@@ -7,7 +7,7 @@ import re
 
 from pycoin.serialize import h2b_rev
 from pycoin.services import get_tx_db
-from pycoin.tx import Tx
+from pycoin.tx import WTransaction
 
 
 def main():
@@ -25,13 +25,13 @@ def main():
         if TX_RE.match(p):
             tx = tx_db.get(h2b_rev(p))
             if not tx:
-                parser.error("can't find Tx with id %s" % p)
+                parser.error("can't find WTransaction with id %s" % p)
         else:
             f = open(p, "rb")
             try:
                 if f.name.endswith("hex"):
                     f = io.BytesIO(codecs.getreader("hex_codec")(f).read())
-                tx = Tx.parse(f)
+                tx = WTransaction.parse(f)
             except Exception:
                 parser.error("can't parse %s" % f.name)
 

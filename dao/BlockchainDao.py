@@ -8,7 +8,7 @@ from _overlapped import NULL
 
 from dao import TransactionDao
 from dao.CoinSqlite3 import CoinSqlite3
-from model.Block import Block
+from model.Block import WBlock
 
 
 def search(hash):       
@@ -16,7 +16,7 @@ def search(hash):
     tmp = c.fetchone()
     if tmp != None:
         txs = TransactionDao.search(hash)
-        block = Block(tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], txs, tmp[7])
+        block = WBlock(tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], txs, tmp[7])
         for tx in txs:
             tx.block = block
         return block
@@ -33,7 +33,7 @@ def searchAll():
     blocks = []
     for tmp in c.fetchall():
         txs = TransactionDao.search(tmp[0])
-        block = Block(tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], txs, tmp[7])
+        block = WBlock(tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], txs, tmp[7])
         for tx in txs:
             tx.block = block
         blocks.append(block)

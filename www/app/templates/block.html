@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    
+
+    <h1 style="padding-bottom:10px">Block #{{block.height}}</h1>
+
+    <div class="row-fluid">
+        <div class="col-md-6 col-sm-6">
+            <table class="table table-striped">
+                <tbody><tr>
+                    <th colspan="2">Summary</th>
+                </tr>
+                <tr>
+                    <td>Number Of Transactions</td>
+                    <td>{{block.txs}}</td>
+                </tr>
+                <!-- <tr>
+                    <td>Output Total</td>
+                    <td><span data-c="2046265343324" data-time="1493705721000">20,462.65343324 CFC</span></td>
+                </tr>
+                <tr>
+                    <td>Estimated Transaction Volume</td>
+                    <td><span data-c="164417042657" data-time="1493705721000">1,644.17042657 CFC</span></td>
+                </tr>
+                -->
+                <tr>
+                    <td>Transaction Fees</td>
+                    <td><span data-c="177830886" data-time="1493705721000">{{block.fees}} CFC</span></td>
+                </tr>
+                <tr>
+                    <td>Height</td>
+                    <td>{{block.height}} <font color="green">(Main Chain)
+                    </font></td>
+                </tr>
+                <tr>
+                    <td>Timestamp</td>
+                    <td>2{{block.timestamp}}</td>
+                </tr>
+                
+                    <!-- <tr>
+                        <td>Received Time</td>
+                        <td>2017-05-02 06:15:21
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Relayed By</td>
+                        <td><a href="/blocks/Bixin">Bixin</a></td>
+                    </tr>
+                -->
+                <tr>
+                    <td>Difficulty</td>
+                    <td>{{block.difficulty}}</td>
+                </tr>
+                <!-- <tr>
+                    <td>Bits</td>
+                    <td>402791230</td>
+                </tr>
+                <tr>
+                -->
+                    <td>Size</td>
+                    <td>{{block.size}} KB</td>
+                </tr>
+                <tr>
+                    <td>Version</td>
+                    
+                    
+                        <td>{{block.version}}</td>
+                    
+                </tr>
+                <tr>
+                    <td>Nonce</td>
+                    <td>{{block.nonce}}</td>
+                </tr>
+                
+            </tbody></table>
+        </div>
+
+        <div class="col-md-6 col-sm-6">
+            <table class="table table-striped">
+                <tbody><tr>
+                    <th colspan="2">Hashes</th>
+                </tr>
+                <tr>
+                    <td>Hash</td>
+                    <td><a class="hash-link" href="./block?block_hash={{block.hash}}">{{block.hash}}</a>
+                    </td>
+                </tr>
+                <tr>
+                    
+                    <td>Previous Block</td>
+                    <td><a class="hash-link" href="/block?block_hash={{block.pre_hash}}">{{block.pre_hash}}</a></td>
+                </tr>
+                <tr>
+                    <td>Next Block(s)</td>
+                    <td>
+                        <a class="hash-link" href="/block?block_hash={{block.next_hash}}">{{block.next_hash}}</a><br>
+                    
+                    </td>
+                </tr>
+                <tr>
+                    <td>Merkle Root</td>
+                    <td class="hash-link">{{block.merkle_root}}</td>
+                </tr>
+            </tbody></table>
+
+            
+                
+            
+        </div>
+
+    </div>
+
+    <div style="width:100%; clear:both;">
+        <h2>Transactions</h2>
+
+        
+            {% for tx in block.txs %}
+            <div id="tx-246377861" class="txdiv">
+                <table class="table table-striped" cellpadding="0" cellspacing="0" style="padding:0px;float:left;margin:0px;width:100%">
+                    <tbody>
+                        <tr>
+                            <th colspan="3" align="left">
+                                <a class="hash-link" href="/tx?txid={{tx.tx_hash}}">{{tx.tx_hash}}</a> 
+                                <!-- <span class="pull-right">2017-05-02 06:15:21</span> -->
+                            </th>
+                        </tr>
+                        <tr>
+                            <!-- tx_in-->
+                            <td width="500px" class="txtd hidden-phone">
+                                {% for tx_input in tx.tx_inputs%}
+                                <a href="/address/{{tx_input}}">{{tx_input}}</a><br>
+                                {% endfor %}                                
+                            </td>
+                            <!-- arrow img -->
+                            <td width="48px" class="hidden-phone" style="padding:4px;text-align:center;vertical-align:middle;"><img src="static/img/arrow_right_green.png"></td>
+                            <!-- tx_out-->
+                            <td class="txtd">
+                            {% for tx_output in tx.tx_outputs%}
+                                <a href="/address/{{tx_output[0]}}">{{tx_output[0]}}</a> <span class="pull-right hidden-phone"><span data-c="170251093" data-time="1493705177000" data-original-title="" title="">{{tx_output[1]}} CFC</span></span><br>
+                            {% endfor %}
+                            </td>
+                            
+                            
+                            
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="padding-bottom:30px;width:100%;text-align:right;clear:both"> <button class="btn btn-success cb">{{tx.total_coin}} CFC</button>
+                </div>
+            </div>
+            {% endfor %}
+            
+            
+        
+    </div>
+
+</div>
+{% endblock %}

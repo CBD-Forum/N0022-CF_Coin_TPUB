@@ -1,0 +1,41 @@
+
+<div role="navigation" class="navbar navbar-default navbar-inverse bc-header bc-public-header" style="border-radius:0px; border: 0px;">
+    
+    <div class="container container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header flex-between">
+        <a class="navbar-brand" href="./home"><img id="logo" src="./Resources/white-blockchain.svg" alt="Bitcoin block explorer and currency statistics"></a>
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="navbar-collapse collapse bg-blue" id="navbar-1">
+        <ul class="nav navbar-nav navbar-left">
+          <li class="item"><a href="./wallet" title="Bitcoin Wallet" class="upper">Wallet</a></li>
+          <li class="item"><a href="./charts" title="Bitcoin Charts" class="upper">Charts</a></li>
+          <li class="item"><a href="./stats" title="Bitcoin Stats" class="upper">Stats</a></li>
+          <li class="item"><a href="./markets" title="Bitcoin Markets" class="upper">Markets</a></li>
+          <li class="item"><a href="./api" title="Blockchain Developer Tools" class="upper">API</a></li>
+        </ul>
+        
+          <ul class="nav navbar-nav navbar-right hidden-sm">
+            <li class="hidden-md">
+              <form action="./search" method="GET" class="bc-form navbar-search">
+                <div class="group">
+                  <div class="item search">
+                    <input placeholder="Search for block hash, transaction, address, etc" name="search" id="header-search" type="text">
+                    <i class="icon-search"></i>
+                  </div>
+                </div>
+              </form>
+            </li>
+          </ul>
+        
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </div> 

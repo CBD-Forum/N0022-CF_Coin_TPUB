@@ -11,6 +11,7 @@ from pycoin.serialize.bitcoin_streamer import parse_struct, stream_struct
 
 from model.Transaction import Transaction
 from model.TransactionCF import TransactionCF
+from utils import TransactionUtils
 
 
 class BlockHeader(object):
@@ -69,7 +70,7 @@ class BlockHeader(object):
 
     def stream(self, f):
         """Stream the block header in the standard way to the file-like object f.
-        The Block subclass also includes the transactions."""
+        The WBlock subclass also includes the transactions."""
         return self.stream_header(f)
 
     def as_bin(self):
@@ -100,10 +101,10 @@ class BlockHeader(object):
 
 
 
-class Block(BlockHeader):
+class WBlock(BlockHeader):
     @classmethod
     def parse(cls, f, include_offsets=None):
-        """Parse the Block from the file-like object in the standard way
+        """Parse the WBlock from the file-like object in the standard way
         that blocks are sent in the network."""
         if include_offsets is None:
             include_offsets = hasattr(f, "tell")
@@ -189,3 +190,30 @@ class Block(BlockHeader):
     def __repr__(self):
         return "%s [%s] (previous %s) [tx count:%d] %s" % (
             self.__class__.__name__, self.id(), self.previous_block_id(), len(self.txs), self.txs)
+
+    def total_in(self):
+        total_in_number = 0
+        for tx in self.txs:
+            total_in_number += tx.total_in()
+        return total_in_number
+    
+    def normal_tc_number(self):
+        normal_tc = 0
+        for tx in self.txs:
+            if not TransactionUtils.isCFTransation(tx):
+                ++normal_tc
+        return normal_tc
+    
+    def cf_tc_number(self):
+        cf_tc = 0
+        for tx in self.txs:
+            if TransactionUtils.isCFTransation(tx):
+                ++cf_tc
+        return cf_tc
+    
+    def fee(self):
+        fee = 0
+        for tx in self.txs:
+            if TransactionUtils.isCFTransation(tx):
+                fee += tx.fee()
+        return fee

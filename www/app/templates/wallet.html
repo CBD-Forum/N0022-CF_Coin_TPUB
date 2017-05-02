@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="col-md-6 pln">
+        <!-- Needs Translation --><h3 class="upper mb-25 center-tablet mt-40">密钥管理</h3><!-- Needs Translation -->
+        <table class="table table-striped">
+          <tbody><tr>
+              <thead width="10%">密钥 ID</td>
+              <thead width="30%">公钥</td>
+              <thead width="30%">私钥</td>
+              <thead width="30%">公钥地址</td>
+          </tr>
+          {% for key in my_keys %}
+          <tr>
+              <td>{{key.id}}</td>
+              <td>{{key.pubkey}}</td>
+              <td>{{key.privatekey}}</td>
+              <td>{{key.pub_addr}}</td>
+          </tr>
+          {% endfor %}
+          
+        </tbody></table>
+    </div>
+    
+    
+    <div class="col-md-6 prn">
+        <h3 class="upper mb-25 center-tablet mt-40">Market Summary</h3>
+        <table class="table table-striped">
+          <tbody><tr>
+              <td width="50%">Market Price</td>
+              <td colspan="2" id="market_price_usd">$1,434.92</td>
+              <td class="hidden-xs"><a href="/charts/market-price">View Chart</a></td>
+          </tr>
+          <tr>
+              <td>Trade Volume</td>
+              <td colspan="2" id="trade_volume_usd">$95,918,572.28</td>
+              <td class="hidden-xs"></td>
+          </tr>
+          <tr>
+              <td>Trade Volume</td>
+              <td colspan="2" id="trade_volume_btc">66,846.04847356 BTC</td>
+              <td class="hidden-xs"></td>
+          </tr>
+        </tbody></table>
+      </div>
+      
+      
+
+{% endblock%}

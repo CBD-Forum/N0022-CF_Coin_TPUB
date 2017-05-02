@@ -277,7 +277,7 @@ def main():
             continue
 
         if args.override_network:
-            # Override the network value, so we can take the same xpubkey and view what
+            # Override the network value, so we can take the same xpubkey and www what
             # the values would be on each other network type.
             # XXX public interface for this is needed...
             key._netcode = args.override_network
