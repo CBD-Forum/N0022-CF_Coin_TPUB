@@ -66,7 +66,9 @@ class CoinSqlite3(object):
                 timestamp integer not null,
                 difficulty integer not null,
                 nonce integer not null,
-                state integer not null
+                state integer not null,
+                next_block_hash text,
+                height integer
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()   

@@ -70,7 +70,7 @@ class BlockHeader(object):
 
     def stream(self, f):
         """Stream the block header in the standard way to the file-like object f.
-        The WBlock subclass also includes the transactions."""
+        The Block subclass also includes the transactions."""
         return self.stream_header(f)
 
     def as_bin(self):
@@ -101,10 +101,10 @@ class BlockHeader(object):
 
 
 
-class WBlock(BlockHeader):
+class Block(BlockHeader):
     @classmethod
     def parse(cls, f, include_offsets=None):
-        """Parse the WBlock from the file-like object in the standard way
+        """Parse the Block from the file-like object in the standard way
         that blocks are sent in the network."""
         if include_offsets is None:
             include_offsets = hasattr(f, "tell")
@@ -129,7 +129,7 @@ class WBlock(BlockHeader):
         block.check_merkle_hash()
         return block
 
-    def __init__(self, version, previous_block_hash, merkle_root, timestamp, difficulty, nonce, txs, state):
+    def __init__(self, version, previous_block_hash, merkle_root, timestamp, difficulty, nonce, txs, state, next_block_hash = "", height = 0):
         self.version = version
         self.previous_block_hash = previous_block_hash
         self.merkle_root = merkle_root
@@ -138,6 +138,8 @@ class WBlock(BlockHeader):
         self.nonce = nonce
         self.txs = txs
         self.state = state
+        self.next_block_hash = next_block_hash
+        self.height = height
         self.max = self.difficulty_max_mask_for_bits()
         
 #         target = self.difficulty

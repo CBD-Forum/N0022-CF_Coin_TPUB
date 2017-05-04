@@ -9,7 +9,7 @@ from pycoin.serialize import stream_to_bytes, b2h_rev, b2h, h2b
 
 from dao import BlockchainDao
 from dao.CoinSqlite3 import CoinSqlite3
-from model.Block import WBlock
+from model.Block import Block
 from model.Transaction import dump_tx
 from utils import SecretKeyUtils, TransactionUtils
 from model.TransactionCF import CFHeader
@@ -45,7 +45,7 @@ def main():
     TransactionUtils.createCFTransaction([], cf_header, spendValue=0, publicAddrToValueDict={})
 #     TransactionUtils.createFirstTransaction({"17ZaizPFAB76bVXXDZNMHunzeoFjrwGtS2":100})
 #     for f in args.block_bin:
-#         block = WBlock.parse(f) 
+#         block = Block.parse(f) 
 #          
 #         BlockchainDao.save(block)
 #         print(block.hash())

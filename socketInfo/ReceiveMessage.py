@@ -9,7 +9,7 @@ import json
 from pycoin.serialize import b2h, h2b
 
 from dao import NetNodeDao, BlockchainDao, TransactionDao
-from model.Block import WBlock
+from model.Block import Block
 from model.NetNode import NetNode
 from model.Transaction import Transaction
 from utils import BlockchainUtils, TransactionUtils
@@ -47,7 +47,7 @@ def handleReceiMsg(message, addr):
     elif(ConstantMessage.BROADCASTBLOCKMSG == type):
         TTL = json_receive.get("ttl")
         block_as_hex = data
-        block = WBlock.parse(io.BytesIO(h2b(block_as_hex)))
+        block = Block.parse(io.BytesIO(h2b(block_as_hex)))
         if BlockchainUtils.verify(block):
             BlockchainUtils.insert(block)
         if TTL > 0:
@@ -70,7 +70,7 @@ def handleReceiMsg(message, addr):
 #             lstNetnode.append(netNode)
         return data  
     elif(ConstantMessage.REPLYBLOCKMSG == type):
-        block = WBlock.parse(io.BytesIO(h2b(data)))
+        block = Block.parse(io.BytesIO(h2b(data)))
         if(BlockchainUtils.verify(block)):
             BlockchainUtils.insert(block)
         return block

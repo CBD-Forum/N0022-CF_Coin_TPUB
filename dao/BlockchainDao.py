@@ -8,7 +8,7 @@ from _overlapped import NULL
 
 from dao import TransactionDao
 from dao.CoinSqlite3 import CoinSqlite3
-from model.Block import WBlock
+from model.Block import Block
 
 
 def search(hash):       
@@ -16,7 +16,7 @@ def search(hash):
     tmp = c.fetchone()
     if tmp != None:
         txs = TransactionDao.search(hash)
-        block = WBlock(tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], txs, tmp[7])
+        block = Block(tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], txs, tmp[7], tmp[8], tmp[9])
         for tx in txs:
             tx.block = block
         return block
@@ -33,7 +33,7 @@ def searchAll():
     blocks = []
     for tmp in c.fetchall():
         txs = TransactionDao.search(tmp[0])
-        block = WBlock(tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], txs, tmp[7])
+        block = Block(tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], txs, tmp[7], tmp[8], tmp[9])
         for tx in txs:
             tx.block = block
         blocks.append(block)
@@ -55,13 +55,16 @@ def searchUnlinkedBlock():
 # def save(blockChain):    
 #     pass
 
-def insert(blockChain):
-    CoinSqlite3().exec_sql('INSERT INTO BlockInfo(hash, version,previous_block_hash,merkle_root,timestamp,difficulty,nonce,state) VALUES (?,?,?,?,?,?,?,?)', blockChain.hash(), blockChain.version, blockChain.previous_block_hash, blockChain.merkle_root, blockChain.timestamp, blockChain.difficulty, blockChain.nonce, blockChain.state)
+def __insert(blockChain, preHeight):
+    CoinSqlite3().exec_sql('INSERT INTO BlockInfo(hash, version,previous_block_hash,merkle_root,timestamp,difficulty,nonce,state,height) VALUES (?,?,?,?,?,?,?,?,?)', blockChain.hash(), blockChain.version, blockChain.previous_block_hash, blockChain.merkle_root, blockChain.timestamp, blockChain.difficulty, blockChain.nonce, blockChain.state, preHeight + 1)
     for tx in blockChain.txs:
         TransactionDao.save(tx)
+
+def __updatePreBlock(blockChain):
+    CoinSqlite3().exec_sql('Update BlockInfo set `next_block_hash` =? where hash = ?', blockChain.hash(), blockChain.pre_block_hash)    
         
-def update(blockChain):
-    CoinSqlite3().exec_sql('Update BlockInfo set `version`=?,`previous_block_hash`=?,`merkle_root`=?,`timestamp`=?,`difficulty`=?,`nonce`=?,`state`=? where hash = ?', blockChain.version, blockChain.previous_block_hash, blockChain.merkle_root, blockChain.timestamp, blockChain.difficulty, blockChain.nonce, blockChain.state, blockChain.hash())
+def __update(blockChain, preHeight):
+    CoinSqlite3().exec_sql('Update BlockInfo set `version`=?,`previous_block_hash`=?,`merkle_root`=?,`timestamp`=?,`difficulty`=?,`nonce`=?,`state`=?,`height`=? where hash = ?', blockChain.version, blockChain.previous_block_hash, blockChain.merkle_root, blockChain.timestamp, blockChain.difficulty, blockChain.nonce, blockChain.state, preHeight + 1, blockChain.hash())
     for tx in blockChain.txs:
         TransactionDao.save(tx)
         
@@ -70,8 +73,15 @@ def isExist(blockChain):
     s = tmp.fetchone()
     return s != None
 
-def save(blockChain):    
-    if isExist(blockChain):
-        update(blockChain)
+def save(blockChain):  
+    preBlock = search(blockChain.hash())  
+    if preBlock == None:
+        preHeight = 0;
     else:
-        insert(blockChain)
+        preHeight = preBlock.height;
+    if isExist(blockChain):
+        __update(blockChain, preHeight)
+    else:
+        __insert(blockChain, preBlock.height)
+        
+    __updatePreBlock(blockChain)
