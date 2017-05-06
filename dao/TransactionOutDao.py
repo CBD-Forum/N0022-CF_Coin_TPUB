@@ -81,7 +81,7 @@ def deleteOld(tx, index):
                 state text not null
                 );"""
 
-'''更新所有关联的out信息，设置状态为可用'''
+'''更新所有关联的out信息，设置状态为不可用'''
 def updateAllLinkedCFTransationOut(tx):
     c = CoinSqlite3().exec_sql('Select hash from TransactionInfo where original_hash = ?', tx.cf_header.original_hash)
     for tmp in c.fetchall():

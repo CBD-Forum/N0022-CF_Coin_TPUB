@@ -61,7 +61,7 @@ def __insert(blockChain, preHeight):
         TransactionDao.save(tx)
 
 def __updatePreBlock(blockChain):
-    CoinSqlite3().exec_sql('Update BlockInfo set `next_block_hash` =? where hash = ?', blockChain.hash(), blockChain.pre_block_hash)    
+    CoinSqlite3().exec_sql('Update BlockInfo set `next_block_hash` =? where hash = ?', blockChain.hash(), blockChain.previous_block_hash)    
         
 def __update(blockChain, preHeight):
     CoinSqlite3().exec_sql('Update BlockInfo set `version`=?,`previous_block_hash`=?,`merkle_root`=?,`timestamp`=?,`difficulty`=?,`nonce`=?,`state`=?,`height`=? where hash = ?', blockChain.version, blockChain.previous_block_hash, blockChain.merkle_root, blockChain.timestamp, blockChain.difficulty, blockChain.nonce, blockChain.state, preHeight + 1, blockChain.hash())
@@ -74,7 +74,7 @@ def isExist(blockChain):
     return s != None
 
 def save(blockChain):  
-    preBlock = search(blockChain.hash())  
+    preBlock = search(blockChain.previous_block_hash)  
     if preBlock == None:
         preHeight = 0;
     else:
@@ -82,6 +82,7 @@ def save(blockChain):
     if isExist(blockChain):
         __update(blockChain, preHeight)
     else:
-        __insert(blockChain, preBlock.height)
-        
-    __updatePreBlock(blockChain)
+        __insert(blockChain, preHeight)
+    
+    if preBlock != None:    
+        __updatePreBlock(blockChain)

@@ -1,7 +1,7 @@
 from flask import render_template, request
 
-from www.app import app
-from www.app import datas
+from app import app
+from app import datas
 
 
 @app.route('/')
@@ -20,11 +20,11 @@ def block():
 @app.route('/wallet')
 #display personal infomation
 def wallet():
-#     my_keys = get_keys()
-#     my_txs = get_my_txs()
+    my_keys = datas.get_keys()
+    my_txs = datas.get_my_txs()
 #     my_utxos = get_my_utxos()
 #     launched_projects = get_i_launched()
 #     participated_projects = get_i_participated()
 #     
-#     return render_template("wallet.html", my_keys = mykeys, my_txs = mytxs, my_utxos = my_utxos, launched_projects = launched_projects, participated_projects = participated_projects)
-    pass
+    return render_template("wallet.html", my_keys = my_keys, my_txs = my_txs) #, my_utxos = my_utxos, launched_projects = launched_projects, participated_projects = participated_projects)
+    

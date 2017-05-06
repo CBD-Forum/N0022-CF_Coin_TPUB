@@ -25,7 +25,7 @@ def insert(tx):
     # 保存新交易
     TransactionDao.save(tx)
     
-    # 如果是众筹成功 刷新所有众筹交易的状态为可用
+    # 如果是众筹成功 刷新所有众筹交易的状态为不可用
     if isCFTransation(tx):
         if tx.cf_header.total == 0:
             TransactionOutDao.updateAllLinkedCFTransationOut(tx)
@@ -131,6 +131,10 @@ def createCFTransaction(pre_out_ids, cf_header, spendValue, publicAddrToValueDic
         insert(tx)
         # 广播新交易
         SendMessage.broadcastTransactionMsg(tx)
+
+# 搜索指定hash的众筹交易，数组顺序为交易生成顺序。  state=0代表众筹未完成，state=1代表众筹完成
+def searchFcTcs(original_hash):   
+    return TransactionDao.searchFcTcs(original_hash);
             
 def isCFTransation(tx):
     return isinstance(tx, TransactionCF)

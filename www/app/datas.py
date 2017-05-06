@@ -29,8 +29,15 @@ class WTransaction():
         self.tx_outputs = [['1PqbXjAadgPbvS8CmHLTC8HRkd7whiN5Te', 1.70251093],['1MT8cEhMf4oMiy2pAHKX2YWUH7AX2ep5t4 ', 0.01000184]]
         self.time = time.ctime()
         self.total_coin = 1.71251277
+        self.fee = 0.12
   
-
+class Key():
+    def __init__(self, id):
+        self.id = id
+        self.pub_key = '1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF'
+        self.sec_key = 'ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890'
+        self.addr = '1234567890QWERTYUIOP'
+        
 def get_blocks():
     
     blocks = []
@@ -43,3 +50,15 @@ def get_block_info(block_hash):
     block = WBlock(3, 1, '0000000000000000055768af037a1fc0fdabcdw15d5d8a5f0dbd22d65f6ff906', 1120, 1493620140, 200.5, 150.3 )
     block.get_details()
     return block
+
+def get_keys():
+    keys = []
+    for i in range(5):
+        keys.append(Key(i))
+    return keys
+
+def get_my_txs():
+    txs = []
+    for i in range(5):
+        txs.append(WTransaction())
+    return txs

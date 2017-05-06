@@ -30,6 +30,11 @@ def search(parentBlockId):
 def searchUnChainedTx():   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where parentBlockId = \'\'')
     return __getSearchResult(c)
+
+# 搜索指定hash的众筹交易
+def searchFcTcs(original_hash):   
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where original_hash = ?', original_hash)
+    return __getSearchResult(c)
     
 def save(tx):
     if isExist(tx):
