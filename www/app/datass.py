@@ -27,15 +27,15 @@ class WBlock():
         self.merkle_root = block.merkle_root
 
 class WTransaction():
-    def __init__(self, tx, timestamp):
+    def __init__(self, tx, timestamp=0):
         self.tx_hash = tx.hash()
         inputs = []
-#         for txin in tx.txs_in:
-#             inputs.append(txin.address())
+        for txin in tx.txs_in:
+            inputs.append(txin.address())
         self.tx_inputs = inputs
         outputs = {}
-#         for txout in tx.txs_out:
-#             outputs[txout.address()] = txout.value
+        for txout in tx.txs_out:
+            outputs[txout.address()] = txout.value
         self.tx_outputs = outputs
         self.time = timestamp
         self.total_coin = tx.total_in()
@@ -70,6 +70,6 @@ def get_keys():
 
 def get_my_txs():
     txs = []
-    for i in range(5):
-        txs.append(WTransaction())
+#     for i in range(5):
+#         txs.append(WTransaction())
     return txs

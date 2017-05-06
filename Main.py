@@ -19,8 +19,8 @@ from pycoin.ui import standard_tx_out_script
 import Constants
 from dao import BlockchainDao, TransactionDao
 from model import TransactionOut, Transaction
-from model.Block import WBlock
-from model.TraBlockonIn import TransactionIn
+from model.Block import Block
+from model.TransactionIn import TransactionIn
 from socketInfo import CoinSocket
 from socketInfo import SendMessage
 
@@ -47,7 +47,7 @@ def findBlockChain():
     for block in unlinkedBlock: 
         previous_block_hash = block.hash()
         for nonce in range(0, 0xFFFFFFFF):
-            tmpBlock = WBlock(version, previous_blockBlock merkle_root, timestamp, difficulty, nonce, txs, state)
+            tmpBlock = Block(version, previous_block_hash, merkle_root, timestamp, difficulty, nonce, txs, state)
             if tmpBlock.check_pow():
                 for tx in tmpBlock.txs:
                     tx.block = tmpBlock                
@@ -74,6 +74,8 @@ def insertFeeToMinner(txs):
         
 def main():
     CoinSocket.ReivSocket()
+    CoinSocket.SendSocket.init()
+    
 #     addr = ('127.0.0.1', 8181)
 #     SendMessage.searchNetNodeMsg(addr)   
     while True:

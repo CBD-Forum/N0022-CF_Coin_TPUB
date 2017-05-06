@@ -9,13 +9,18 @@ from _thread import start_new_thread
 from urllib.parse import urlencode
 import asyncio
 import threading
+     
 
 
-class SendSocket(object):     
-    port = 9081  
-    s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
-    s.bind(('', port))
+
     
+class SendSocket(object):
+    @classmethod
+    def init(cls):
+        port = 9081  
+        cls.s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
+        cls.s.bind(('', port))
+        
     @classmethod
     def sendMsg(cls, json_reply, addr):
 #         s.sendto(strjson_reply, addr)
@@ -35,10 +40,10 @@ class SendSocket(object):
         
 
 class ReivSocket(object):     
-    port = 8081  
-    s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
-    s.bind(('', port))
-    def __init__(self):
+    def __init__(self):        
+        port = 8081  
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
+        s.bind(('', port))
         t =threading.Thread(target=self.receive,args=())
         t.start()
         print('finishing......')
