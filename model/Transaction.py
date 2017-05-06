@@ -192,10 +192,11 @@ class Transaction(object):
 
     ALLOW_SEGWIT = True
 
-    def __init__(self, version, txs_in, txs_out, lock_time=0, unspents=None, state = 0):
+    def __init__(self, version, txs_in, txs_out, lock_time=0, unspents=None, state = 0, uid = 0):
         """
         The part of a Tx that specifies where the Bitcoin comes from.
         """
+        self.uid = uid
         self.version = version
         self.txs_in = txs_in
         self.txs_out = txs_out

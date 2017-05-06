@@ -49,7 +49,8 @@ class CoinSqlite3(object):
         
     def _init_table_secretkey(self):
         SQL = """create table if not exists SecretKeyInfo (
-                publicKey text primary key,
+                id integer primary key,
+                publicKey text not null,
                 privateKey text,
                 pubicAddress text not null
                 );"""
@@ -59,7 +60,8 @@ class CoinSqlite3(object):
     
     def _init_table_block(self):
         SQL = """create table if not exists BlockInfo (
-                hash text primary key,
+                id integer primary key,
+                hash text not null,
                 version integer not null,
                 previous_block_hash text not null,
                 merkle_root text not null,
@@ -75,7 +77,8 @@ class CoinSqlite3(object):
                 
     def _init_table_tx(self):
         SQL = """create table if not exists TransactionInfo (
-                hash text primary key,
+                id integer primary key,
+                hash text not null,
                 version integer not null,
                 lock_time integer not null,
                 parentBlockId text,

@@ -16,7 +16,7 @@ def search(hash):
     tmp = c.fetchone()
     if tmp != None:
         txs = TransactionDao.search(hash)
-        block = Block(tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], txs, tmp[7], tmp[8], tmp[9])
+        block = Block(tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7], txs, tmp[8], tmp[9], tmp[10], tmp[0])
         for tx in txs:
             tx.block = block
         return block
@@ -25,15 +25,15 @@ def searchIDs():
     c = CoinSqlite3()._exec_sql('Select previous_block_hash from BlockInfo')
     hashs = []
     for tmp in c.fetchall():
-        hashs.append(tmp[0])
+        hashs.append(tmp[1])
     return hashs
 
 def searchAll(): 
     c = CoinSqlite3()._exec_sql('Select * from BlockInfo')
     blocks = []
     for tmp in c.fetchall():
-        txs = TransactionDao.search(tmp[0])
-        block = Block(tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], txs, tmp[7], tmp[8], tmp[9])
+        txs = TransactionDao.search(tmp[1])
+        block = Block(tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7], txs, tmp[8], tmp[9], tmp[10], tmp[0])
         for tx in txs:
             tx.block = block
         blocks.append(block)
@@ -43,7 +43,7 @@ def searchUnlinkedBlock():
     c = CoinSqlite3()._exec_sql('Select previous_block_hash from BlockInfo')
     preBlockHashs = []
     for tmp in c.fetchall():
-        preBlockHashs.append(tmp[0])
+        preBlockHashs.append(tmp[1])
 
     blocks = searchAll()    
     unlinkedBlocks = []    

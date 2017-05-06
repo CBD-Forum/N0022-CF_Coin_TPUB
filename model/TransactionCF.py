@@ -115,8 +115,8 @@ class TransactionCF(Transaction):
 
 
 
-    def __init__(self, cf_header,version, txs_in, txs_out, lock_time=0, unspents=None, state = 0):
-        super().__init__(version, txs_in, txs_out, lock_time=0, unspents=None, state = 0)
+    def __init__(self, cf_header, version, txs_in, txs_out, lock_time=0, unspents=None, state = 0, uid = 0):
+        super().__init__(version, txs_in, txs_out, lock_time, unspents, state, uid)
         self.cf_header = cf_header
 #         self.tx_type = 0x02
         

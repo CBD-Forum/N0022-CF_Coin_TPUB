@@ -1,10 +1,11 @@
 
-from dao import BlockchainDao
+from dao import BlockchainDao, SecretKeyDao, TransactionDao
+from utils import TransactionUtils
 
 
 class WBlock():
-    def __init__(self, id, block):
-        self.id = id
+    def __init__(self, block):
+        self.id = block.uid
         self.height = block.height
         self.hash = block.hash()
         wtxs = []
@@ -35,41 +36,44 @@ class WTransaction():
         self.tx_inputs = inputs
         outputs = {}
         for txout in tx.txs_out:
-            outputs[txout.address()] = txout.value
+            outputs[txout.address()] = txout.coin_value
         self.tx_outputs = outputs
         self.time = timestamp
         self.total_coin = tx.total_in()
         self.fee = tx.fee()
   
 class Key():
-    def __init__(self, id):
-        self.id = id
-        self.pub_key = '1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF'
-        self.sec_key = 'ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890'
-        self.addr = '1234567890QWERTYUIOP'
+    def __init__(self, secretKey):
+        self.id = secretKey.uid
+        self.pub_key = secretKey.publicKey
+        self.sec_key = secretKey.privateKey
+        self.addr = secretKey.pubicAddress
         
 def get_blocks():    
     wblocks = []
     blocks = BlockchainDao.searchAll();
-    iFlag = 0
     for block in blocks:
-        ++iFlag
-        wblocks.append(WBlock(++iFlag, block))
+        wblocks.append(WBlock(block))
     return wblocks
    
 def get_block_info(block_hash):
     block = BlockchainDao.search(block_hash)
-    wblock = WBlock(WBlock(0, block))
+    wblock = WBlock(WBlock(block))
     return wblock
 
 def get_keys():
+    secretKeys = SecretKeyDao.searchMySecrets()
     keys = []
-    for i in range(5):
-        keys.append(Key(i))
+    for secretKey in secretKeys:
+        keys.append(Key(secretKey))
     return keys
 
 def get_my_txs():
-    txs = []
+    txs = TransactionDao.searchAll()
 #     for i in range(5):
 #         txs.append(WTransaction())
+
+    wtxs = []
+    for tx in txs:
+        wtxs.append(WTransaction(tx))
     return txs

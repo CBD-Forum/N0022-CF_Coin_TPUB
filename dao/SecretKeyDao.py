@@ -4,14 +4,14 @@
 '''
 
 from dao.CoinSqlite3 import CoinSqlite3
-from model import SecretKey
+from model.SecretKey import SecretKey
 
 
 def search():   
     c = CoinSqlite3()._exec_sql('Select * from SecretKeyInfo')
     secrets = []
     for tmp in c.fetchall():
-        secret = SecretKey(tmp[0], tmp[1])
+        secret = SecretKey(tmp[1], tmp[3], tmp[2], tmp[0])
         secrets.append(secret)
     return secrets
 
@@ -24,7 +24,7 @@ def searchMySecrets():
     c = CoinSqlite3()._exec_sql('Select * from SecretKeyInfo Where privateKey != \'\'')
     secrets = []
     for tmp in c.fetchall():
-        secret = SecretKey(tmp[0], tmp[1])
+        secret = SecretKey(tmp[1], tmp[3], tmp[2], tmp[0])
         secrets.append(secret)
     return secrets
 

@@ -10,7 +10,7 @@ def search(parentBlockId, parentTxId):
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoIn where parentBlockId = ? And parentTxId = ?', parentBlockId, parentTxId)
     txIns = []
     for tmp in c.fetchall():
-        txIn = TransactionIn(tmp[1], tmp[2], tmp[3], tmp[4], tmp[7])
+        txIn = TransactionIn(tmp[1], tmp[2], tmp[3], tmp[4], tmp[7], tmp[0])
         txIns.append(txIn)
     return txIns
 

@@ -11,17 +11,22 @@ from utils import TransactionUtils
 def __getSearchResult(c):
     txs = []
     for tmp in c.fetchall():
-        parentBlockId = tmp[3]
-        parentTxId = tmp[0]
+        parentBlockId = tmp[4]
+        parentTxId = tmp[1]
         txs_in = TransactionInDao.search(parentBlockId, parentTxId)
         txs_out = TransactionOutDao.search(parentBlockId, parentTxId)
-        if tmp[6] == 1:
-            tx = Transaction(tmp[1], txs_in, txs_out, tmp[2], tmp[4].split(','), tmp[5])
+        if tmp[7] == 1:
+            tx = Transaction(tmp[2], txs_in, txs_out, tmp[3], tmp[5].split(','), tmp[6], tmp[0])
         else:
-            tx = TransactionCF(CFHeader(tmp[7], tmp[8], tmp[9], tmp[10], tmp[11], tmp[12]), tmp[1], txs_in, txs_out, tmp[2])
+            tx = TransactionCF(CFHeader(tmp[8], tmp[9], tmp[10], tmp[11], tmp[12], tmp[13]), tmp[2], txs_in, txs_out, tmp[3], tmp[0])
         txs.append(tx)
         
     return txs
+
+def searchAll():
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfo')
+    return __getSearchResult(c)
+    
 
 def search(parentBlockId):   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where parentBlockId = ?', parentBlockId)

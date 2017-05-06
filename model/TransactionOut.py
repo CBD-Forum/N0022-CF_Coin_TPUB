@@ -38,13 +38,14 @@ class TransactionOut(object):
     The part of a Tx that specifies where the Bitcoin goes to.
     """
 
-    def __init__(self, coin_value, script, state=0, usedState=0, end_time=0):
+    def __init__(self, coin_value, script, state=0, usedState=0, end_time=0, uid = 0):
         assert isinstance(script, bytes)
         self.coin_value = self.COIN_VALUE_CAST_F(coin_value)
         self.script = script
         self.state = state
         self.usedState = usedState
         self.end_time=end_time
+        self.uid = uid
 
     def stream(self, f):
         stream_struct("QS", f, self.coin_value, self.script)

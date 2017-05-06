@@ -129,7 +129,8 @@ class Block(BlockHeader):
         block.check_merkle_hash()
         return block
 
-    def __init__(self, version, previous_block_hash, merkle_root, timestamp, difficulty, nonce, txs, state, next_block_hash = "", height = 0):
+    def __init__(self, version, previous_block_hash, merkle_root, timestamp, difficulty, nonce, txs, state, next_block_hash = "", height = 0, uid = 0):
+        self.uid = uid
         self.version = version
         self.previous_block_hash = previous_block_hash
         self.merkle_root = merkle_root

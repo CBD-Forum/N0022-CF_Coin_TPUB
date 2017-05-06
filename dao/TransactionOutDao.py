@@ -9,7 +9,6 @@ from pycoin.tx.Spendable import Spendable
 
 from dao import TransactionDao, SecretKeyDao
 from dao.CoinSqlite3 import CoinSqlite3
-from model.SecretKey import SecretKey
 from model.TransactionOut import TransactionOut
 from utils import TransactionUtils
 
@@ -18,7 +17,7 @@ def searchAll():
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut')
     txOuts = []
     for tmp in c.fetchall():
-        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10])
+        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10], tmp[0])
         txOuts.append(txOut)
     return txOuts
 
@@ -28,7 +27,7 @@ def searchById(id):
     if tmp == None:
         return None
     else:    
-        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10])
+        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10], tmp[0])
         return txOut
 
 def searchSpendById(id):   
@@ -43,14 +42,14 @@ def searchByIndex(parentTxId, index):
     if tmp == None:
         return None
     else:    
-        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10])
+        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10], tmp[0])
         return txOut
 
 def search(parentBlockId, parentTxId):   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where parentBlockId = ? And parentTxId = ?', parentBlockId, parentTxId)
     txOuts = []
     for tmp in c.fetchall():
-        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10])
+        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10], tmp[0])
         txOuts.append(txOut)
     return txOuts  
   
@@ -85,6 +84,6 @@ def deleteOld(tx, index):
 def updateAllLinkedCFTransationOut(tx):
     c = CoinSqlite3().exec_sql('Select hash from TransactionInfo where original_hash = ?', tx.cf_header.original_hash)
     for tmp in c.fetchall():
-        if tx.hash() != tmp[0]:
-            CoinSqlite3().exec_sql('Update TransactionInfoOut set `usedState` = 1 where `parentTxId` = ? and `index` == 0', tmp[0])
+        if tx.hash() != tmp[1]:
+            CoinSqlite3().exec_sql('Update TransactionInfoOut set `usedState` = 1 where `parentTxId` = ? and `index` == 0', tmp[1])
   

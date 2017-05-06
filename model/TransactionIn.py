@@ -41,12 +41,13 @@ class TransactionIn(object):
     """
     The part of a Tx that specifies where the Bitcoin comes from.
     """
-    def __init__(self, previous_hash, previous_index, script=b'', sequence=4294967295, state=0):
+    def __init__(self, previous_hash, previous_index, script=b'', sequence=4294967295, state=0, uid = 0):
         self.previous_hash = previous_hash
         self.previous_index = previous_index
         self.script = script
         self.sequence = sequence
         self.state=state
+        self.uid = uid
         self.witness = ()
 
     @classmethod
