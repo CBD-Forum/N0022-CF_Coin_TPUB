@@ -1,8 +1,9 @@
+
 from flask import render_template, request
 
-from app import app
-from app import datas
+from www.app import datas
 
+from www.app import app
 
 @app.route('/')
 @app.route('/index')

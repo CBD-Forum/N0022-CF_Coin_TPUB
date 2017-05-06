@@ -1,4 +1,6 @@
 import time
+
+
 class WBlock():
     def __init__(self, id, height, hash, txs, timestamp, total, size):
         self.id = id
