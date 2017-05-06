@@ -15,20 +15,34 @@ from utils import TransactionUtils
 
 def searchAll():   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut')
+    return __getSearchResult(c)
+
+def __getSearchResult(c):
     txOuts = []
     for tmp in c.fetchall():
         txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10], tmp[0])
         txOuts.append(txOut)
     return txOuts
 
-def searchById(id):   
-    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where id = ? ', id)
+def __getSearchResultSingle(c):
     tmp = c.fetchone()
     if tmp == None:
         return None
     else:    
         txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10], tmp[0])
         return txOut
+   
+def searchMyTxOuts():
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where isMyTx = 1')
+    return __getSearchResult(c)
+   
+def searchMyUnUsedTxOuts():
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where isMyTx = 1 and usedState = 0')
+    return __getSearchResult(c)
+ 
+def searchById(id):   
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where id = ? ', id)
+    return __getSearchResultSingle(c);
 
 def searchSpendById(id):   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where id = ? ', id)
@@ -38,20 +52,11 @@ def searchSpendById(id):
 
 def searchByIndex(parentTxId, index):   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where parentTxId = ? And `index` = ?', parentTxId, index)
-    tmp = c.fetchone()
-    if tmp == None:
-        return None
-    else:    
-        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10], tmp[0])
-        return txOut
+    return __getSearchResultSingle(c);
 
 def search(parentBlockId, parentTxId):   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where parentBlockId = ? And parentTxId = ?', parentBlockId, parentTxId)
-    txOuts = []
-    for tmp in c.fetchall():
-        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10], tmp[0])
-        txOuts.append(txOut)
-    return txOuts  
+    return __getSearchResult(c)
   
 def save(txOut, tx, index):
     deleteOld(tx, index)
@@ -60,7 +65,7 @@ def save(txOut, tx, index):
     if TransactionUtils.isCFTransation(tx):
         if 0 == index:
             end_time = tx.cf_header.end_time
-    CoinSqlite3().exec_sql('INSERT INTO TransactionInfoOut(coin_value, script, parentBlockId, parentTxId, state, `index`, pubicAddress, isToMe, usedState, end_time) VALUES (?,?,?,?,?,?,?,?,?,?)', txOut.coin_value, txOut.script, tx.getBlockHash(), tx.hash(), txOut.state, index, pubicAddress, SecretKeyDao.isMypubicAddress(pubicAddress), 0, end_time)
+    CoinSqlite3().exec_sql('INSERT INTO TransactionInfoOut(coin_value, script, parentBlockId, parentTxId, state, `index`, pubicAddress, isToMe, usedState, end_time, isMyTx) VALUES (?,?,?,?,?,?,?,?,?,?,?)', txOut.coin_value, txOut.script, tx.getBlockHash(), tx.hash(), txOut.state, index, pubicAddress, SecretKeyDao.isMypubicAddress(pubicAddress), 0, end_time, SecretKeyDao.isMypubicAddress(txOut.address()))
   
 def updateState(tx_out, tx_out_id):
     CoinSqlite3().exec_sql('Update TransactionInfoOut set `usedState`=? where `id` = ?', tx_out.usedState, tx_out_id)

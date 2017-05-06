@@ -1,5 +1,6 @@
 
-from dao import BlockchainDao, SecretKeyDao, TransactionDao
+from dao import BlockchainDao, SecretKeyDao, TransactionDao, TransactionInDao, \
+    TransactionOutDao
 from utils import TransactionUtils
 
 
@@ -77,3 +78,9 @@ def get_my_txs():
     for tx in txs:
         wtxs.append(WTransaction(tx))
     return wtxs
+
+def get_my_unused_in_txs():
+    return TransactionInDao.searchMyUnUsedTxIns();
+
+def get_my_unused_out_txs():
+    return TransactionOutDao.searchMyUnUsedTxOuts();

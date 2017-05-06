@@ -106,7 +106,8 @@ class CoinSqlite3(object):
                 parentBlockId text,
                 parentTxId text not null,
                 state integer not null,
-                `index` integer not null
+                `index` integer not null,
+                isMyTx integer
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()   
@@ -122,7 +123,8 @@ class CoinSqlite3(object):
                 pubicAddress integer,
                 isToMe integer,
                 usedState integer,                
-                end_time integer
+                end_time integer,
+                isMyTx integer
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()
