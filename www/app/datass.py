@@ -29,14 +29,14 @@ class WBlock():
 
 class WTransaction():
     def __init__(self, tx, timestamp=0):
-        self.tx_hash = tx.hash()
+        self.tx_hash = tx.hash().hex()
         inputs = []
         for txin in tx.txs_in:
             inputs.append(txin.address())
         self.tx_inputs = inputs
-        outputs = {}
+        outputs = []
         for txout in tx.txs_out:
-            outputs[txout.address()] = txout.coin_value
+            outputs.append([txout.address(), txout.coin_value])
         self.tx_outputs = outputs
         self.time = timestamp
         self.total_coin = tx.total_in()
@@ -76,4 +76,4 @@ def get_my_txs():
     wtxs = []
     for tx in txs:
         wtxs.append(WTransaction(tx))
-    return txs
+    return wtxs
