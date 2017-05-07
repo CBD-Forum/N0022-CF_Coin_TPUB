@@ -37,3 +37,6 @@ def broadcastTransactionMsg(tx):
     tx_as_hex = b2h(s.getvalue())
     message = json.dumps({"type":ConstantMessage.BROADCASTTRANSACTIONMSG, "data":tx_as_hex, "ttl":3})
     SendSocket.broadcastMsg(message, NetNodeDao.searchAddrs())
+    
+def initSendSocket():
+    SendSocket.init();

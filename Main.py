@@ -21,8 +21,8 @@ from dao import BlockchainDao, TransactionDao
 from model import TransactionOut, Transaction
 from model.Block import Block
 from model.TransactionIn import TransactionIn
-from socketInfo import CoinSocket
 from socketInfo import SendMessage
+from socketInfo.CoinSocket import ReivSocket, SendSocket
 
 
 def findBlockChain():
@@ -73,8 +73,8 @@ def insertFeeToMinner(txs):
         
         
 def main():
-    CoinSocket.ReivSocket()
-    CoinSocket.SendSocket.init()
+    ReivSocket()
+    SendSocket.init()
     
 #     addr = ('127.0.0.1', 8181)
 #     SendMessage.searchNetNodeMsg(addr)   

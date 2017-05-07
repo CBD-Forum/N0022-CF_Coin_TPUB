@@ -5,6 +5,8 @@ Created on 2017��4��29��
 '''
 
 
+import time
+
 from pycoin.tx.Spendable import Spendable
 
 from dao import TransactionDao, SecretKeyDao
@@ -20,7 +22,7 @@ def searchAll():
 def __getSearchResult(c):
     txOuts = []
     for tmp in c.fetchall():
-        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10], tmp[0])
+        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10], tmp[0], tmp[4], tmp[6])
         txOuts.append(txOut)
     return txOuts
 
@@ -29,15 +31,19 @@ def __getSearchResultSingle(c):
     if tmp == None:
         return None
     else:    
-        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10], tmp[0])
+        txOut = TransactionOut(tmp[1], tmp[2], tmp[5], tmp[9], tmp[10], tmp[0], tmp[4], tmp[6])
         return txOut
    
 def searchMyTxOuts():
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where isMyTx = 1')
     return __getSearchResult(c)
    
-def searchMyUnUsedTxOuts():
+def searchMyUnUsedNomalTxOuts():    #不包含未用的众筹交易
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where isMyTx = 1 and usedState = 0')
+    return __getSearchResult(c)
+   
+def searchMyUnUsedTotalTxOuts():    #包含未成功的众筹交易
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where end_time < ? and usedState = 0', int(time.time()))
     return __getSearchResult(c)
  
 def searchById(id):   
@@ -91,4 +97,7 @@ def updateAllLinkedCFTransationOut(tx):
     for tmp in c.fetchall():
         if tx.hash() != tmp[1]:
             CoinSqlite3().exec_sql('Update TransactionInfoOut set `usedState` = 1 where `parentTxId` = ? and `index` == 0', tmp[1])
-  
+
+def updateEndTimeToZero(tx):
+    CoinSqlite3().exec_sql('Update TransactionInfoOut set `end_time`=0 where `hash` = ?', tx.hash())
+    

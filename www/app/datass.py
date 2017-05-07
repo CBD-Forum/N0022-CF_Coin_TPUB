@@ -3,7 +3,6 @@ from dao import BlockchainDao, SecretKeyDao, TransactionDao, TransactionInDao, \
     TransactionOutDao
 from utils import TransactionUtils
 
-
 class WBlock():
     def __init__(self, block):
         self.id = block.uid
@@ -82,5 +81,22 @@ def get_my_txs():
 def get_my_unused_in_txs():
     return TransactionInDao.searchMyUnUsedTxIns();
 
+'''获取可用的out节点'''
 def get_my_unused_out_txs():
-    return TransactionOutDao.searchMyUnUsedTxOuts();
+    return TransactionOutDao.searchMyUnUsedTotalTxOuts();
+
+'''造币交易'''
+def createNewBitcoinTx(publicAddrToValueArray):
+    return TransactionUtils.createFirstTransaction(publicAddrToValueArray)
+
+'''生成普通交易'''
+def createNormalBitCoinTx(pre_out_ids, publicAddrToValueArray):
+    return TransactionUtils.createTransaction(pre_out_ids, publicAddrToValueArray);
+
+'''生成普通众筹'''
+def createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueDict, refund_addr):
+    return TransactionUtils.createNormalCFTransaction(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueDict, refund_addr);
+
+'''生成新众筹'''
+def createNewCFBitCoinTx(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee=[]):
+    return TransactionUtils.createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee)

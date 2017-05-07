@@ -42,9 +42,11 @@ def main():
     args = parser.parse_args()
 #     pbkey = '1693NYwCPZYAdF1pYdVfrfCR6c9acpNGQd'
 #     cf_header = CFHeader(ZERO32, 10, pbkey, time.time()+3600, ZERO32, 10)
-#     TransactionUtils.createCFTransaction([], cf_header, spendValue=0, publicAddrToValueDict={})
+#     TransactionUtils.createCFTransaction([], cf_header, spendValue=0, publicAddrToValueDict=[[]])
 #     TransactionUtils.createFirstTransaction({"17ZaizPFAB76bVXXDZNMHunzeoFjrwGtS2":100})
     for f in args.block_bin:
+        for i in range(1,30):
+            SecretKeyUtils.manageKey(10*i)
         block = Block.parse(f) 
           
         BlockchainDao.save(block)
@@ -54,8 +56,6 @@ def main():
         dump_block(block)
         print('')
          
-        for i in range(1,30):
-            SecretKeyUtils.manageKey(10*i)
 
 if __name__ == '__main__':
     main()

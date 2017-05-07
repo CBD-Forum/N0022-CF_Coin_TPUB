@@ -40,18 +40,31 @@ class SendSocket(object):
         
 
 class ReivSocket(object):     
-    def __init__(self):        
+    def __init__(self):   
+        pass     
+#         port = 8081  
+#         clss = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
+#         s.bind(('', port))
+#         t =threading.Thread(target=self.receive,args=())
+#         t.start()
+#         print('finishing......')
+    
+    
+    @classmethod   
+    def init(cls):  
         port = 8081  
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
-        s.bind(('', port))
-        t =threading.Thread(target=self.receive,args=())
+        cls.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
+        cls.s.bind(('', port))
+        t =threading.Thread(target=cls.receive,args=())
         t.start()
         print('finishing......')
-        
-    def receive(self):
+            
+    
+    @classmethod    
+    def receive(cls):
         print('waiting......')
         while True:
-            byte, addr = self.s.recvfrom(1024)
+            byte, addr = cls.s.recvfrom(1024)
 #             data = bytes.decode(byte)  
             ReceiveMessage.handleReceiMsg(byte, addr)
             sleep(100)    

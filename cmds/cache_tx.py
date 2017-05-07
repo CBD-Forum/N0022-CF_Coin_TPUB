@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+
+
+
 import argparse
 import codecs
 import io
@@ -7,7 +10,8 @@ import re
 
 from pycoin.serialize import h2b_rev
 from pycoin.services import get_tx_db
-from pycoin.tx import WTransaction
+
+from model.Transaction import Transaction
 
 
 def main():
@@ -25,13 +29,13 @@ def main():
         if TX_RE.match(p):
             tx = tx_db.get(h2b_rev(p))
             if not tx:
-                parser.error("can't find WTransaction with id %s" % p)
+                parser.error("can't find Transact    ion with id %s" % p)
         else:
             f = open(p, "rb")
             try:
                 if f.name.endswith("hex"):
                     f = io.BytesIO(codecs.getreader("hex_codec")(f).read())
-                tx = WTransaction.parse(f)
+                tx = Transaction.parse(f)
             except Exception:
                 parser.error("can't parse %s" % f.name)
 

@@ -51,7 +51,7 @@ class TransactionIn(object):
         self.witness = ()
 
     @classmethod
-    def coinbase_tx_in(class_, script, state=0):
+    def coinbase_tx_in(class_, script=b'', state=0):
         tx = class_(previous_hash=ZERO, previous_index=4294967295, script=script, state=state)
         return tx
 

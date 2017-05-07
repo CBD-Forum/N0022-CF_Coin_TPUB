@@ -91,7 +91,7 @@ class CoinSqlite3(object):
                 pubkey integer,
                 end_time integer,
                 pre_hash text,
-                total integer
+                lack_amount integer
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()   

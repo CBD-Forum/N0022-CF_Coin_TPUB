@@ -21,7 +21,6 @@ def save(txIn, tx, index):
 
 def deleteOld(tx, index):   
     CoinSqlite3().exec_sql('Delete from TransactionInfoIn where parentBlockId = ? And parentTxId = ? And `Index` = ?', tx.getBlockHash(), tx.hash(), index)
-
    
 def searchMyTxIns():
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoIn where isMyTx = 1')

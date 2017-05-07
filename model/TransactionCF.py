@@ -49,13 +49,13 @@ SIGHASH_ANYONECANPAY = 0x80
 ZERO32 = b'\0' * 32
 
 class CFHeader():
-    def __init__(self, original_hash, target_amount, pubkey, end_time, pre_hash, total):
-        self.original_hash=original_hash
-        self.target_amount=target_amount
-        self.pubkey=pubkey
-        self.end_time=end_time
-        self.pre_hash=pre_hash
-        self.total=total
+    def __init__(self, original_hash, target_amount, pubkey, end_time, pre_hash, lack_amount):
+        self.original_hash=original_hash        #起始块hash
+        self.target_amount=target_amount    #目标数量
+        self.pubkey=pubkey  #众筹人公钥地址
+        self.end_time=end_time  #截至时间
+        self.pre_hash=pre_hash  #前一块的hash
+        self.lack_amount=lack_amount    #剩余筹钱数量
 
 class TransactionCF(Transaction):
     TxIn = TransactionIn
@@ -79,7 +79,7 @@ class TransactionCF(Transaction):
             allow_segwit = class_.ALLOW_SEGWIT
         txs_in = []
         txs_out = []
-        original_hash, target_amount, pubkey, end_time, pre_hash, total = parse_struct("#QSL#Q", f)
+        original_hash, target_amount, pubkey, end_time, pre_hash, lack_amount = parse_struct("#QSL#Q", f)
             
         version, = parse_struct("L", f)
         v1 = ord(f.read(1))
@@ -111,7 +111,7 @@ class TransactionCF(Transaction):
                     stack.append(parse_bc_string(f))
                 tx_in.witness = stack
         lock_time, = parse_struct("L", f)
-        return class_(CFHeader(original_hash, target_amount, pubkey, end_time, pre_hash, total), version, txs_in, txs_out, lock_time)
+        return class_(CFHeader(original_hash, target_amount, pubkey, end_time, pre_hash, lack_amount), version, txs_in, txs_out, lock_time)
 
 
 

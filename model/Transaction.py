@@ -74,7 +74,7 @@ def dump_tx(tx, netcode, verbose_signature, disassembly_level, do_trace, use_pdb
         print("pubkey : %s" % tx.cf_header.pubkey)
         print("end_time : %s" % tx.cf_header.end_time)
         print("pre_hash : %s" % tx.cf_header.pre_hash)
-        print("total : %s" % tx.cf_header.total)
+        print("lack_amount : %s" % tx.cf_header.lack_amount)
     print("Version: %2d  tx hash %s  %d bytes   " % (tx.version, tx.id(), len(tx_bin)))
     print("TransactionIn count: %d; TransactionOut count: %d" % (len(tx.txs_in), len(tx.txs_out)))
     if tx.lock_time == 0:
@@ -302,7 +302,7 @@ class Transaction(object):
             stream_struct("S", f, self.cf_header.pubkey)
             stream_struct("L", f, self.cf_header.end_time)
             stream_struct("#", f, self.cf_header.pre_hash)
-            stream_struct("Q", f, self.cf_header.total)
+            stream_struct("Q", f, self.cf_header.lack_amount)
         else:
             stream_struct("L", f, 1)
         ####
@@ -614,7 +614,7 @@ class Transaction(object):
                 raise ValidationFailureError("tx_out value negative or out of range")
             nValueOut += tx_out.coin_value
             if nValueOut > self.MAX_MONEY:
-                raise ValidationFailureError("tx_out total out of range")
+                raise ValidationFailureError("tx_out lack_amount out of range")
 
     def _check_txs_in(self):
         # Check for duplicate inputs
