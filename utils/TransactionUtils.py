@@ -169,8 +169,8 @@ def createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_f
     return cf
 
 # 搜索指定hash的众筹交易，数组顺序为交易生成顺序。  state=0代表众筹未完成，state=1代表众筹完成
-def searchFcTcs(original_hash):   
-    return TransactionDao.searchFcTcs(original_hash);
+def searchCFTcs(original_hash):   
+    return TransactionDao.searchCFTcs(original_hash);
             
 def isCFTransation(tx):
     return isinstance(tx, TransactionCF)

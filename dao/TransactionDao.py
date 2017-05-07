@@ -55,7 +55,7 @@ def searchUnChainedTx():
     return __getSearchResult(c)
 
 # 搜索指定hash的众筹交易
-def searchFcTcs(original_hash):   
+def searchCFTcs(original_hash):   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where original_hash = ?', original_hash)
     return __getSearchResult(c)
     
