@@ -31,7 +31,7 @@
     <div class="container container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header flex-between">
-        <a class="navbar-brand" href="./home"><img id="logo" src="static/white-blockchain.svg" alt="Bitcoin block explorer and currency statistics"></a>
+        <a class="navbar-brand" href="./blocks"><img id="logo" src="static/white-blockchain.svg" alt="Bitcoin block explorer and currency statistics"></a>
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-1" aria-expanded="false">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
@@ -43,11 +43,12 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="navbar-collapse collapse bg-blue" id="navbar-1">
         <ul class="nav navbar-nav navbar-left">
-          <li class="item"><a href="./wallet" title="Bitcoin Wallet" class="upper">My Wallet</a></li>
-          <li class="item"><a href="./charts" title="Bitcoin Charts" class="upper">Charts</a></li>
-          <li class="item"><a href="./stats" title="Bitcoin Stats" class="upper">Stats</a></li>
-          <li class="item"><a href="./markets" title="Bitcoin Markets" class="upper">Markets</a></li>
-          <li class="item"><a href="./api" title="Blockchain Developer Tools" class="upper">API</a></li>
+			<li class="item"><a href="./index" title="Bitcoin Wallet" class="upper">首页</a></li>
+			<li class="item"><a href="./blocks" title="Bitcoin Wallet" class="upper">区块列表</a></li>
+			<li class="item"><a href="./CF_projects" title="Bitcoin Charts" class="upper">众筹项目</a></li>
+			<li class="item"><a href="./wallet" title="Bitcoin Stats" class="upper">我的钱包</a></li>
+			<li class="item"><a href="./wallet" title="Bitcoin Stats" class="upper">关于我们</a></li>
+			<li class="item"><a href="./wallet" title="Bitcoin Stats" class="upper">联系我们</a></li>
         </ul>
         
           <ul class="nav navbar-nav navbar-right hidden-sm">
@@ -55,7 +56,7 @@
               <form action="./search" method="GET" class="bc-form navbar-search">
                 <div class="group">
                   <div class="item search">
-                    <input placeholder="Search for block hash, transaction, address, etc" name="search" id="header-search" type="text">
+                    <input placeholder="搜索" name="search" id="header-search" type="text">
                     <i class="icon-search"></i>
                   </div>
                 </div>
