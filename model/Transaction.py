@@ -53,6 +53,7 @@ from pycoin.tx.script.tools import opcode_list
 from model.TransactionIn import TransactionIn
 from model.TransactionOut import TransactionOut
 from utils import TransactionUtils
+from dao import TransactionDao
 
 MAX_MONEY = 21000000 * SATOSHI_PER_COIN
 MAX_BLOCK_SIZE = 1000000
@@ -576,7 +577,12 @@ class Transaction(object):
                     b2h_rev(tx_in.previous_hash), tx_in_idx))
 
     def total_out(self):
-        return sum(tx_out.coin_value for tx_out in self.txs_out)
+        total = sum(tx_out.coin_value for tx_out in self.txs_out)
+        if TransactionUtils.isCFTransation(self):
+            if self.cf_header.lack_amount <= 0:
+                pre_tx = TransactionDao.searchByHash(self.cf_header.pre_hash)
+                total = total - self.txs_out[0].coin_value + pre_tx.cf_header.lack_amount - self.cf_header.lack_amount
+        return total
 
     def tx_outs_as_spendable(self, block_index_available=0):
         h = self.hash()
