@@ -9,7 +9,7 @@ import time
 
 from pycoin.tx.Spendable import Spendable
 
-from dao import TransactionDao, SecretKeyDao
+from dao import SecretKeyDao
 from dao.CoinSqlite3 import CoinSqlite3
 from model.TransactionOut import TransactionOut
 from utils import TransactionUtils
@@ -92,12 +92,9 @@ def deleteOld(tx, index):
                 );"""
 
 '''更新所有关联的out信息，设置状态为不可用'''
-def updateAllLinkedCFTransationOut(tx):
-    c = CoinSqlite3().exec_sql('Select * from TransactionInfo where original_hash = ?', tx.cf_header.original_hash)
-    for tmp in c.fetchall():
-        if tx.hash() != tmp[1]:
-            CoinSqlite3().exec_sql('Update TransactionInfoOut set `usedState` = 1 where `parentTxId` = ? and `index` == 0', tmp[1])
+def updateAllLinkedCFTransationOut(hash):
+    CoinSqlite3().exec_sql('Update TransactionInfoOut set `usedState` = 1 where `parentTxId` = ? and `index` = 0', hash)
 
 def updateEndTimeToZero(tx):
-    CoinSqlite3().exec_sql('Update TransactionInfoOut set `end_time`=0 where `hash` = ?', tx.hash())
+    CoinSqlite3().exec_sql('Update TransactionInfoOut set `end_time`=0 where `parentTxId` = ?', tx.hash())
     

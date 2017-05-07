@@ -94,8 +94,8 @@ def createNormalBitCoinTx(pre_out_ids, publicAddrToValueArray):
     return TransactionUtils.createTransaction(pre_out_ids, publicAddrToValueArray);
 
 '''生成普通众筹'''
-def createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueDict, refund_addr):
-    return TransactionUtils.createNormalCFTransaction(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueDict, refund_addr);
+def createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr):
+    return TransactionUtils.createNormalCFTransaction(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr);
 
 '''生成新众筹'''
 def createNewCFBitCoinTx(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee=[]):

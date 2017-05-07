@@ -91,3 +91,10 @@ def isExist(tx):
     tmp = CoinSqlite3()._exec_sql('Select * from TransactionInfo where hash = ?', tx.hash())
     s = tmp.fetchone()
     return s != None
+
+'''更新所有关联的out信息，设置状态为不可用'''
+def updateAllLinkedCFTransationOut(tx):
+    c = CoinSqlite3()._exec_sql('Select hash from TransactionInfo where original_hash = ?', tx.cf_header.original_hash)
+    for tmp in c.fetchall():
+        if tx.hash() != tmp[0]:
+            TransactionOutDao.updateAllLinkedCFTransationOut(tmp[0])

@@ -29,7 +29,7 @@ def insert(tx):
     # 如果是众筹成功 刷新所有众筹交易的状态为不可用
     if isCFTransation(tx):
         if tx.cf_header.lack_amount == 0:
-            TransactionOutDao.updateAllLinkedCFTransationOut(tx)
+            TransactionDao.updateAllLinkedCFTransationOut(tx)
             TransactionOutDao.updateEndTimeToZero(tx)
     
 def updatePreOutState(tx):
