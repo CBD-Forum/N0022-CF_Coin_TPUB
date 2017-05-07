@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="container">{% extends "base.html" %}
-{% block content %}
   <div class="container">
     
 
@@ -18,7 +16,7 @@
                     <th>区块高度</th>
                     <th>区块年龄</th>
                     <th class="hidden-xs">交易数</th>
-                    <th class="hidden-xs">交易额</th>
+                    <th class="hidden-xs">Total Sent</th>
                     <!-- <th class="hidden-xs">Relayed By</th> -->
                     <th>字节数 (kB)</th>
                 </tr>
@@ -27,63 +25,6 @@
                 {% for block in blocks %}
                     <tr id="bi-{{block.id}}">
                         <td><a href="./block?block_hash={{block.hash.hex()}}">{{block.height}}</a>
-                        </td>
-                        <td data-time="{{block.timestamp}}"></td>
-                        <td class="hidden-xs">{{block.txs_number}}</td>
-                        <td class="hidden-xs"><span data-c="2866345098762">{{block.total}} CFC</span>
-                        </td>
-                        <!-- <td class="hidden-xs">
-                            
-                                
-                                    <a href="./blocks/cfcoin.com">cfcoin.com</a>
-                                
-                                
-                            
-
-                        </td> -->
-                        <td>{{block.size}}</td>
-                    </tr>
-                
-                 {% endfor%}   
-                
-                    
-                
-            </tbody></table>
-        </div>
-    </div>
-    
-  </div>
-  
-  
-  
-  
- {% endblock %} 
-  
- 
-    
-
-    
-
-    <div class="flex-row flex-center flex-between upper em-500 mt-20 mb-15">
-      <span class="f-24">区块列表</span>
-      <a class="f-16" href="./blocks"><b class="flex-center mr-5">查看更多 <i class="icon-right_arrow ml-10"></i></b></a>
-    </div>
-    <div class="row-fluid row">
-        <div class="col-md-12">
-            <table class="table table-striped" id="blocks">
-                <tbody><tr>
-                    <th>Height</th>
-                    <th>Age</th>
-                    <th class="hidden-xs">Transactions</th>
-                    <th class="hidden-xs">Total Sent</th>
-                    <!-- <th class="hidden-xs">Relayed By</th> -->
-                    <th>Size (kB)</th>
-                </tr>
-
-                
-                {% for block in blocks %}
-                    <tr id="bi-{{block.id}}">
-                        <td><a href="./block?block_hash={{block.hash}}">{{block.height}}</a>
                         </td>
                         <td data-time="{{block.timestamp}}"></td>
                         <td class="hidden-xs">{{block.txs_number}}</td>

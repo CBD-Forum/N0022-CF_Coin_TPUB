@@ -9,11 +9,11 @@
         <div class="col-md-6 col-sm-6">
             <table class="table table-striped">
                 <tbody><tr>
-                    <th colspan="2">Summary</th>
+                    <th colspan="2">区块详情</th>
                 </tr>
                 <tr>
-                    <td>Number Of Transactions</td>
-                    <td>{{block.txs}}</td>
+                    <td>交易数</td>
+                    <td>{{block.count_txs}}</td>
                 </tr>
                 <!-- <tr>
                     <td>Output Total</td>
@@ -25,17 +25,17 @@
                 </tr>
                 -->
                 <tr>
-                    <td>Transaction Fees</td>
+                    <td>交易手续费</td>
                     <td><span data-c="177830886" data-time="1493705721000">{{block.fees}} CFC</span></td>
                 </tr>
                 <tr>
-                    <td>Height</td>
+                    <td>区块高度</td>
                     <td>{{block.height}} <font color="green">(Main Chain)
                     </font></td>
                 </tr>
                 <tr>
-                    <td>Timestamp</td>
-                    <td>2{{block.timestamp}}</td>
+                    <td>创建时间</td>
+                    <td>{{block.timestamp}}</td>
                 </tr>
                 
                     <!-- <tr>
@@ -49,7 +49,7 @@
                     </tr>
                 -->
                 <tr>
-                    <td>Difficulty</td>
+                    <td>挖矿难度</td>
                     <td>{{block.difficulty}}</td>
                 </tr>
                 <!-- <tr>
@@ -58,18 +58,18 @@
                 </tr>
                 <tr>
                 -->
-                    <td>Size</td>
+                    <td>字节数</td>
                     <td>{{block.size}} KB</td>
                 </tr>
                 <tr>
-                    <td>Version</td>
+                    <td>区块版本</td>
                     
                     
                         <td>{{block.version}}</td>
                     
                 </tr>
                 <tr>
-                    <td>Nonce</td>
+                    <td>随机数</td>
                     <td>{{block.nonce}}</td>
                 </tr>
                 
@@ -79,28 +79,29 @@
         <div class="col-md-6 col-sm-6">
             <table class="table table-striped">
                 <tbody><tr>
-                    <th colspan="2">Hashes</th>
+                    <th colspan="2">哈希</th>
                 </tr>
                 <tr>
-                    <td>Hash</td>
-                    <td><a class="hash-link" href="./block?block_hash={{block.hash}}">{{block.hash}}</a>
+                    <td>区块哈希值</td>
+                    <td><a class="hash-link" href="./block?block_hash={{block.hash.hex()}}">{{block.hash.hex()}}</a>
                     </td>
                 </tr>
                 <tr>
                     
-                    <td>Previous Block</td>
-                    <td><a class="hash-link" href="/block?block_hash={{block.pre_hash}}">{{block.pre_hash}}</a></td>
+                    <td>前一区块</td>
+                    <td><a class="hash-link" href="/block?block_hash={{block.pre_hash.hex()}}">{{block.pre_hash.hex()}}</a></td>
                 </tr>
                 <tr>
-                    <td>Next Block(s)</td>
+                    <td>后一区块</td>
                     <td>
-                        <a class="hash-link" href="/block?block_hash={{block.next_hash}}">{{block.next_hash}}</a><br>
-                    
+					{% if block.next_hash %}
+                        <a class="hash-link" href="/block?block_hash={{block.next_hash.hex()}}">{{block.next_hash.hex()}}</a><br>
+                    {% endif %}
                     </td>
                 </tr>
                 <tr>
-                    <td>Merkle Root</td>
-                    <td class="hash-link">{{block.merkle_root}}</td>
+                    <td>梅克尔根</td>
+                    <td class="hash-link">{{block.merkle_root.hex()}}</td>
                 </tr>
             </tbody></table>
 
@@ -146,7 +147,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <div style="padding-bottom:30px;width:100%;text-align:right;clear:both"> <button class="btn btn-success cb">{{tx.total_coin}} CFC</button>
+                <div style="padding-bottom:30px;width:100%;text-align:right;clear:both"> <button class="btn btn-success cb">Fee : {{tx.fee}} CFC</button>
                 </div>
             </div>
             {% endfor %}
