@@ -10,7 +10,7 @@ from www.app import app
 def index():
     blocks = datass.get_blocks()
     return render_template("index2.html", blocks = blocks)
-	
+    
 @app.route('/block')
 #display a block's details by hash
 def block():
