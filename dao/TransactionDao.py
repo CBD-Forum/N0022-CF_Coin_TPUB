@@ -2,12 +2,15 @@
 
 @author: Administrator
 '''
+from pycoin.serialize import b2h_rev
+
+import Constants
 from dao import TransactionInDao, TransactionOutDao
 from dao.CoinSqlite3 import CoinSqlite3
 from model.Transaction import Transaction
 from model.TransactionCF import TransactionCF, CFHeader
 from utils import TransactionUtils
-import Constants
+
 
 def __getSearchResult(c):
     txs = []
@@ -16,10 +19,11 @@ def __getSearchResult(c):
         parentTxId = tmp[1]
         txs_in = TransactionInDao.search(parentBlockId, parentTxId)
         txs_out = TransactionOutDao.search(parentBlockId, parentTxId)
+        unspents = unspents_from_db(txs_in)
         if tmp[7] == 1:
-            tx = Transaction(tmp[2], txs_in, txs_out, tmp[3], tmp[5].split(','), tmp[6], tmp[0])
+            tx = Transaction(tmp[2], txs_in, txs_out, tmp[3], unspents, tmp[6], tmp[0])
         else:
-            tx = TransactionCF(CFHeader(tmp[8], tmp[9], tmp[10], tmp[11], tmp[12], tmp[13]), tmp[2], txs_in, txs_out, tmp[3], tmp[0])
+            tx = TransactionCF(CFHeader(tmp[8], tmp[9], tmp[10], tmp[11], tmp[12], tmp[13]), tmp[2], txs_in, txs_out, tmp[3], unspents, tmp[6], tmp[0])
         txs.append(tx)
         
     return txs
@@ -30,10 +34,11 @@ def __getSearchResultSingle(c):
     parentTxId = tmp[1]
     txs_in = TransactionInDao.search(parentBlockId, parentTxId)
     txs_out = TransactionOutDao.search(parentBlockId, parentTxId)
+    unspents = unspents_from_db(txs_in)
     if tmp[7] == 1:
-        tx = Transaction(tmp[2], txs_in, txs_out, tmp[3], tmp[5].split(','), tmp[6], tmp[0])
+        tx = Transaction(tmp[2], txs_in, txs_out, tmp[3], unspents, tmp[6], tmp[0])
     else:
-        tx = TransactionCF(CFHeader(tmp[8], tmp[9], tmp[10], tmp[11], tmp[12], tmp[13]), tmp[2], txs_in, txs_out, tmp[3], tmp[0])
+        tx = TransactionCF(CFHeader(tmp[8], tmp[9], tmp[10], tmp[11], tmp[12], tmp[13]), tmp[2], txs_in, txs_out, tmp[3], unspents, tmp[6], tmp[0])
         
     return tx
 
@@ -68,9 +73,9 @@ def save(tx):
 
 def insert(tx):
     if TransactionUtils.isCFTransation(tx):
-        CoinSqlite3().exec_sql('INSERT INTO TransactionInfo(hash, version,lock_time,parentBlockId,unspents,state,type,original_hash, target_amount, pubkey, end_time, pre_hash, lack_amount) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', tx.hash(), tx.version, tx.lock_time, tx.getBlockHash(), ','.join(tx.unspents), tx.state, 2, tx.cf_header.original_hash, tx.cf_header.target_amount, tx.cf_header.pubkey, tx.cf_header.end_time, tx.cf_header.pre_hash, tx.cf_header.lack_amount)
+        CoinSqlite3().exec_sql('INSERT INTO TransactionInfo(hash, version,lock_time,parentBlockId,state,type,original_hash, target_amount, pubkey, end_time, pre_hash, lack_amount) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)', tx.hash(), tx.version, tx.lock_time, tx.getBlockHash(), tx.state, 2, tx.cf_header.original_hash, tx.cf_header.target_amount, tx.cf_header.pubkey, tx.cf_header.end_time, tx.cf_header.pre_hash, tx.cf_header.lack_amount)
     else:
-        CoinSqlite3().exec_sql('INSERT INTO TransactionInfo(hash, version,lock_time,parentBlockId,unspents,state,type) VALUES (?,?,?,?,?,?,?)', tx.hash(), tx.version, tx.lock_time, tx.getBlockHash(), ','.join(tx.unspents), tx.state, 1)
+        CoinSqlite3().exec_sql('INSERT INTO TransactionInfo(hash, version,lock_time,parentBlockId,state,type) VALUES (?,?,?,?,?,?)', tx.hash(), tx.version, tx.lock_time, tx.getBlockHash(), tx.state, 1)
         
     for index, txIn in enumerate(tx.txs_in):
         TransactionInDao.save(txIn, tx, index)
@@ -79,9 +84,9 @@ def insert(tx):
           
 def update(tx):
     if TransactionUtils.isCFTransation(tx):
-        CoinSqlite3().exec_sql('Update TransactionInfo set `version`=?,`lock_time`=?,`parentBlockId`=?,`unspents`=?,`state`=?, `type` = ? ,original_hash = ?, target_amount = ?, pubkey = ?, end_time = ?, pre_hash = ?, lack_amount = ? where hash = ?', tx.version, tx.lock_time, tx.getBlockHash(), ','.join(tx.unspents), tx.state, 2, tx.cf_header.original_hash, tx.cf_header.target_amount, tx.cf_header.pubkey, tx.cf_header.end_time, tx.cf_header.pre_hash, tx.cf_header.lack_amount, tx.hash())
+        CoinSqlite3().exec_sql('Update TransactionInfo set `version`=?,`lock_time`=?,`parentBlockId`=?,`state`=?, `type` = ? ,original_hash = ?, target_amount = ?, pubkey = ?, end_time = ?, pre_hash = ?, lack_amount = ? where hash = ?', tx.version, tx.lock_time, tx.getBlockHash(), tx.state, 2, tx.cf_header.original_hash, tx.cf_header.target_amount, tx.cf_header.pubkey, tx.cf_header.end_time, tx.cf_header.pre_hash, tx.cf_header.lack_amount, tx.hash())
     else:    
-        CoinSqlite3().exec_sql('Update TransactionInfo set `version`=?,`lock_time`=?,`parentBlockId`=?,`unspents`=?,`state`=?, `type` = ? where hash = ?', tx.version, tx.lock_time, tx.getBlockHash(), ','.join(tx.unspents), tx.state, 1, tx.hash())
+        CoinSqlite3().exec_sql('Update TransactionInfo set `version`=?,`lock_time`=?,`parentBlockId`=?, `state`=?, `type` = ? where hash = ?', tx.version, tx.lock_time, tx.getBlockHash(), tx.state, 1, tx.hash())
 
     for index, txIn in enumerate(tx.txs_in):
         TransactionInDao.save(txIn, tx, index)
@@ -115,4 +120,18 @@ def isPreCFlinked(cf):
         s = c.fetchone()
         return s != None
 
-        
+def unspents_from_db(txs_in, ignore_missing=False):
+    unspents = []
+    for tx_in in txs_in:
+        if tx_in.is_coinbase():
+            unspents.append(None)
+            continue
+        tx = searchByHash(tx_in.previous_hash)
+        if tx and tx.hash() == tx_in.previous_hash:
+            unspents.append(tx.txs_out[tx_in.previous_index])
+        elif ignore_missing:
+            unspents.append(None)
+        else:
+            raise KeyError(
+                "can't find tx_out for %s:%d" % (b2h_rev(tx_in.previous_hash), tx_in.previous_index))
+    return unspents    
