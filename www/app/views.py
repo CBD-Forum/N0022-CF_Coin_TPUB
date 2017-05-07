@@ -4,6 +4,7 @@ from flask import render_template, request
 from www.app import datass,datas
 
 from www.app import app
+from pycoin.serialize import h2b
 
 @app.route('/')
 
@@ -18,7 +19,7 @@ def blocks():
 @app.route('/block')
 #display a block's details by hash
 def block():
-    block_hash = request.args.get('block_hash')
+    block_hash = h2b(request.args.get('block_hash'))
     block = datass.get_block_info(block_hash)
     return render_template("block.html", block = block)
     

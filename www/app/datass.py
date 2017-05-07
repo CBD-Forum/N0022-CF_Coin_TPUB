@@ -13,6 +13,7 @@ class WBlock():
         for tx in block.txs:
             wtxs.append(WTransaction(tx, block.timestamp))
         self.txs = wtxs
+        self.count_txs = len(self.txs)
         self.timestamp = block.timestamp
         self.total = block.total_in()
         self.size = len(block.as_hex())
@@ -59,7 +60,7 @@ def get_blocks():
    
 def get_block_info(block_hash):
     block = BlockchainDao.search(block_hash)
-    wblock = WBlock(WBlock(block))
+    wblock = WBlock(block)
     return wblock
 
 def get_keys():
