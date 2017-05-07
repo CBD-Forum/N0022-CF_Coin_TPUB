@@ -4,7 +4,6 @@
 @author: Administrator
 '''
 from _ast import If
-from _overlapped import NULL
 
 from dao import TransactionDao
 from dao.CoinSqlite3 import CoinSqlite3

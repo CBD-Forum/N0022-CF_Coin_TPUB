@@ -98,3 +98,7 @@ def updateAllLinkedCFTransationOut(tx):
     for tmp in c.fetchall():
         if tx.hash() != tmp[0]:
             TransactionOutDao.updateAllLinkedCFTransationOut(tmp[0])
+            
+def updateFirstCFState(tx):
+    CoinSqlite3()._exec_sql('Update TransactionInfo set `state`= 10 where hash = ?', tx.cf_header.original_hash)
+    

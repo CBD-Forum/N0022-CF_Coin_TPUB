@@ -2,10 +2,8 @@
 
 @author: Administrator
 '''
-from _ast import If
-from _overlapped import NULL
 import sqlite3
-from socketInfo import ConstantMessage
+import Constants
 
 
 class CoinSqlite3(object):
@@ -17,7 +15,7 @@ class CoinSqlite3(object):
         '''
         Constructor
         '''
-        self.db = sqlite3.connect('C:/Users/Administrator/workspace/python/test/crowd_funding_coin/dao/test.db')
+        self.db = sqlite3.connect(Constants.DB_PATH)
         self._init_tables()
 
     def _exec_sql(self, sql, *args):

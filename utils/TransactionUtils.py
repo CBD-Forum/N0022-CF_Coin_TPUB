@@ -31,6 +31,8 @@ def insert(tx):
         if tx.cf_header.lack_amount == 0:
             TransactionDao.updateAllLinkedCFTransationOut(tx)
             TransactionOutDao.updateEndTimeToZero(tx)
+            #把众筹初始发起的tx  状态刷为10
+            TransactionDao.updateFirstCFState(tx)
     
 def updatePreOutState(tx):
     # 更新已有交易状态

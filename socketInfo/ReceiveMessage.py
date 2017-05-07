@@ -2,7 +2,6 @@
 
 @author: Administrator
 '''
-from _overlapped import NULL
 import io
 import json
 
