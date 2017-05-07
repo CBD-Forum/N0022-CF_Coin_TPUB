@@ -12,6 +12,7 @@ from model.TransactionCF import TransactionCF, CFHeader
 from model.TransactionIn import TransactionIn
 from model.TransactionOut import TransactionOut
 from socketInfo import SendMessage
+from _ast import If
 
 
 # from pycoin.tx.pay_to import ScriptPayToAddressCFfrom pycoin.ui import standard_tx_out_sc
@@ -75,10 +76,11 @@ def __get_tx_ins(pre_out_ids):
 def __get_tx_outs(publicAddrToValueArray):
     tx_outs = []
     for singlePublicAddrToValueArray in publicAddrToValueArray:
-        value = singlePublicAddrToValueArray[1]
-        script = standard_tx_out_script(singlePublicAddrToValueArray[0]);
-        tx_out = TransactionOut(value, script, 0, 0)
-        tx_outs.append(tx_out)
+        if len(singlePublicAddrToValueArray) == 2:
+            value = singlePublicAddrToValueArray[1]
+            script = standard_tx_out_script(singlePublicAddrToValueArray[0]);
+            tx_out = TransactionOut(value, script, 0, 0)
+            tx_outs.append(tx_out)
     return tx_outs
     
 '''
@@ -115,7 +117,9 @@ def createNormalCFTransaction(pre_out_ids, pre_cf_hash, spendValue, otherPublicA
     pre_cf = TransactionDao.searchByHash(pre_cf_hash);
     cf_header = pre_cf.cf_header
     cf_header.lack_amount = cf_header.lack_amount - spendValue
-    cf_header.pre_cf_hash = pre_cf_hash
+    cf_header.pre_hash = pre_cf_hash
+    if cf_header.original_hash == '' or cf_header.original_hash == Constants.ZERO_HASH:
+        cf_header.original_hash = pre_cf_hash
 #     cfscript = b''
     if cf_header.lack_amount <= 0:#CF suceess
         outValue = cf_header.target_amount

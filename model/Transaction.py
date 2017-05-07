@@ -299,7 +299,7 @@ class Transaction(object):
             stream_struct("L", f, 2)
             stream_struct("#", f, self.cf_header.original_hash)
             stream_struct("Q", f, self.cf_header.target_amount)
-            stream_struct("S", f, self.cf_header.pubkey)
+            stream_struct("S", f, self.cf_header.pubkey.encode(encoding="utf-8"))
             stream_struct("L", f, self.cf_header.end_time)
             stream_struct("#", f, self.cf_header.pre_hash)
             stream_struct("Q", f, self.cf_header.lack_amount)

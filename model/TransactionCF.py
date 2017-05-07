@@ -80,6 +80,7 @@ class TransactionCF(Transaction):
         txs_in = []
         txs_out = []
         original_hash, target_amount, pubkey, end_time, pre_hash, lack_amount = parse_struct("#QSL#Q", f)
+        pubkey = pubkey.decode()
             
         version, = parse_struct("L", f)
         v1 = ord(f.read(1))

@@ -22,8 +22,8 @@ def createNormalBitCoinTx(pre_out_ids, publicAddrToValueArray):
     return TransactionUtils.createTransaction(pre_out_ids, publicAddrToValueArray);
 
 '''生成普通众筹'''
-def createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueDict, refund_addr):
-    return TransactionUtils.createNormalCFTransaction(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueDict, refund_addr);
+def createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr):
+    return TransactionUtils.createNormalCFTransaction(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr);
 
 '''生成新众筹'''
 def createNewCFBitCoinTx(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee=[]):
@@ -36,8 +36,8 @@ def test():
     tx2 = createNormalBitCoinTx([tx.txs_out[0].uid],[['1693NYwCPZYAdF1pYdVfrfCR6c9acpNGQd', 1230],['1693NYwCPZYAdF1pYdVfrfCR6c9acpNGQd', 1230], ['1693NYwCPZYAdF1pYdVfrfCR6c9acpNGQd', 10]]) 
     tx2 = TransactionDao.searchByHash(tx2.hash())   
     cf = createNewCFBitCoinTx(1000,'1DXNcbPEavwHQHtgPrjhkbG62f9SZBXp4v',2 * int(time.time()), [tx2.txs_out[2].uid])
-    createNormalCFBitCoinTx([[tx2.txs_out[0].uid]], cf.hash(), 500, '1693NYwCPZYAdF1pYdVfrfCR6c9acpNGQd')
-    createNormalCFBitCoinTx([[tx2.txs_out[1].uid]], cf.hash(), 500, '1693NYwCPZYAdF1pYdVfrfCR6c9acpNGQd')
+    cf2 = createNormalCFBitCoinTx([tx2.txs_out[0].uid], cf.hash(), 500, [[]],'1693NYwCPZYAdF1pYdVfrfCR6c9acpNGQd')
+    createNormalCFBitCoinTx([tx2.txs_out[1].uid], cf2.hash(), 500, [[]], '1693NYwCPZYAdF1pYdVfrfCR6c9acpNGQd')
 
 if __name__ == '__main__':
     ReivSocket.init()
