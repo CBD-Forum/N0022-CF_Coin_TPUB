@@ -12,15 +12,17 @@ from model.TransactionCF import TransactionCF, CFHeader
 from model.TransactionIn import TransactionIn
 from model.TransactionOut import TransactionOut
 from socketInfo import SendMessage
-from _ast import If
 
 
 # from pycoin.tx.pay_to import ScriptPayToAddressCFfrom pycoin.ui import standard_tx_out_sc
 
-
 def insert(tx):
     if TransactionDao.isExist(tx):
         return
+    
+    if isCFTransation(tx):
+        if TransactionDao.isPreCFlinked(tx):
+            return
     
     updatePreOutState(tx)         
     # 保存新交易
@@ -31,7 +33,7 @@ def insert(tx):
         if tx.cf_header.lack_amount == 0:
             TransactionDao.updateAllLinkedCFTransationOut(tx)
             TransactionOutDao.updateEndTimeToZero(tx)
-            #把众筹初始发起的tx  状态刷为10
+            #把众筹初始发起的tx  usedstate设置为1
             TransactionDao.updateFirstCFState(tx)
     
 def updatePreOutState(tx):
@@ -40,17 +42,17 @@ def updatePreOutState(tx):
         TransactionOutDao.setStateUsed(tx.hash(), tx_in.previous_index)
     
 def verify(transaction):
-    isNeedVerify = True        
+    isNotCFTx = True        
     # 如果输入小于输出，且不是最后一次众筹， 返回False                     
     if isCFTransation(transaction):
         if transaction.cf_header.lack_amount == 0:      
-            isNeedVerify = False
+            isNotCFTx = False
         
     # 脚本验证    
     # in对应的out是否存在，且没有被转出
     for tx_in in transaction.txs_in:
         if tx_in.is_coinbase:
-            isNeedVerify = False;  
+            isNotCFTx = False;  
         else:  
             pre_tx_out = TransactionOutDao.searchByIndex(tx_in.previous_hash, tx_in.previous_index)
             if pre_tx_out == None:
@@ -58,9 +60,9 @@ def verify(transaction):
             if pre_tx_out.usedState == 1:
                 return False;
 
-    if isNeedVerify:
+    if isNotCFTx:
         return transaction.fee() >= 0
-    else:
+    else:        
         return True
 
 def __get_tx_ins(pre_out_ids):

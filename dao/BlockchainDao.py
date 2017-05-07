@@ -72,6 +72,11 @@ def isExist(blockChain):
     s = tmp.fetchone()
     return s != None
 
+def isPreBlockLinked(blockChain):
+    tmp = CoinSqlite3()._exec_sql('Select * from BlockInfo where previous_block_hash = ?', blockChain.previous_block_hash)
+    s = tmp.fetchone()
+    return s != None
+
 def save(blockChain):  
     preBlock = search(blockChain.previous_block_hash)  
     if preBlock == None:

@@ -7,6 +7,7 @@ from dao.CoinSqlite3 import CoinSqlite3
 from model.Transaction import Transaction
 from model.TransactionCF import TransactionCF, CFHeader
 from utils import TransactionUtils
+import Constants
 
 def __getSearchResult(c):
     txs = []
@@ -101,4 +102,17 @@ def updateAllLinkedCFTransationOut(tx):
             
 def updateFirstCFState(tx):
     CoinSqlite3()._exec_sql('Update TransactionInfo set `state`= 10 where hash = ?', tx.cf_header.original_hash)
+    c = CoinSqlite3()._exec_sql('Select hash from TransactionInfo where hash = ?', tx.cf_header.original_hash)
+    for tmp in c.fetchall():
+        if tx.hash() != tmp[0]:
+            TransactionOutDao.updateAllLinkedCFTransationOut(tmp[0])
     
+def isPreCFlinked(cf):
+    if cf.cf_header.pre_hash == '' or cf.cf_header.pre_hash == Constants.ZERO_HASH:
+        return False
+    else:
+        c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where pre_hash = ?', cf.cf_header.pre_hash)
+        s = c.fetchone()
+        return s != None
+
+        
