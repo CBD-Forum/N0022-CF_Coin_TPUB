@@ -70,6 +70,7 @@ class CFProject():
         self.end_time = time.ctime(src_cf.cf_header.end_time)
         self.lack_amount = des_cf.cf_header.lack_amount
         self.progress_rate = '%.2f %%' % ((des_cf.cf_header.target_amount - des_cf.cf_header.lack_amount) / des_cf.cf_header.target_amount *100)
+        self.cert = src_cf.cf_header.cert
         '''众筹成功，众筹失败'''
         if des_cf.cf_header.lack_amount <= 0:
             self.status = '众筹成功'

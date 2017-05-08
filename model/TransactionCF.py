@@ -49,13 +49,14 @@ SIGHASH_ANYONECANPAY = 0x80
 ZERO32 = b'\0' * 32
 
 class CFHeader():
-    def __init__(self, original_hash, target_amount, pubkey, end_time, pre_hash, lack_amount):
+    def __init__(self, original_hash, target_amount, pubkey, end_time, pre_hash, lack_amount, cert = ''):
         self.original_hash=original_hash        #起始块hash
         self.target_amount=target_amount    #目标数量
         self.pubkey=pubkey  #众筹人公钥地址
         self.end_time=end_time  #截至时间
         self.pre_hash=pre_hash  #前一块的hash
         self.lack_amount=lack_amount    #剩余筹钱数量
+        self.cert = cert
 
 class TransactionCF(Transaction):
     TxIn = TransactionIn

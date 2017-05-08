@@ -145,7 +145,7 @@ def createNormalCFTransaction(pre_out_ids, pre_cf_hash, spendValue, otherPublicA
         SendMessage.broadcastTransactionMsg(cf)
     return cf
         
-def createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee=[]):
+def createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee=[], cert=''):
     if len(pre_out_ids_for_fee) == 0:
         tx_in = TransactionIn.coinbase_tx_in();
         tx_ins = []
@@ -161,7 +161,7 @@ def createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_f
     original_hash = Constants.ZERO_HASH
     pre_hash = Constants.ZERO_HASH
     lack_amount = target_amount
-    cf_header = CFHeader(original_hash, target_amount, pubkey_addr, end_time, pre_hash, lack_amount)
+    cf_header = CFHeader(original_hash, target_amount, pubkey_addr, end_time, pre_hash, lack_amount, cert)
     cf = TransactionCF(cf_header, Constants.VERSION, tx_ins, tx_outs, Constants.LOCK_TIME)
     if verify(cf):
         insert(cf)

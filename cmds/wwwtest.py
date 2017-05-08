@@ -27,7 +27,27 @@ def createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAdd
 
 '''生成新众筹'''
 def createNewCFBitCoinTx(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee=[]):
-    return TransactionUtils.createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee)
+    return TransactionUtils.createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee, '''-----BEGIN CERTIFICATE-----
+MIIDLjCCAhagAwIBAgIJAKTZkez5jH1vMA0GCSqGSIb3DQEBBQUAMG8xCzAJBgNV
+BAYTAkNOMRAwDgYDVQQIDAdCZWlqaW5nMQ0wCwYDVQQKDARUUFVCMREwDwYDVQQL
+DAhTZWN1cml0eTENMAsGA1UEAwwEdHB1YjEdMBsGCSqGSIb3DQEJARYOYWRtaW5A
+dHB1Yi5jb20wHhcNMTcwNTA4MDgxMTEwWhcNMjcwNTA2MDgxMTEwWjBvMQswCQYD
+VQQGEwJDTjEQMA4GA1UECAwHQmVpamluZzENMAsGA1UECgwEVFBVQjERMA8GA1UE
+CwwIU2VjdXJpdHkxDTALBgNVBAMMBHRwdWIxHTAbBgkqhkiG9w0BCQEWDmFkbWlu
+QHRwdWIuY29tMHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEfStTpZiZKqNHJd2tYj/E
+MOGYOxFrh/TTliVA3lXadzablXdB27YqBAQirbGnw+NJuvgxa7CBi/nMqahAMTnC
+IGFBC/MLll7T4kS/f359/BiRbs4wMiuWNIzhoRugOAmgo3sweTAJBgNVHRMEAjAA
+MCwGCWCGSAGG+EIBDQQfFh1PcGVuU1NMIEdlbmVyYXRlZCBDZXJ0aWZpY2F0ZTAd
+BgNVHQ4EFgQUZ/QPXuhN9WaAjgAOUhOVNN1cELcwHwYDVR0jBBgwFoAUNUt6r4IA
+A3nI7bjzFAXN2SRaapQwDQYJKoZIhvcNAQEFBQADggEBAMlXmy0e8a+KqUKZGW6P
++arugviHapt0QLUAxdFPPwbAQm7/wJYcbguAwPvxUQlHMsdvdSqEdDQeOYiOwft8
+IGZ0dzNbynvhyH99tK42p5wgWRQyf4hMHrOnCdCgYUNOUVB0kPsSZ1R1ajSgfE/0
+Xsi5Jbhpqpzm2G8NVqnPXeYfzQPZwzSgDs9INLs4Yw6aA8ei1IT8ESPSUtCSbFiT
+HDB9G7UT/ZJBG6ZeGGONsf6ZOHZz38OkonBfL/tGS6NQzTFpr4H6yKyA3GlnYLOn
+E+FOPdz0PSfhJOsKHY+AXFWPVrKfOimfznDYHpyQ0G6X9s31MAjF1JddRG6Xo1Vl
+Ftg=
+-----END CERTIFICATE-----
+''')
 
 
 def test():

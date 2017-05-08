@@ -80,7 +80,7 @@ class CoinSqlite3(object):
                 version integer not null,
                 lock_time integer not null,
                 parentBlockId text,
-                unspents text not null,
+                unspents text,
                 state integer not null,                
                 type integer not null,
                 
@@ -89,7 +89,8 @@ class CoinSqlite3(object):
                 pubkey integer,
                 end_time integer,
                 pre_hash text,
-                lack_amount integer
+                lack_amount integer,
+                cert text
                 );"""
         c = self._exec_sql(SQL)
         self.db.commit()   
