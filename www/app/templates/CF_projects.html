@@ -30,12 +30,14 @@
                         <td><a href="./project?project_id={{project.cf_id}}">{{project.cf_id}}</a>
                         </td>
                         <td class="hidden-xs">{{project.pubkey}}</td>
-                        <td class="hidden-xs">{{project.target_amount}}</td>
+                        <td class="hidden-xs">{{project.target_amount}} CFC</td>
 						<td class="hidden-xs">{{project.start_time}}</td>
 						<td class="hidden-xs">{{project.end_time}}</td>
-						<td class="hidden-xs">{{project.target_amount - project.lack_amount}}</td>
+						<td class="hidden-xs">{{project.target_amount - project.lack_amount}} CFC</td>
                         <td class="hidden-xs">{{project.progress_rate}}</td>
 						{% if project.cert %}
+						<td class="hidden-xs"></td>
+						{% else %}
 						<td class="hidden-xs"></td>
 						{% endif %}
                         

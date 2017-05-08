@@ -41,8 +41,8 @@ class Key():
         self.addr = '1234567890QWERTYUIOP'
         
 class Project():
-    def __init__(self):
-        self.cf_id = '1234567890acdef'
+    def __init__(self, cf_id):
+        self.cf_id = cf_id
         self.target_amount = 100
         self.start_time = time.ctime(time.time()-3600*24*5)
         self.pubkey = '123456789abcedf'
@@ -87,7 +87,7 @@ def get_my_txs():
 def get_CF_projects():
     projects = []
     for i in range(5):
-        projects.append(Project())
+        projects.append(Project('123456adc'))
     return projects
 
 def get_CF_project(project_id):
