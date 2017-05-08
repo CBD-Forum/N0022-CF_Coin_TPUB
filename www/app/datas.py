@@ -40,6 +40,25 @@ class Key():
         self.sec_key = 'ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890'
         self.addr = '1234567890QWERTYUIOP'
         
+class Project():
+    def __init__(self):
+        self.cf_id = '1234567890acdef'
+        self.target_amount = 100
+        self.start_time = time.ctime(time.time()-3600*24*5)
+        self.pubkey = '123456789abcedf'
+        self.end_time = time.ctime(time.time()+3600*24*5)
+        self.lack_amount = 50
+        self.progress_rate = '%.2f %%' % 0.5*100 #50%
+        '''众筹成功，众筹失败'''
+        self.status = '正在进行'
+        self.promoter = [['addr1', 10], ['addr2',20]]
+        self.process_date = [['day1',20], ['day2',30]]
+        self.cert = Cert()
+        
+def Cert():
+    def __init__(self):
+        self.issue = 'CN tpub'        
+        
 def get_blocks():
     
     blocks = []
@@ -64,3 +83,9 @@ def get_my_txs():
     for i in range(5):
         txs.append(WTransaction())
     return txs
+
+def get_CF_projects():
+    projects = []
+    for i in range(5):
+        projects.append(Project('12345678zcbd6')))
+    return projects

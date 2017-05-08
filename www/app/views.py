@@ -56,4 +56,8 @@ def wallettest():
 #     participated_projects = get_i_participated()
 #     
     return render_template("wallet.html", my_keys = my_keys, my_txs = my_txs) #, my_utxos = my_utxos, launched_projects = launched_projects, participated_projects = participated_projects)
-       
+   
+@app.route('/CF_projects')
+def CF_projects():
+    projects = datas.get_CF_projects()  
+    return render_template("CF_projects.html", projects = projects)  

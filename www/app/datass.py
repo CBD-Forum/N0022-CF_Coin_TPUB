@@ -42,6 +42,7 @@ class WTransaction():
         self.time = timestamp
         self.total_coin = tx.total_in()
         self.fee = tx.fee()
+        self.tx_type = TransactionUtils.isCFTransation(tx)
   
 class Key():
     def __init__(self, secretKey):
