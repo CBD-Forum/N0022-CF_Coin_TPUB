@@ -91,4 +91,4 @@ def get_CF_projects():
     return projects
 
 def get_CF_project(project_id):
-    return Project()
+    return Project(project_id)

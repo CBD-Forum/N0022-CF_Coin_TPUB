@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    
+
+    <h1 style="padding-bottom:10px">众筹项目 #{{project.cf_id}}</h1>
+
+    <div class="row-fluid">
+        <div class="col-md-6 col-sm-6">
+            <table class="table table-striped">
+                <tbody><tr>
+                    <th colspan="2">详情</th>
+                </tr>
+                <tr>
+                    <td>项目ID</td>
+                    <td>{{project.cf_id}}</td>
+                </tr>
+                <!-- <tr>
+                    <td>Output Total</td>
+                    <td><span data-c="2046265343324" data-time="1493705721000">20,462.65343324 CFC</span></td>
+                </tr>
+                <tr>
+                    <td>Estimated Transaction Volume</td>
+                    <td><span data-c="164417042657" data-time="1493705721000">1,644.17042657 CFC</span></td>
+                </tr>
+                -->
+                <tr>
+                    <td>筹款地址</td>
+                    <td>{{project.pubkey}} </span></td>
+                </tr>
+                <tr>
+                    <td>开始时间</td>
+                    <td>{{project.start_time}} <!-- <font color="green">(Main Chain)
+                    </font> --></td>
+                </tr>
+                <tr>
+                    <td>截止时间</td>
+                    <td>{{project.end_time}}</td>
+                </tr>
+                
+                    <!-- <tr>
+                        <td>Received Time</td>
+                        <td>2017-05-02 06:15:21
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Relayed By</td>
+                        <td><a href="/blocks/Bixin">Bixin</a></td>
+                    </tr>
+                -->
+                <tr>
+                    <td>目标金额</td>
+                    <td>{{project.target_amount}}</td>
+                </tr>
+                <!-- <tr>
+                    <td>Bits</td>
+                    <td>402791230</td>
+                </tr>
+                <tr>
+                -->
+                    <td>已筹款</td>
+                    <td>{{project.target_amount - project.lack_amount}} CFC</td>
+                </tr>
+                <tr>
+                    <td>筹款进度</td>
+                    
+                    
+                        <td>{{project.progress_rate}}</td>
+                    
+                </tr>
+                <tr>
+                    <td>状态</td>
+                    <td>{{project.status}}</td>
+                </tr>
+                
+            </tbody></table>
+        </div>
+
+        <div class="col-md-6 col-sm-6">
+            <table class="table table-striped">
+                <tbody><tr>
+                    <th colspan="2">证书</th>
+                </tr>
+				{% if project.cert %}
+                <tr>
+                    <td>区块哈希值</td>
+                    <td><a class="hash-link" href="./block?block_hash={{project.hash.hex()}}">{{project.hash.hex()}}</a>
+                    </td>
+                </tr>
+                <tr>
+                    
+                    <td>前一区块</td>
+                    <td><a class="hash-link" href="/block?block_hash={{project.pre_hash.hex()}}">{{project.pre_hash.hex()}}</a></td>
+                </tr>
+                <tr>
+                    <td>后一区块</td>
+                    <td>
+					{% if project.next_hash %}
+                        <a class="hash-link" href="/block?block_hash={{project.next_hash.hex()}}">{{project.next_hash.hex()}}</a><br>
+                    {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>梅克尔根</td>
+                    <td class="hash-link">{{project.merkle_root.hex()}}</td>
+                </tr>
+				{% else %}
+				<tr>
+					<td>此项目未使用证书</td>
+				</tr>
+				{% endif %}
+            </tbody></table>
+
+            
+                
+            
+        </div>
+
+    </div>
+
+    <div style="width:50%; clear:both;" >
+        <h2>筹款人列表</h2>
+
+        
+            {% for promoter in project.promoter %}
+            <div id="tx-246377861" class="txdiv" >
+                <table class="table table-striped" cellpadding="0" cellspacing="0" style="padding:0px;float:left;margin:0px;width:100%">
+                    <tbody>
+                        <tr>
+                            <th colspan="3" align="left">
+                                <a class="hash-link" href="/tx?txid={{promoter[0]}}">{{promoter[0]}}</a> 
+                                <span class="pull-right">{{ promoter[1] }}</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <!-- tx_in-->
+                            <td width="180px" class="txtd hidden-phone">
+                                
+                                <a href="/address/{{promoter[2]}}">{{promoter[2]}}</a><br>
+                                                               
+                            </td>
+                            <!-- arrow img -->
+                            <td width="48px" class="hidden-phone" style="padding:4px;text-align:center;vertical-align:middle;"><img src="static/img/arrow_right_green.png"></td>
+                            <!-- tx_out-->
+                            <td class="txtd">
+                            
+                                <span class="pull-right">{{promoter[3]}} </span><br>
+                            
+                            </td>
+                            
+                            
+                            
+                        </tr>
+                    </tbody>
+                </table>
+                
+            </div>
+            {% endfor %}
+            
+            
+        
+    </div>
+
+</div>
+{% endblock %}

@@ -27,7 +27,7 @@
                 
                 {% for project in projects %}
                     <tr id="bi-{{project.id}}">
-                        <td><a href="./project?project_id={{project.cf_id}}">{{project.cf_id}}</a>
+                        <td><a href="./CF_project_detail?CF_project_id={{project.cf_id}}">{{project.cf_id}}</a>
                         </td>
                         <td class="hidden-xs">{{project.pubkey}}</td>
                         <td class="hidden-xs">{{project.target_amount}} CFC</td>
