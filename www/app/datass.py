@@ -81,7 +81,7 @@ class CFProject():
         tmpPreCF = src_cf
         promoter = []
         for cf in cfs[1:]:
-            promoter.append([cf.hash(), cf.time(), cf.txs_out[0].address(), tmpPreCF.cf_header.lack_amount - cf.cf_header.lack_amount])
+            promoter.append([cf.hash().hex(), cf.time(), cf.txs_out[0].address(), tmpPreCF.cf_header.lack_amount - cf.cf_header.lack_amount])
             tmpPreCF = cf
         self.promoter = promoter
         self.process_date = [['day1',20], ['day2',30]]
