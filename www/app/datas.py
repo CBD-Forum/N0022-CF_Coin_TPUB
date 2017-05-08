@@ -87,5 +87,5 @@ def get_my_txs():
 def get_CF_projects():
     projects = []
     for i in range(5):
-        projects.append(Project('12345678zcbd6')))
+        projects.append(Project('12345678zcbd6'))
     return projects
