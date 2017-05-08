@@ -48,10 +48,10 @@ class Project():
         self.pubkey = '123456789abcedf'
         self.end_time = time.ctime(time.time()+3600*24*5)
         self.lack_amount = 50
-        self.progress_rate = '%.2f %%' % 0.5*100 #50%
+        self.progress_rate = '%.2f %%' % (0.5*100) #50%
         '''众筹成功，众筹失败'''
         self.status = '正在进行'
-        self.promoter = [['addr1', 10], ['addr2',20]]
+        self.promoter = [['hash', 'time', 'addr1', 10], ['hash','time', 'addr2',20]]
         self.process_date = [['day1',20], ['day2',30]]
         self.cert = Cert()
         
@@ -87,5 +87,8 @@ def get_my_txs():
 def get_CF_projects():
     projects = []
     for i in range(5):
-        projects.append(Project('12345678zcbd6'))
+        projects.append(Project())
     return projects
+
+def get_CF_project(project_id):
+    return Project()
