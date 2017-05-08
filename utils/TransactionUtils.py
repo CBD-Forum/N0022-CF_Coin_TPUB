@@ -6,7 +6,7 @@
 from pycoin.ui import standard_tx_out_script
 
 import Constants
-from dao import TransactionDao, TransactionOutDao
+from dao import TransactionDao, TransactionOutDao, TransactionCFDao
 from model.Transaction import Transaction
 from model.TransactionCF import TransactionCF, CFHeader
 from model.TransactionIn import TransactionIn
@@ -15,7 +15,6 @@ from socketInfo import SendMessage
 
 
 # from pycoin.tx.pay_to import ScriptPayToAddressCFfrom pycoin.ui import standard_tx_out_sc
-
 def insert(tx):
     if TransactionDao.isExist(tx):
         return
@@ -171,8 +170,12 @@ def createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_f
     return cf
 
 # 搜索指定hash的众筹交易，数组顺序为交易生成顺序。  state=0代表众筹未完成，state=1代表众筹完成
-def searchCFTcs(original_hash):   
-    return TransactionDao.searchCFTcs(original_hash);
+def searchCFTcsByOriginal_hash(original_hash):   
+    return TransactionCFDao.searchCFTcsByOriginal_hash(original_hash)
             
 def isCFTransation(tx):
     return isinstance(tx, TransactionCF)
+
+def getParentBlock(tx):
+    return TransactionDao.getParentBlock(tx)
+    

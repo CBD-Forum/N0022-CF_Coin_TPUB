@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 import datetime
 import io
+import time
 import warnings
 
 from pycoin.cmds.tx import LOCKTIME_THRESHOLD
@@ -50,10 +51,11 @@ from pycoin.tx.script.disassemble import disassemble_scripts, \
     sighash_type_to_string
 from pycoin.tx.script.tools import opcode_list
 
+from dao import TransactionDao
 from model.TransactionIn import TransactionIn
 from model.TransactionOut import TransactionOut
 from utils import TransactionUtils
-from dao import TransactionDao
+
 
 MAX_MONEY = 21000000 * SATOSHI_PER_COIN
 MAX_BLOCK_SIZE = 1000000
@@ -773,6 +775,13 @@ class Transaction(object):
     def fee(self):
         return self.total_in() - self.total_out()
 
+    def time(self):
+        block = TransactionUtils.getParentBlock(self)
+        if block == None:
+            return int(time.time())
+        else :
+            return block.timestamp
+        
     def validate_unspents(self, tx_db):
         """
         Spendable objects returned from blockchain.info or

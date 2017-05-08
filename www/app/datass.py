@@ -1,7 +1,13 @@
 
+import time
+
+from pycoin.serialize import h2b
+
 from dao import BlockchainDao, SecretKeyDao, TransactionDao, TransactionInDao, \
-    TransactionOutDao
+    TransactionOutDao, TransactionCFDao
 from utils import TransactionUtils
+from www.app.datas import Cert
+
 
 class WBlock():
     def __init__(self, block):
@@ -50,6 +56,36 @@ class Key():
         self.pub_key = secretKey.publicKey
         self.sec_key = secretKey.privateKey
         self.addr = secretKey.pubicAddress
+
+class CFProject():
+    def __init__(self, cfs):
+        if len(cfs) == 0:
+            return
+        src_cf = cfs[0]
+        des_cf = cfs[-1]
+        self.cf_id = src_cf.hash().hex()
+        self.target_amount = src_cf.cf_header.target_amount
+        self.start_time = time.ctime(src_cf.time()-3600*24*5)
+        self.pubkey = src_cf.cf_header.pubkey
+        self.end_time = time.ctime(src_cf.cf_header.end_time)
+        self.lack_amount = des_cf.cf_header.lack_amount
+        self.progress_rate = '%.2f %%' % ((des_cf.cf_header.target_amount - des_cf.cf_header.lack_amount) / des_cf.cf_header.target_amount *100)
+        '''众筹成功，众筹失败'''
+        if des_cf.cf_header.lack_amount <= 0:
+            self.status = '众筹成功'
+        elif src_cf.cf_header.end_time > int(time.time()):
+            self.status = '正在进行'
+        else:
+            self.status = '众筹失败'   
+                
+        tmpPreCF = src_cf
+        promoter = []
+        for cf in cfs[1:]:
+            promoter.append([cf.hash(), cf.time(), cf.txs_out[0].address(), tmpPreCF.cf_header.lack_amount - cf.cf_header.lack_amount])
+            tmpPreCF = cf
+        self.promoter = promoter
+        self.process_date = [['day1',20], ['day2',30]]
+        self.cert = None
         
 def get_blocks():    
     wblocks = []
@@ -102,3 +138,15 @@ def createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAdd
 '''生成新众筹'''
 def createNewCFBitCoinTx(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee=[]):
     return TransactionUtils.createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee)
+
+def get_CF_projects():
+    allCFDict = TransactionCFDao.searchAllCFDict()
+    projects = []
+    for cfs in allCFDict.values():
+        projects.append(CFProject(cfs))
+    return projects
+
+def get_CF_project(project_id):
+    allCFDict = TransactionCFDao.searchAllCFDict()
+    cfs = allCFDict[h2b(project_id)]
+    return CFProject(cfs)

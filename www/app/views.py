@@ -59,11 +59,11 @@ def wallettest():
    
 @app.route('/CF_projects')
 def CF_projects():
-    projects = datas.get_CF_projects()  
+    projects = datass.get_CF_projects()  
     return render_template("CF_projects.html", projects = projects)  
 
 @app.route('/CF_project_detail')
 def CF_project_detail():
     project_id = request.args.get('CF_project_id')
-    project = datas.get_CF_project(project_id)  
+    project = datass.get_CF_project(project_id)  
     return render_template("CF_project_detail.html", project = project)  

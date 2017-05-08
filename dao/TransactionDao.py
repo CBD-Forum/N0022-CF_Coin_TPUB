@@ -5,7 +5,7 @@
 from pycoin.serialize import b2h_rev
 
 import Constants
-from dao import TransactionInDao, TransactionOutDao
+from dao import TransactionInDao, TransactionOutDao, BlockchainDao
 from dao.CoinSqlite3 import CoinSqlite3
 from model.Transaction import Transaction
 from model.TransactionCF import TransactionCF, CFHeader
@@ -58,11 +58,6 @@ def searchByHash(hash):
     
 def searchUnChainedTx():   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where parentBlockId = \'\'')
-    return __getSearchResult(c)
-
-# 搜索指定hash的众筹交易
-def searchCFTcs(original_hash):   
-    c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where original_hash = ?', original_hash)
     return __getSearchResult(c)
     
 def save(tx):
@@ -134,4 +129,15 @@ def unspents_from_db(txs_in, ignore_missing=False):
         else:
             raise KeyError(
                 "can't find tx_out for %s:%d" % (b2h_rev(tx_in.previous_hash), tx_in.previous_index))
-    return unspents    
+    return unspents  
+
+def getParentBlock(tx):
+    c = CoinSqlite3()._exec_sql('Select parentBlockId from TransactionInfo where hash = ?', tx.hash())
+    tmp = c.fetchone()
+    if tmp == None:
+        return None
+    else:
+        parentBlockId = tmp[0]
+        return BlockchainDao.search(parentBlockId)
+    
+      
