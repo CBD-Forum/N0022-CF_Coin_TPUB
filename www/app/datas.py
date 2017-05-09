@@ -56,8 +56,14 @@ class Project():
         self.cert = Cert()
         
 class Cert():
-    def __init__(self):
-        self.issue = 'CN tpub'        
+    def __init__(self,cert_obj):
+        self.issuer = cert_obj.get_issuer()  
+        self.subject = cert_obj.get_subject()   
+        self.expired = cert_obj.has_expired()
+        self.notAfter = cert_obj.get_notAfter()
+        self.notBefore = cert_obj.get_notBefore()
+        self.serial_number = cert_obj.get_serial_number()
+        self.signature_algorihm = cert_obj.get_signature_algorithm()
         
 def get_blocks():
     
