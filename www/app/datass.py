@@ -34,21 +34,43 @@ class WBlock():
         self.merkle_root = block.merkle_root
 
 class WTransaction():
+    def get_detail(self, tx):
+        self.size = len(tx.as_hex()) #bytes
+        block = TransactionUtils.searchParentBlock(tx)
+        if block != None:
+            self.block_hash = block.hash()
+        else:
+            self.block_hash = '1234567890asdfgh'
+        self.in_amount = tx.total_in()
+        self.fee_per_byte = float(self.fee / self.size) * 10**8
+        self.in_scripts = ['1234567asdfxcvbn','123456ASDFGH']#这里怎么存看你方便
+        self.out_scripts = []
+        for txout in tx.txs_out:
+            self.out_scripts.append(txout.script)
+        
     def __init__(self, tx, timestamp=0):
         self.tx_hash = tx.hash().hex()
         inputs = []
         for txin in tx.txs_in:
-            inputs.append(txin.address())
+            inputs.append(TransactionUtils.getTxinPublicAddressByPre(txin))
         self.tx_inputs = inputs
         outputs = []
         for txout in tx.txs_out:
-            outputs.append([txout.address(), txout.coin_value])
+            if TransactionUtils.isCFTransationOut(txout):
+                txout_type = '众筹交易'
+            else:
+                txout_type = '普通交易'
+            outputs.append([txout.address(), txout.coin_value, txout_type, TransactionUtils.getTransactionAndOutTime(txout)])
         self.tx_outputs = outputs
-        self.time = timestamp
+        self.time = TransactionUtils.getTransactionAndOutTime(tx)
         self.total_coin = tx.total_in()
         self.fee = tx.fee()
-        self.tx_type = TransactionUtils.isCFTransation(tx)
-  
+        if TransactionUtils.isCFTransation(tx):
+            self.tx_type = '众筹交易'
+        else:
+            self.tx_type = '普通交易'
+        self.get_detail(tx)
+        
 class Key():
     def __init__(self, secretKey):
         self.id = secretKey.uid
@@ -64,7 +86,7 @@ class CFProject():
         des_cf = cfs[-1]
         self.cf_id = src_cf.hash().hex()
         self.target_amount = src_cf.cf_header.target_amount
-        self.start_time = time.ctime(TransactionUtils.getTransactionTime(src_cf)-3600*24*5)
+        self.start_time = time.ctime(TransactionUtils.getTransactionAndOutTime(src_cf)-3600*24*5)
         self.pubkey = src_cf.cf_header.pubkey
         self.end_time = time.ctime(src_cf.cf_header.end_time)
         self.lack_amount = des_cf.cf_header.lack_amount
@@ -82,7 +104,7 @@ class CFProject():
         tmpPreCF = src_cf
         promoter = []
         for cf in cfs[1:]:
-            promoter.append([cf.hash().hex(), TransactionUtils.getTransactionTime(cf), cf.txs_out[0].address(), tmpPreCF.cf_header.lack_amount - cf.cf_header.lack_amount])
+            promoter.append([cf.hash().hex(), TransactionUtils.getTransactionAndOutTime(cf), cf.txs_out[0].address(), tmpPreCF.cf_header.lack_amount - cf.cf_header.lack_amount])
             tmpPreCF = cf
         self.promoter = promoter
         self.process_date = [['day1',20], ['day2',30]]

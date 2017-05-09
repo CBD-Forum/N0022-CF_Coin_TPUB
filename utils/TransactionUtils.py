@@ -206,22 +206,16 @@ def isCFTransationOut(txout):
 # 通过寻找前一个out 获取in的pubAddress            
 def getTxinPublicAddressByPre(txin):
     if txin.is_coinbase():
-        return None
+        return "(coinbase)"
     pre_tx = TransactionDao.searchByHash(txin.previous_hash)
     if pre_tx != None:
         pre_txout = pre_tx.txs_out[txin.previous_index];
         return pre_txout.address()
     else:
         return None
-    
-def getTransactionOutTime(txout):
-    block = searchParentBlock(txout)
-    if block == None:
-        return int(time.time())
-    else :
-        return block.timestamp
-        
-def getTransactionTime(tx):
+
+#支持tx和txout        
+def getTransactionAndOutTime(tx):
     block = searchParentBlock(tx)
     if block == None:
         return int(time.time())
