@@ -3,7 +3,7 @@
 <div class="container">
     
 
-    <h1 style="padding-bottom:10px">众筹项目 #{{project.cf_id}}</h1>
+    <h1 style="padding-bottom:10px">众筹项目 #<object alt="{{project.cf_id}}">{{project.cf_id[:20]}}... </object></h1>
 
     <div class="row-fluid">
         <div class="col-md-6 col-sm-6">
@@ -13,7 +13,7 @@
                 </tr>
                 <tr>
                     <td>项目ID</td>
-                    <td>{{project.cf_id}}</td>
+                    <td alt="{{project.cf_id}}">{{ project.cf_id[:20] }}...</td>
                 </tr>
                 <!-- <tr>
                     <td>Output Total</td>
@@ -83,26 +83,26 @@
                 </tr>
 				{% if project.cert %}
                 <tr>
-                    <td>区块哈希值</td>
-                    <td><a class="hash-link" href="./block?block_hash={{project.hash.hex()}}">{{project.hash.hex()}}</a>
+                    <td>issue</td>
+                    <td><a class="hash-link" "> {{project.cert}}</a>
                     </td>
                 </tr>
                 <tr>
                     
-                    <td>前一区块</td>
-                    <td><a class="hash-link" href="/block?block_hash={{project.pre_hash.hex()}}">{{project.pre_hash.hex()}}</a></td>
+                    <td>xx</td>
+                    <td><a class="hash-link" href="/block?block_hash=xx">xx</a></td>
                 </tr>
                 <tr>
-                    <td>后一区块</td>
+                    <td>xx</td>
                     <td>
 					{% if project.next_hash %}
-                        <a class="hash-link" href="/block?block_hash={{project.next_hash.hex()}}">{{project.next_hash.hex()}}</a><br>
+                        <a class="hash-link" href="/block?block_hash=xx">xx</a><br>
                     {% endif %}
                     </td>
                 </tr>
                 <tr>
-                    <td>梅克尔根</td>
-                    <td class="hash-link">{{project.merkle_root.hex()}}</td>
+                    <td>xx</td>
+                    <td class="hash-link">xx</td>
                 </tr>
 				{% else %}
 				<tr>
@@ -134,7 +134,7 @@
                         </tr>
                         <tr>
                             <!-- tx_in-->
-                            <td width="180px" class="txtd hidden-phone">
+                            <td width="400px" class="txtd hidden-phone">
                                 
                                 <a href="/address/{{promoter[2]}}">{{promoter[2]}}</a><br>
                                                                
