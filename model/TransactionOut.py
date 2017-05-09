@@ -81,7 +81,7 @@ class TransactionOut(object):
     
     
     def time(self):
-        block = TransactionUtils.getParentBlock(self)
+        block = TransactionUtils.searchParentBlock(self)
         if block == None:
             return int(pytime.time())
         else :

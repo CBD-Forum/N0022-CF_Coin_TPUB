@@ -176,11 +176,33 @@ def searchCFTcsByOriginal_hash(original_hash):
 def isCFTransation(tx):
     return isinstance(tx, TransactionCF)
 
-def getParentBlock(tx):
+def searchParentBlock(tx):
     if isinstance(tx, Transaction):
-        return TransactionDao.getParentBlock(tx)
+        return TransactionDao.searchParentBlock(tx)
     elif isinstance(tx, TransactionOut):
-        return TransactionOutDao.getParentBlock(tx)
+        return TransactionOutDao.searchParentBlock(tx)
     else:
         return None
+
+# 判断out是否是众筹交易（index = 0 且父节点是cf）    
+def isCFTransationOut(txout):
+    #index不为0  肯定不是众筹
+    if txout.index != 0:
+        return False
     
+    tx = TransactionOutDao.searchParentTransaction(txout)
+    if tx == None:
+        return False
+    else:
+        return isCFTransation(tx)
+
+# 通过寻找前一个out 获取in的pubAddress            
+def getTxinPublicAddressByPre(txin):
+    if txin.is_coinbase():
+        return None
+    pre_tx = TransactionDao.searchByHash(txin.previous_hash)
+    if pre_tx != None:
+        pre_txout = pre_tx.txs_out[txin.previous_index];
+        return pre_txout.address()
+    else:
+        return None

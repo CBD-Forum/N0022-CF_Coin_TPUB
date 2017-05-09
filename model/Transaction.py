@@ -776,7 +776,7 @@ class Transaction(object):
         return self.total_in() - self.total_out()
 
     def time(self):
-        block = TransactionUtils.getParentBlock(self)
+        block = TransactionUtils.searchParentBlock(self)
         if block == None:
             return int(pytime.time())
         else :

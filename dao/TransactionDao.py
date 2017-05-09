@@ -131,7 +131,7 @@ def unspents_from_db(txs_in, ignore_missing=False):
                 "can't find tx_out for %s:%d" % (b2h_rev(tx_in.previous_hash), tx_in.previous_index))
     return unspents  
 
-def getParentBlock(tx):
+def searchParentBlock(tx):
     c = CoinSqlite3()._exec_sql('Select parentBlockId from TransactionInfo where hash = ?', tx.hash())
     tmp = c.fetchone()
     if tmp == None:

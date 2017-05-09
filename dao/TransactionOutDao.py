@@ -9,7 +9,7 @@ import time
 
 from pycoin.tx.Spendable import Spendable
 
-from dao import SecretKeyDao, BlockchainDao
+from dao import SecretKeyDao, BlockchainDao, TransactionDao
 from dao.CoinSqlite3 import CoinSqlite3
 from model.TransactionOut import TransactionOut
 from utils import TransactionUtils
@@ -98,7 +98,7 @@ def updateAllLinkedCFTransationOut(hash):
 def updateEndTimeToZero(tx):
     CoinSqlite3().exec_sql('Update TransactionInfoOut set `end_time`=0 where `parentTxId` = ?', tx.hash())
     
-def getParentBlock(txout):
+def searchParentBlock(txout):
     c = CoinSqlite3()._exec_sql('Select parentBlockId from TransactionInfoOut where `id` = ?', txout.uid)
     tmp = c.fetchone()
     if tmp == None:
@@ -106,3 +106,12 @@ def getParentBlock(txout):
     else:
         parentBlockId = tmp[0]
         return BlockchainDao.search(parentBlockId)
+    
+def searchParentTransaction(txout):
+    c = CoinSqlite3()._exec_sql('Select parentTxId from TransactionInfoOut where `id` = ?', txout.uid)
+    tmp = c.fetchone()
+    if tmp == None:
+        return None
+    else:
+        parentTxId = tmp[0]
+        return TransactionDao.searchByHash(parentTxId)
