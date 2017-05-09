@@ -66,4 +66,13 @@ def CF_projects():
 def CF_project_detail():
     project_id = request.args.get('CF_project_id')
     project = datass.get_CF_project(project_id)  
-    return render_template("CF_project_detail.html", project = project)  
+    return render_template("CF_project_detail.html", project = project) 
+
+@app.route('/tx') 
+def tx():
+    tx_id = request.args.get('tx_id')
+    tx = datas.get_tx(tx_id)  
+    return render_template("tx.html", tx = tx) 
+    
+    
+    

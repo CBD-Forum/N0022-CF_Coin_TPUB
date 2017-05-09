@@ -32,6 +32,16 @@ class WTransaction():
         self.time = time.ctime()
         self.total_coin = 1.71251277
         self.fee = 0.12
+        
+        
+        
+    def get_detail(self):
+        self.size = 128 #bytes
+        self.block_hash = '1234567890asdfgh'
+        self.in_amount = self.total_coin + self.fee
+        self.fee_per_byte = float(self.fee / self.size) * 10**8
+        self.in_scripts = ['1234567asdfxcvbn','123456ASDFGH']#这里怎么存看你方便
+        self.out_scripts = ['1234567asdfxcvbn','123456ASDFGH']
   
 class Key():
     def __init__(self, id):
@@ -98,3 +108,9 @@ def get_CF_projects():
 
 def get_CF_project(project_id):
     return Project(project_id)
+
+def get_tx(tx_id):
+    tx = WTransaction()
+    tx.get_detail()
+    return tx
+    
