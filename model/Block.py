@@ -143,20 +143,20 @@ class Block(BlockHeader):
         self.height = height
         self.max = self.difficulty_max_mask_for_bits()
         
-#         target = self.difficulty
-#         a=(target & 0xff000000)>>24
-#         b=(target & 0x00ff0000)>>16
-#         c=(target & 0x0000ff00)>>8
-#         d=(target & 0x000000ff)
-#         num = (c << 16) + (b << 8 ) + a
-#         exp = d
-#         max = num * 256 ** (d-3)
-#         #max = (target & 0xffffff) * 256 ** (((target & 0xff000000) >> 24 )-3)
-#         max = ('%064s' % hex(max)[2:]).replace(' ', '0')
-#         self.max = max
+        target = self.difficulty
+        a=(target & 0xff000000)>>24
+        b=(target & 0x00ff0000)>>16
+        c=(target & 0x0000ff00)>>8
+        d=(target & 0x000000ff)
+        num = (c << 16) + (b << 8 ) + a
+        exp = d
+        max = num * 256 ** (d-3)
+        #max = (target & 0xffffff) * 256 ** (((target & 0xff000000) >> 24 )-3)
+        max = ('%064s' % hex(max)[2:]).replace(' ', '0')
+        self.max = max
 
         
-        self.check_merkle_hash()
+#         self.check_merkle_hash()
 
     def as_blockheader(self):
         return BlockHeader(self.version, self.previous_block_hash, self.merkle_root,

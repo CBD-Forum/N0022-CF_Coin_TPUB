@@ -29,13 +29,17 @@ def findBlockChain():
     unchainedTxs = TransactionDao.searchUnChainedTx()  # 没有被打包的交易
     unlinkedBlock = BlockchainDao.searchUnlinkedBlock()  # 没被链接的区块
     
+    if len(unchainedTxs) == 0 or len(unlinkedBlock) == 0:
+        return
+    
     version = Constants.VERSION
     timestamp = int(time.time())
     difficulty = Constants.DIFFICULTY
     txs = unchainedTxs
-    
-    minner_tx = insertFeeToMinner(txs)
-    txs.insert(0, minner_tx) 
+    for tx in txs:
+        if tx.fee() > 0:
+            feeOut = getFeeOut(tx.fee())
+            tx.txs_out.append(feeOut)
      
     state = 0
     if txs.__len__() == 0:
@@ -54,23 +58,11 @@ def findBlockChain():
                 BlockchainDao.save(tmpBlock)
                 SendMessage.broadcastBlockMsg(tmpBlock)
 
-def insertFeeToMinner(txs):
-    fee = 0;
-    for tx in txs:
-        fee += tx.fee()
-    tx_in = TransactionIn.coinbase_tx_in(b'')
-    tx_ins = []
-    tx_ins.append(tx_in)
-    
-    
+def getFeeOut(fee):
     script = standard_tx_out_script(Constants.MINNER_PUBADDR);
-    tx_out = TransactionOut(fee, script, 0, 0)
-    tx_outs = []
-    tx_outs.append(tx_out)
-    
-    minner_tx = Transaction(Constants.VERSION, tx_ins, tx_outs, Constants.LOCK_TIME, None, 0) 
-    return minner_tx
-        
+    coin_value = fee
+    txout = TransactionOut.TransactionOut(coin_value, script)
+    return txout
         
 def main():
     ReivSocket()
