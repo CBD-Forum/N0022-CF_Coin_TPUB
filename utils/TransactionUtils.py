@@ -177,5 +177,10 @@ def isCFTransation(tx):
     return isinstance(tx, TransactionCF)
 
 def getParentBlock(tx):
-    return TransactionDao.getParentBlock(tx)
+    if isinstance(tx, Transaction):
+        return TransactionDao.getParentBlock(tx)
+    elif isinstance(tx, TransactionOut):
+        return TransactionOutDao.getParentBlock(tx)
+    else:
+        return None
     

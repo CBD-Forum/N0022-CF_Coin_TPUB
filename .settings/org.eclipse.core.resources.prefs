@@ -4,4 +4,6 @@ encoding//model/Transaction.py=utf-8
 encoding//model/TransactionCF.py=utf-8
 encoding//model/TransactionIn.py=utf-8
 encoding//model/TransactionOut.py=utf-8
+encoding//www/app/templates/CF_project_detail.html=UTF-8
+encoding//www/app/templates/wallet.html=UTF-8
 encoding/<project>=UTF-8
