@@ -5,8 +5,7 @@ from pycoin.serialize import h2b
 
 from dao import BlockchainDao, SecretKeyDao, TransactionDao, TransactionInDao, \
     TransactionOutDao, TransactionCFDao
-from utils import TransactionUtils
-from www.app.datas import Cert
+from utils import TransactionUtils, SecretKeyUtils
 
 
 class WBlock():
@@ -70,7 +69,8 @@ class CFProject():
         self.end_time = time.ctime(src_cf.cf_header.end_time)
         self.lack_amount = des_cf.cf_header.lack_amount
         self.progress_rate = '%.2f %%' % ((des_cf.cf_header.target_amount - des_cf.cf_header.lack_amount) / des_cf.cf_header.target_amount *100)
-        self.cert = src_cf.cf_header.cert
+        cert_obj = SecretKeyUtils.stringToCert(src_cf.cf_header.cert)
+        self.cert = Cert(cert_obj)
         '''众筹成功，众筹失败'''
         if des_cf.cf_header.lack_amount <= 0:
             self.status = '众筹成功'
@@ -151,3 +151,13 @@ def get_CF_project(project_id):
     allCFDict = TransactionCFDao.searchAllCFDict()
     cfs = allCFDict[h2b(project_id)]
     return CFProject(cfs)
+
+class Cert():
+    def __init__(self,cert_obj):
+        self.issuer = cert_obj.get_issuer()  
+        self.subject = cert_obj.get_subject()   
+        self.expired = cert_obj.has_expired()
+        self.notAfter = cert_obj.get_notAfter()
+        self.notBefore = cert_obj.get_notBefore()
+        self.serial_number = cert_obj.get_serial_number()
+        self.signature_algorihm = cert_obj.get_signature_algorithm()
