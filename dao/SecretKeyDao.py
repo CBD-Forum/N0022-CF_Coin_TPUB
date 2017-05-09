@@ -11,7 +11,7 @@ def search():
     c = CoinSqlite3()._exec_sql('Select * from SecretKeyInfo')
     secrets = []
     for tmp in c.fetchall():
-        secret = SecretKey(tmp[1], tmp[3], tmp[2], tmp[0])
+        secret = SecretKey(tmp[1], tmp[3], tmp[2], tmp[4], tmp[0])
         secrets.append(secret)
     return secrets
 
@@ -24,7 +24,7 @@ def searchMySecrets():
     c = CoinSqlite3()._exec_sql('Select * from SecretKeyInfo Where privateKey != \'\'')
     secrets = []
     for tmp in c.fetchall():
-        secret = SecretKey(tmp[1], tmp[3], tmp[2], tmp[0])
+        secret = SecretKey(tmp[1], tmp[3], tmp[2], tmp[4], tmp[0])
         secrets.append(secret)
     return secrets
 
@@ -36,7 +36,7 @@ def save(secret):
 
 
 def insert(secret):
-    CoinSqlite3().exec_sql('INSERT INTO SecretKeyInfo(publicKey, privateKey,pubicAddress) VALUES (?,?,?)', str(secret.publicKey), str(secret.privateKey), str(secret.pubicAddress)) 
+    CoinSqlite3().exec_sql('INSERT INTO SecretKeyInfo(publicKey, privateKey,pubicAddress, cert) VALUES (?,?,?,?)', str(secret.publicKey), str(secret.privateKey), str(secret.pubicAddress), str(secret.cert)) 
               
 def update(secret):
     pass
