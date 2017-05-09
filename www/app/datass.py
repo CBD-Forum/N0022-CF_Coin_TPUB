@@ -86,7 +86,7 @@ class CFProject():
             tmpPreCF = cf
         self.promoter = promoter
         self.process_date = [['day1',20], ['day2',30]]
-        self.cert = None
+#         self.cert = None
         
 def get_blocks():    
     wblocks = []

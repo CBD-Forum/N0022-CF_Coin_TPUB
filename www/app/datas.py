@@ -55,7 +55,7 @@ class Project():
         self.process_date = [['day1',20], ['day2',30]]
         self.cert = Cert()
         
-def Cert():
+class Cert():
     def __init__(self):
         self.issue = 'CN tpub'        
         

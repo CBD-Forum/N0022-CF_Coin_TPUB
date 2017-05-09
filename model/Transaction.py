@@ -54,6 +54,7 @@ from pycoin.tx.script.tools import opcode_list
 from dao import TransactionDao
 from model.TransactionIn import TransactionIn
 from model.TransactionOut import TransactionOut
+from model.TransactionCF import TransactionCF
 from utils import TransactionUtils
 
 
@@ -75,6 +76,7 @@ def dump_tx(tx, netcode, verbose_signature, disassembly_level, do_trace, use_pdb
         print("original_hash : %s" % tx.cf_header.original_hash)
         print("target_amount : %s" % tx.cf_header.target_amount)
         print("pubkey : %s" % tx.cf_header.pubkey)
+        print("certificate : %s " % tx.cf_header.cert)
         print("end_time : %s" % tx.cf_header.end_time)
         print("pre_hash : %s" % tx.cf_header.pre_hash)
         print("lack_amount : %s" % tx.cf_header.lack_amount)
@@ -302,7 +304,8 @@ class Transaction(object):
             stream_struct("L", f, 2)
             stream_struct("#", f, self.cf_header.original_hash)
             stream_struct("Q", f, self.cf_header.target_amount)
-            stream_struct("S", f, self.cf_header.pubkey.encode(encoding="utf-8"))
+            pubkey = TransactionCF.combine_cert(self.CF_header.pubkey, self.CF_header.certificate)
+            stream_struct("S", f, pubkey.encode(encoding="utf-8"))
             stream_struct("L", f, self.cf_header.end_time)
             stream_struct("#", f, self.cf_header.pre_hash)
             stream_struct("Q", f, self.cf_header.lack_amount)

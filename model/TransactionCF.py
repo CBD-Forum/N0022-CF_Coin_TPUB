@@ -29,13 +29,18 @@ THE SOFTWARE.
 import io
 import warnings
 
+import sys
+sys.path.append(".")
+sys.path.append("..")
+   
+
 from pycoin.convention import SATOSHI_PER_COIN
 from pycoin.serialize.bitcoin_streamer import parse_struct, parse_bc_int, \
     parse_bc_string
 from pycoin.tx import Spendable
-from model.Transaction import Transaction
 from model.TransactionIn import TransactionIn
 from model.TransactionOut import TransactionOut
+from Transaction import Transaction
 
 
 MAX_MONEY = 21000000 * SATOSHI_PER_COIN
@@ -81,6 +86,7 @@ class TransactionCF(Transaction):
         txs_in = []
         txs_out = []
         original_hash, target_amount, pubkey, end_time, pre_hash, lack_amount = parse_struct("#QSL#Q", f)
+        pubkey, certificate = class_.separate_cert(self, pubkey)
         pubkey = pubkey.decode()
             
         version, = parse_struct("L", f)
@@ -113,9 +119,22 @@ class TransactionCF(Transaction):
                     stack.append(parse_bc_string(f))
                 tx_in.witness = stack
         lock_time, = parse_struct("L", f)
-        return class_(CFHeader(original_hash, target_amount, pubkey, end_time, pre_hash, lack_amount), version, txs_in, txs_out, lock_time)
+        return class_(CFHeader(original_hash, target_amount, pubkey, end_time, pre_hash, lack_amount, certificate), version, txs_in, txs_out, lock_time)
 
-
+    def separate_cert(self, pubkey):
+        sequnce = b'\xff\xff\xff\xff'
+        if  sequnce in pubkey:
+            pubkey, certificate = pubkey.split(sequnce)
+        else:
+            certificate = None
+        return pubkey, certificate
+    
+    @classmethod
+    def combine_cert(cls, pubkey, certificate):
+        if certificate in (None, ''):
+            return pubkey
+        sequnce = b'\xff\xff\xff\xff'
+        return pubkey + sequnce + certificate
 
     def __init__(self, cf_header, version, txs_in, txs_out, lock_time=0, unspents=None, state = 0, uid = 0):
         super().__init__(version, txs_in, txs_out, lock_time, unspents, state, uid)
