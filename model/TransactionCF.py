@@ -40,7 +40,7 @@ from pycoin.serialize.bitcoin_streamer import parse_struct, parse_bc_int, \
 from pycoin.tx import Spendable
 from model.TransactionIn import TransactionIn
 from model.TransactionOut import TransactionOut
-from Transaction import Transaction
+from model.Transaction import Transaction
 
 
 MAX_MONEY = 21000000 * SATOSHI_PER_COIN
