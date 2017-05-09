@@ -83,21 +83,21 @@
                 </tr>
 				{% if project.cert %}
                 <tr>
-                    <td>issue</td>
-                    <td><a class="hash-link" "> {{project.cert}}</a>
+                    <td>版本</td>
+                    <td><a class="hash-link" "> V3</a>
                     </td>
                 </tr>
                 <tr>
                     
-                    <td>xx</td>
-                    <td><a class="hash-link" href="/block?block_hash=xx">xx</a></td>
+                    <td>序列号</td>
+                    <td>project.cert.serial_number</td>
                 </tr>
                 <tr>
-                    <td>xx</td>
+                    <td>签名算法</td>
                     <td>
-					{% if project.next_hash %}
+					
                         <a class="hash-link" href="/block?block_hash=xx">xx</a><br>
-                    {% endif %}
+                    
                     </td>
                 </tr>
                 <tr>
