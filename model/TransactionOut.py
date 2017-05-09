@@ -30,9 +30,7 @@ from pycoin.serialize.bitcoin_streamer import stream_struct, parse_struct
 from pycoin.tx.pay_to import script_obj_from_script
 from pycoin.tx.script import tools
 
-import time as pytime
 import Constants
-from utils import TransactionUtils
 
 
 class TransactionOut(object):
@@ -78,12 +76,4 @@ class TransactionOut(object):
         # attempt to return the destination hash160, or None on failure
         info = script_obj_from_script(self.script).info()
         return info.get("hash160")
-    
-    
-    def time(self):
-        block = TransactionUtils.searchParentBlock(self)
-        if block == None:
-            return int(pytime.time())
-        else :
-            return block.timestamp
-        
+

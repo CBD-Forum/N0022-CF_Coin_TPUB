@@ -86,7 +86,7 @@ class TransactionCF(Transaction):
         txs_in = []
         txs_out = []
         original_hash, target_amount, pubkey, end_time, pre_hash, lack_amount = parse_struct("#QSL#Q", f)
-        pubkey, certificate = class_.separate_cert(self, pubkey)
+        pubkey, certificate = class_.separate_cert(class_, pubkey)
         pubkey = pubkey.decode()
             
         version, = parse_struct("L", f)

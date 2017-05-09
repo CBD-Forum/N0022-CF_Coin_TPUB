@@ -3,10 +3,13 @@
 @author: Administrator
 '''
 
+import time
+
 from pycoin.ui import standard_tx_out_script
 
 import Constants
-from dao import TransactionDao, TransactionOutDao, TransactionCFDao
+from dao import TransactionDao, TransactionOutDao, TransactionCFDao, \
+    BlockchainDao
 from model.Transaction import Transaction
 from model.TransactionCF import TransactionCF, CFHeader
 from model.TransactionIn import TransactionIn
@@ -177,12 +180,15 @@ def isCFTransation(tx):
     return isinstance(tx, TransactionCF)
 
 def searchParentBlock(tx):
+    blockHash = None
     if isinstance(tx, Transaction):
-        return TransactionDao.searchParentBlock(tx)
+        blockHash = TransactionDao.searchParentBlockHash(tx)
     elif isinstance(tx, TransactionOut):
-        return TransactionOutDao.searchParentBlock(tx)
-    else:
+        blockHash = TransactionOutDao.searchParentBlockHash(tx)
+    if blockHash == None:
         return None
+    else:
+        return BlockchainDao.search(blockHash)
 
 # 判断out是否是众筹交易（index = 0 且父节点是cf）    
 def isCFTransationOut(txout):
@@ -190,7 +196,8 @@ def isCFTransationOut(txout):
     if txout.index != 0:
         return False
     
-    tx = TransactionOutDao.searchParentTransaction(txout)
+    tx_hash = TransactionOutDao.searchParentTransactionHash(txout)
+    tx = TransactionDao.searchByHash(tx_hash)
     if tx == None:
         return False
     else:
@@ -206,3 +213,17 @@ def getTxinPublicAddressByPre(txin):
         return pre_txout.address()
     else:
         return None
+    
+def getTransactionOutTime(txout):
+    block = searchParentBlock(txout)
+    if block == None:
+        return int(time.time())
+    else :
+        return block.timestamp
+        
+def getTransactionTime(tx):
+    block = searchParentBlock(tx)
+    if block == None:
+        return int(time.time())
+    else :
+        return block.timestamp

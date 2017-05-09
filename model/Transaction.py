@@ -28,7 +28,6 @@ THE SOFTWARE.
 
 import datetime
 import io
-import time as pytime
 import warnings
 
 from pycoin.cmds.tx import LOCKTIME_THRESHOLD
@@ -774,13 +773,6 @@ class Transaction(object):
 
     def fee(self):
         return self.total_in() - self.total_out()
-
-    def time(self):
-        block = TransactionUtils.searchParentBlock(self)
-        if block == None:
-            return int(pytime.time())
-        else :
-            return block.timestamp
         
     def validate_unspents(self, tx_db):
         """
