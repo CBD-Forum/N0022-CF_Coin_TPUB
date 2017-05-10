@@ -4,7 +4,6 @@ from www.app import datass,datas
 
 from www.app import app
 from pycoin.serialize import h2b
-from cmds import wwwtest
 import time
 
 @app.route('/')
@@ -82,25 +81,56 @@ def action():
     if not action:
         return render_template("action.html")
     if action == 'createNewCFBitCoinTx':
-        target_amount = request.form.get('target_amount')
+        target_amount = int(request.form.get('target_amount'))
         pubkey_addr = request.form.get('pubkey_addr')
-        end_time = time.time() + int(request.form.get('end_time')) * 3600 *24
+        end_time = int(time.time()) + int(request.form.get('end_time')) * 3600 *24
         pre_out_ids_for_fee = request.form.get('pre_out_ids_for_fee').split(';')
-        res = wwwtest.createNewCFBitCoinTx(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee)
+#         pre_out_ids_for_fee = [pre_out_ids_for_fee[0], int(pre_out_ids_for_fee[1])]
+        res = datass.createNewCFBitCoinTx(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee)
            
       
     elif action == 'createNormalCFBitCoinTx':
-        pre_out_ids = request.form.get('pre_out_ids') 
+        pre_out_ids = [ int(i) for i in request.form.get('pre_out_ids').split(';')]
         pre_cf_hash = request.form.get('pre_cf_hash') 
-        spendValue = request.form.get('spendValue') 
-        otherPublicAddrToValueArray = request.form.get('otherPublicAddrToValueArray') 
+        spendValue = int(request.form.get('spendValue'))
+        
+        otherPublicAddrToValueArray = []
+        addrs = request.form.get('otherPublicAddrToValueArray') 
+        for addr in addrs:
+            if ';' not in addr:
+                continue
+            pubkey, coin = addr.split(';')
+            otherPublicAddrToValueArray.append([pubkey, int(coin)])
+        otherPublicAddrToValueArray = [addrs.split(';') for addrs in otherPublicAddrToValueArray]
+        
         refund_addr = request.form.get('refund_addr') 
-        res = wwwtest.createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr)
+        res = datass.createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr)
         
     elif action == 'createNormalBitCoinTx':
-        pass
+        pre_out_ids = [ int(i) for i in request.form.get('pre_out_ids').split(';')]
+        
+        publicAddrToValueArray = []
+        addrs = request.form.getlist('publicAddrToValueArray[]')
+        for addr in addrs:
+            if ';' not in addr:
+                continue
+            pubkey, coin = addr.split(';')
+            publicAddrToValueArray.append([pubkey, int(coin)])
+
+        res = datass.createNormalBitCoinTx(pre_out_ids, publicAddrToValueArray)
+        
     elif action == 'createNewBitcoinTx':
-        pass
+        pubkey_addr = request.form.get('pubkey_addr')
+        
+        publicAddrToValueArray = []
+        addrs = request.form.getlist('publicAddrToValueArray[]')
+        for addr in addrs:
+            if ';' not in addr:
+                continue
+            pubkey, coin = addr.split(';')
+            publicAddrToValueArray.append([pubkey, int(coin)])
+            
+        res = datass.createNewBitcoinTx(publicAddrToValueArray)
     
     if not res:
         alert = '''<script>alert('交易生成失败！请重新检查参数。')</script>'''
