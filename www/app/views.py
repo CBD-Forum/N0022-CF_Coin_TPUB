@@ -5,6 +5,7 @@ from www.app import datass,datas
 from www.app import app
 from pycoin.serialize import h2b
 from cmds import wwwtest
+import time
 
 @app.route('/')
 
@@ -83,7 +84,7 @@ def action():
     if action == 'createNewCFBitCoinTx':
         target_amount = request.form.get('target_amount')
         pubkey_addr = request.form.get('pubkey_addr')
-        end_time = request.form.get('end_time')
+        end_time = time.time() + int(request.form.get('end_time')) * 3600 *24
         pre_out_ids_for_fee = request.form.get('pre_out_ids_for_fee').split(';')
         res = wwwtest.createNewCFBitCoinTx(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee)
            
