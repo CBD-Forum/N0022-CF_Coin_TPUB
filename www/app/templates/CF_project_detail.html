@@ -90,20 +90,50 @@
                 <tr>
                     
                     <td>序列号</td>
-                    <td>project.cert.serial_number</td>
+                    <td>{{project.cert.serial_number}}</td>
                 </tr>
                 <tr>
                     <td>签名算法</td>
                     <td>
 					
-                        <a class="hash-link" href="/block?block_hash=xx">xx</a><br>
+                       {{ project.cert.signature_algorihm}} <br>
                     
                     </td>
                 </tr>
                 <tr>
-                    <td>xx</td>
-                    <td class="hash-link">xx</td>
+                    <td>颁发者</td>
+                    <td class="hash-link">{{ project.cert.issuer.emailAddress}}, 
+					{{ project.cert.issuer.CN}}, 
+					{{ project.cert.issuer.ST}}, 
+					{{ project.cert.issuer.C}}</td>
                 </tr>
+				<tr>
+                    <td>有效期从</td>
+                    <td>
+					
+                       {{ project.cert.notBefore}} 到 {{ project.cert.notAfter}}<br>
+                    
+                    </td>
+                </tr>
+                <tr>
+				<tr>
+                    <td>使用者</td>
+                    <td class="hash-link">{{ project.cert.subject.emailAddress}}, 
+					{{ project.cert.subject.CN}}, 
+					{{ project.cert.subject.ST}}, 
+					{{ project.cert.subject.C}}</td>
+                </tr>
+				<tr>
+                    <td>证书</td>
+                    <td>
+					
+                       {% if project.cert.expired%} 无效 {% else %} 有效 {% endif %}<br>
+                    
+                    </td>
+                </tr>
+                
+				
+				
 				{% else %}
 				<tr>
 					<td>此项目未使用证书</td>
@@ -128,7 +158,7 @@
                     <tbody>
                         <tr>
                             <th colspan="3" align="left">
-                                <a class="hash-link" href="/tx?txid={{promoter[0]}}">{{promoter[0]}}</a> 
+                                <a class="hash-link" href="/tx?tx_id={{promoter[0]}}">{{promoter[0]}}</a> 
                                 <span class="pull-right">{{ promoter[1] }}</span>
                             </th>
                         </tr>

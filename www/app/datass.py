@@ -179,7 +179,7 @@ class Cert():
         self.issuer = cert_obj.get_issuer()  
         self.subject = cert_obj.get_subject()   
         self.expired = cert_obj.has_expired()
-        self.notAfter = cert_obj.get_notAfter()
-        self.notBefore = cert_obj.get_notBefore()
+        self.notAfter = str(cert_obj.get_notAfter())[2:-1]
+        self.notBefore = str(cert_obj.get_notBefore())[2:-1]
         self.serial_number = cert_obj.get_serial_number()
-        self.signature_algorihm = cert_obj.get_signature_algorithm()
+        self.signature_algorihm = str(cert_obj.get_signature_algorithm())[2:-1]

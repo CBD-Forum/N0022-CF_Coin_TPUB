@@ -11,7 +11,7 @@
 		<table class="table table-striped" cellpadding="0" cellspacing="0" style="padding:0px;float:left;margin:0px;width:100%">
 			<tbody>
 				<tr>
-					<th colspan="3" align="left"><a class="hash-link" href="/tx?tx_id={{ tx.tx_hash.hex()}}">{{ tx.tx_hash.hex()}}</a> <span class="pull-right"></span>
+					<th colspan="3" align="left"><a class="hash-link" href="/tx?tx_id={{ tx.tx_hash}}">{{ tx.tx_hash}}</a> <span class="pull-right"></span>
 					</th>
 				</tr>
 				<tr>
@@ -79,6 +79,13 @@
                                       
                                   </td>
                               </tr>
+							  <tr>
+                                  <td>交易类型</td>
+                                  <td>
+                                          tx.tx_type 
+                                      
+                                  </td>
+                              </tr>
  
           </tbody></table>
       </div>
@@ -102,23 +109,18 @@
                   </td>
               </tr>
               <tr>
-                  <td>Fees</td>
+                  <td>矿工手续费</td>
                   <td>
                       <span data-c="4480" data-time="1494335190000">{{ tx.fee }} CFC</span>
                   </td>
               </tr>
               <tr>
-                  <td>Fee per byte</td>
+                  <td>每字节手续费</td>
                   <td>
                       {{ tx.fee_per_byte }} sat/B
                   </td>
               </tr>
-              <tr>
-                  <td>Estimated BTC Transacted</td>
-                  <td>
-                      <span data-c="80000" data-time="1494335190000">0.0008 BTC</span>
-                  </td>
-              </tr>
+              
 
               
           </tbody></table>
@@ -173,3 +175,5 @@
         
     
 </div>
+
+{% endblock %}
