@@ -18,28 +18,27 @@ from pycoin.ui import standard_tx_out_script
 
 import Constants
 from dao import BlockchainDao, TransactionDao
-from model import TransactionOut, Transaction
 from model.Block import Block
+from model.Transaction import Transaction
 from model.TransactionIn import TransactionIn
+from model.TransactionOut import TransactionOut
 from socketInfo import SendMessage
 from socketInfo.CoinSocket import ReivSocket, SendSocket
+from utils import BlockchainUtils
 
 
 def findBlockChain():
     unchainedTxs = TransactionDao.searchUnChainedTx()  # 没有被打包的交易
     unlinkedBlock = BlockchainDao.searchUnlinkedBlock()  # 没被链接的区块
-    
     if len(unchainedTxs) == 0 or len(unlinkedBlock) == 0:
         return
-    
     version = Constants.VERSION
     timestamp = int(time.time())
     difficulty = Constants.DIFFICULTY
     txs = unchainedTxs
-    for tx in txs:
-        if tx.fee() > 0:
-            feeOut = getFeeOut(tx.fee())
-            tx.txs_out.append(feeOut)
+    
+    minner_tx = insertFeeToMinner(txs)
+    txs.insert(0, minner_tx) 
      
     state = 0
     if txs.__len__() == 0:
@@ -55,24 +54,37 @@ def findBlockChain():
             if tmpBlock.check_pow():
                 for tx in tmpBlock.txs:
                     tx.block = tmpBlock                
-                BlockchainDao.save(tmpBlock)
+                BlockchainUtils.insert(tmpBlock)
                 SendMessage.broadcastBlockMsg(tmpBlock)
+                return
 
-def getFeeOut(fee):
+def insertFeeToMinner(txs):
+    fee = 0;
+    for tx in txs:
+        fee += tx.fee()
+    tx_in = TransactionIn.coinbase_tx_in(b'')
+    tx_ins = []
+    tx_ins.append(tx_in)
+    
+    
     script = standard_tx_out_script(Constants.MINNER_PUBADDR);
-    coin_value = fee
-    txout = TransactionOut.TransactionOut(coin_value, script)
-    return txout
+    tx_out = TransactionOut(fee, script, 0, 0)
+    tx_outs = []
+    tx_outs.append(tx_out)
+    
+    minner_tx = Transaction(Constants.VERSION, tx_ins, tx_outs, Constants.LOCK_TIME, None, 0) 
+    return minner_tx
+        
         
 def main():
-    ReivSocket()
+    ReivSocket.init()
     SendSocket.init()
     
 #     addr = ('127.0.0.1', 8181)
 #     SendMessage.searchNetNodeMsg(addr)   
     while True:
         findBlockChain()
-        sleep(100)
+    sleep(1000)
 
 if __name__ == '__main__':
     main()

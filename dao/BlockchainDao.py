@@ -42,7 +42,7 @@ def searchUnlinkedBlock():
     c = CoinSqlite3()._exec_sql('Select previous_block_hash from BlockInfo')
     preBlockHashs = []
     for tmp in c.fetchall():
-        preBlockHashs.append(tmp[1])
+        preBlockHashs.append(tmp[0])
 
     blocks = searchAll()    
     unlinkedBlocks = []    

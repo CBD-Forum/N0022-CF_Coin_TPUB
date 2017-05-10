@@ -25,13 +25,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
-from dis import disassemble
 
+from pycoin import encoding
 from pycoin.serialize import h2b, b2h, b2h_rev
 from pycoin.serialize.bitcoin_streamer import stream_struct, parse_struct
-from pycoin.tx.script.tools import opcode_list
+from pycoin.tx.script.tools import opcode_list, disassemble
 from pycoin.tx.script.vm import verify_script
-from pycoin import encoding
 
 
 ZERO = b'\0' * 32

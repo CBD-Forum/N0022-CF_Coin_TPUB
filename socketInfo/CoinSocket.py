@@ -9,6 +9,7 @@ from _thread import start_new_thread
 from urllib.parse import urlencode
 import asyncio
 import threading
+from test.libregrtest.main import printlist
      
 
 
@@ -29,6 +30,7 @@ class SendSocket(object):
     @classmethod
     def broadcastMsg(cls, json_reply, addrs):
         print('broadcastMsg......')
+        printlist(addrs)
         for addr in addrs:
             cls.s.sendto(str.encode(json_reply), addr)
     
@@ -52,7 +54,7 @@ class ReivSocket(object):
     
     @classmethod   
     def init(cls):  
-        port = 8081  
+        port = 8181  
         cls.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
         cls.s.bind(('', port))
         t =threading.Thread(target=cls.receive,args=())
@@ -64,7 +66,7 @@ class ReivSocket(object):
     def receive(cls):
         print('waiting......')
         while True:
-            byte, addr = cls.s.recvfrom(1024)
+            byte, addr = cls.s.recvfrom(102400)
 #             data = bytes.decode(byte)  
             ReceiveMessage.handleReceiMsg(byte, addr)
             sleep(100)    
