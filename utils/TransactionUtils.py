@@ -3,8 +3,12 @@
 @author: Administrator
 '''
 
+import io
 import time
+import warnings
 
+from pycoin.serialize import h2b
+from pycoin.serialize.bitcoin_streamer import parse_struct
 from pycoin.ui import standard_tx_out_script
 
 import Constants
@@ -16,6 +20,35 @@ from model.TransactionIn import TransactionIn
 from model.TransactionOut import TransactionOut
 from socketInfo import SendMessage
 
+def parse(f):
+    tx_type, = parse_struct("L", f)
+    if 0x01 == tx_type:
+        tx = Transaction.parse(f)
+    elif 0x02 == tx_type:
+        tx = TransactionCF.parse(f)
+    return tx
+
+def from_bin(blob):
+    """Return the Tx for the given binary blob."""
+    f = io.BytesIO(blob)
+    tx = parse(f)
+    try:
+        tx.parse_unspents(f)
+    except Exception:
+        # parsing unspents failed
+        tx.unspents = []
+    return tx
+
+def from_hex(hex_string):
+    """Return the Tx for the given hex string."""
+    return from_bin(h2b(hex_string))
+
+def tx_from_hex(hex_string):
+    warnings.simplefilter('always', DeprecationWarning)
+    warnings.warn("Call to deprecated function tx_from_hex, use from_hex instead",
+                  category=DeprecationWarning, stacklevel=2)
+    warnings.simplefilter('default', DeprecationWarning)
+    return from_hex(hex_string)
 
 # from pycoin.tx.pay_to import ScriptPayToAddressCFfrom pycoin.ui import standard_tx_out_sc
 def insert(tx):

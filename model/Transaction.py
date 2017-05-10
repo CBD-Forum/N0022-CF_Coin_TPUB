@@ -267,32 +267,6 @@ class Transaction(object):
         else:
             return ''
 
-
-    @classmethod
-    def from_bin(cls, blob):
-        """Return the Tx for the given binary blob."""
-        f = io.BytesIO(blob)
-        tx = cls.parse(f)
-        try:
-            tx.parse_unspents(f)
-        except Exception:
-            # parsing unspents failed
-            tx.unspents = []
-        return tx
-
-    @classmethod
-    def from_hex(cls, hex_string):
-        """Return the Tx for the given hex string."""
-        return cls.from_bin(h2b(hex_string))
-
-    @classmethod
-    def tx_from_hex(cls, hex_string):
-        warnings.simplefilter('always', DeprecationWarning)
-        warnings.warn("Call to deprecated function tx_from_hex, use from_hex instead",
-                      category=DeprecationWarning, stacklevel=2)
-        warnings.simplefilter('default', DeprecationWarning)
-        return cls.from_hex(hex_string)
-
     def stream(self, f, blank_solutions=False, include_unspents=False, include_witness_data=True):
         """Stream a Bitcoin transaction Tx to the file-like object f."""
         include_witnesses = include_witness_data and self.has_witness_data()

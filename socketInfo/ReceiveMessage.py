@@ -55,7 +55,7 @@ def handleReceiMsg(message, addr):
     elif(ConstantMessage.BROADCASTTRANSACTIONMSG == type):
         TTL = json_receive.get("ttl")
         tx_as_hex = data
-        tx = Transaction.parse(io.BytesIO(h2b(tx_as_hex)))
+        tx = TransactionUtils.parse(io.BytesIO(h2b(tx_as_hex)))
         if TransactionUtils.verify(tx):
             TransactionUtils.insert(tx)
         if TTL > 0:

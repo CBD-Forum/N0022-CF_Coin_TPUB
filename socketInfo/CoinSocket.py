@@ -59,12 +59,12 @@ class ReivSocket(object):
         cls.s.bind(('', port))
         t =threading.Thread(target=cls.receive,args=())
         t.start()
-        print('finishing......')
+        print('finishing init Receiv......')
             
     
     @classmethod    
     def receive(cls):
-        print('waiting......')
+        print('waiting messages......')
         while True:
             byte, addr = cls.s.recvfrom(102400)
 #             data = bytes.decode(byte)  
