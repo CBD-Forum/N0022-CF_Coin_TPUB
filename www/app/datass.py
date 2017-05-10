@@ -5,7 +5,9 @@ from pycoin.serialize import h2b
 
 from dao import BlockchainDao, SecretKeyDao, TransactionDao, TransactionInDao, \
     TransactionOutDao, TransactionCFDao
+from socketInfo import SendMessage
 from utils import TransactionUtils, SecretKeyUtils
+
 
 class WBlock():
     def __init__(self, block):
@@ -149,19 +151,31 @@ def get_my_unused_out_txs():
 
 '''造币交易'''
 def createNewBitcoinTx(publicAddrToValueArray):
-    return TransactionUtils.createFirstTransaction(publicAddrToValueArray)
+    tx = TransactionUtils.createFirstTransaction(publicAddrToValueArray)
+    if tx != None:
+        SendMessage.broadcastTransactionMsg(tx)
+    return tx
 
 '''生成普通交易'''
 def createNormalBitCoinTx(pre_out_ids, publicAddrToValueArray):
-    return TransactionUtils.createTransaction(pre_out_ids, publicAddrToValueArray);
+    tx = TransactionUtils.createTransaction(pre_out_ids, publicAddrToValueArray);
+    if tx != None:
+        SendMessage.broadcastTransactionMsg(tx)
+    return tx
 
 '''生成普通众筹'''
 def createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr):
-    return TransactionUtils.createNormalCFTransaction(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr);
+    cf = TransactionUtils.createNormalCFTransaction(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr);
+    if cf != None:
+        SendMessage.broadcastTransactionMsg(cf)
+    return cf
 
 '''生成新众筹'''
 def createNewCFBitCoinTx(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee=[]):
-    return TransactionUtils.createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee)
+    cf = TransactionUtils.createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee)
+    if cf != None:
+        SendMessage.broadcastTransactionMsg(cf)
+    return cf
 
 def get_CF_projects():
     allCFDict = TransactionCFDao.searchAllCFDict()

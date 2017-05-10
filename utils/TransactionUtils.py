@@ -18,7 +18,7 @@ from model.Transaction import Transaction
 from model.TransactionCF import TransactionCF, CFHeader
 from model.TransactionIn import TransactionIn
 from model.TransactionOut import TransactionOut
-from socketInfo import SendMessage
+# from socketInfo import SendMessage
 
 def parse(f):
     tx_type, = parse_struct("L", f)
@@ -136,8 +136,7 @@ def createFirstTransaction(publicAddrToValueArray):
     if verify(tx):
         insert(tx)
         # 广播新交易
-        SendMessage.broadcastTransactionMsg(tx)
-    return tx
+        return tx
 
 def createTransaction(pre_out_ids, publicAddrToValueArray):
     tx_ins = __get_tx_ins(pre_out_ids)
@@ -147,8 +146,7 @@ def createTransaction(pre_out_ids, publicAddrToValueArray):
     if verify(tx):
         insert(tx)
         # 广播新交易
-        SendMessage.broadcastTransactionMsg(tx)
-    return tx
+        return tx
 
 # 创建众筹交易块  新发起的众筹不进入此分支
 def createNormalCFTransaction(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueDict, refund_addr):
@@ -177,9 +175,7 @@ def createNormalCFTransaction(pre_out_ids, pre_cf_hash, spendValue, otherPublicA
     cf =  TransactionCF(cf_header, Constants.VERSION, tx_ins, tx_outs, Constants.LOCK_TIME, None, 0)
     if verify(cf):
         insert(cf)
-        # 广播新交易
-        SendMessage.broadcastTransactionMsg(cf)
-    return cf
+        return cf
         
 def createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee=[], cert=''):
     if len(pre_out_ids_for_fee) == 0:
@@ -201,9 +197,7 @@ def createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_f
     cf = TransactionCF(cf_header, Constants.VERSION, tx_ins, tx_outs, Constants.LOCK_TIME)
     if verify(cf):
         insert(cf)
-        # 广播新交易
-        SendMessage.broadcastTransactionMsg(cf)
-    return cf
+        return cf
 
 # 搜索指定hash的众筹交易，数组顺序为交易生成顺序。  state=0代表众筹未完成，state=1代表众筹完成
 def searchCFTcsByOriginal_hash(original_hash):   
