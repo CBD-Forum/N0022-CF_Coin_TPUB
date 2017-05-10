@@ -166,7 +166,7 @@ def get_CF_projects():
     allCFDict = TransactionCFDao.searchAllCFDict()
     projects = []
     for cfs in allCFDict.values():
-        projects.append(CFProject(cfs))
+        projects.insert(0, CFProject(cfs))
     return projects
 
 def get_CF_project(project_id):
