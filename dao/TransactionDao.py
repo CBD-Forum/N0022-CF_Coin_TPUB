@@ -30,6 +30,8 @@ def __getSearchResult(c):
 
 def __getSearchResultSingle(c):
     tmp = c.fetchone()
+    if tmp == None:
+        return None
     parentBlockId = tmp[4]
     parentTxId = tmp[1]
     txs_in = TransactionInDao.search(parentBlockId, parentTxId)

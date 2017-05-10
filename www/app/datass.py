@@ -7,7 +7,6 @@ from dao import BlockchainDao, SecretKeyDao, TransactionDao, TransactionInDao, \
     TransactionOutDao, TransactionCFDao
 from utils import TransactionUtils, SecretKeyUtils
 
-
 class WBlock():
     def __init__(self, block):
         self.id = block.uid
@@ -15,17 +14,17 @@ class WBlock():
         self.hash = block.hash()
         wtxs = []
         for tx in block.txs:
-            wtxs.append(WTransaction(tx, block.timestamp))
+            wtxs.append(WTransaction(tx))
         self.txs = wtxs
         self.count_txs = len(self.txs)
-        self.timestamp = block.timestamp
+        self.timestamp = time.ctime(block.timestamp)
         self.total = block.total_in()
         self.size = len(block.as_hex())
         
         self.txs_number = len(block.txs)
         self.fees = block.fee()
         self.height = block.height
-        self.timestamp = block.timestamp
+        self.timestamp = time.ctime(block.timestamp)
         self.difficulty = block.difficulty
         self.version = block.version
         self.nonce = block.nonce
@@ -48,7 +47,7 @@ class WTransaction():
         for txout in tx.txs_out:
             self.out_scripts.append(txout.script)
         
-    def __init__(self, tx, timestamp=0):
+    def __init__(self, tx):
         self.tx_hash = tx.hash().hex()
         inputs = []
         for txin in tx.txs_in:
@@ -62,11 +61,12 @@ class WTransaction():
                 txout_type = '普通交易'
             outputs.append([txout.address(), txout.coin_value, txout_type, TransactionUtils.getTransactionAndOutTime(txout)])
         self.tx_outputs = outputs
-        self.time = TransactionUtils.getTransactionAndOutTime(tx)
+        self.time = time.ctime(TransactionUtils.getTransactionAndOutTime(tx))
         self.total_coin = tx.total_in()
         self.fee = tx.fee()
         if TransactionUtils.isCFTransation(tx):
             self.tx_type = '众筹交易'
+            self.lock_time = time.ctime(tx.cf_header.end_time)
         else:
             self.tx_type = '普通交易'
         self.get_detail(tx)
@@ -183,3 +183,10 @@ class Cert():
         self.notBefore = str(cert_obj.get_notBefore())[2:-1]
         self.serial_number = cert_obj.get_serial_number()
         self.signature_algorihm = str(cert_obj.get_signature_algorithm())[2:-1]
+        
+def get_tx(tx_id):
+    tx = TransactionDao.searchByHash(tx_id)
+    wtx = WTransaction(tx)
+#     wtx.get_detail()
+    return wtx
+

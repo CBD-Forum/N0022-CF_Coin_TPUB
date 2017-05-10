@@ -72,7 +72,7 @@ def CF_project_detail():
 @app.route('/tx') 
 def tx():
     tx_id = request.args.get('tx_id')
-    tx = datas.get_tx(tx_id)  
+    tx = datass.get_tx(h2b(tx_id))  
     return render_template("tx.html", tx = tx) 
     
 @app.route('/action', methods = ['GET', 'POST']) 

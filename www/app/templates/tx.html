@@ -75,14 +75,14 @@
                                   <td>收入区块</td>
                                   <td>
                                       
-                                          <a href="/block?id={{ tx.block_hash }}">{{ tx.block_hash }}</a>
+                                          <a href="/block?id={{ tx.block_hash.hex() }}">{{ tx.block_hash.hex() }}</a>
                                       
                                   </td>
                               </tr>
 							  <tr>
                                   <td>交易类型</td>
                                   <td>
-                                          tx.tx_type 
+                                          {{tx.tx_type}} 
                                       
                                   </td>
                               </tr>
@@ -141,7 +141,7 @@
                 <h2>输入脚本</h2>
                 <table class="table table-striped" style="margin-top: 10px;" cellpadding="2px">
                     <tbody>
-						{% for in_script in tx.scripts %}
+						{% for in_script in tx.in_scripts %}
 						<tr>
                             <td width="100%">{{ in_script }}</td>
                             <td>
@@ -163,7 +163,7 @@
                     <tbody>
 						{% for out_script in tx.out_scripts%}
 						<tr>
-                            <td width="100%">{{ out_script}} <br></td>
+                            <td width="100%">{{ out_script.hex()}} <br></td>
                             <td><font color="green">OK</font></td>
                         </tr>
                         {% endfor %}
