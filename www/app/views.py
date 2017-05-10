@@ -85,7 +85,7 @@ def action():
         pubkey_addr = request.form.get('pubkey_addr')
         end_time = request.form.get('end_time')
         pre_out_ids_for_fee = request.form.get('pre_out_ids_for_fee').split(';')
-        res, content = wwwtest.createNewCFBitCoinTx(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee)
+        res = wwwtest.createNewCFBitCoinTx(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee)
            
       
     elif action == 'createNormalCFBitCoinTx':
@@ -94,17 +94,17 @@ def action():
         spendValue = request.form.get('spendValue') 
         otherPublicAddrToValueArray = request.form.get('otherPublicAddrToValueArray') 
         refund_addr = request.form.get('refund_addr') 
-        res, content = wwwtest.createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr)
+        res = wwwtest.createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr)
         
     elif action == 'createNormalBitCoinTx':
         pass
     elif action == 'createNewBitcoinTx':
         pass
     
-    if res:
-        alert = '''<script>alert('发送成功！交易Id为%s')</script>''' % content
-    else:
+    if not res:
         alert = '''<script>alert('交易生成失败！请重新检查参数。')</script>'''
+    else:
+        alert = '''<script>alert('发送成功！交易Id为%s')</script>''' % res
     return render_template("action.html", alert_content = alert) 
     
     
