@@ -1,0 +1,204 @@
+{%extends 'base.html'%}
+{% block content %}
+
+<div class="form_content">
+    <form id="lunch_cf_project" action="#" method="post">
+    <fieldset>
+        <legend>发起众筹</legend>
+        <div class="form-row">
+            <div class="field-label"><label for="field1">utxo列表</label>:</div>
+            <div class="field-widget"><textarea name="pre_out_ids_for_fee" id="field1" class="required" title="多个ID用分号隔开；用于支付矿工手续费"></textarea></div>
+        </div>
+        
+        <div class="form-row">
+            <div class="field-label"><label for="field2">目标金额</label>:</div>
+            <div class="field-widget"><input name="target_amount" id="field2" class="required" title=""></div>
+        </div>
+        
+        <div class="form-row">
+            <div class="field-label"><label for="field3">截止时间</label>:</div>
+            <div class="field-widget"><input name="end_time" class="required"></div>
+        </div>
+		<div class="form-row">
+            <div class="field-label"><label for="field3">筹款地址</label>:</div>
+            <div class="field-widget"><input name="pubkey_addr" class="required"></div>
+        </div> 
+	</fieldset>
+	<input type="submit" class="submit" name="action" value="createNewCFBitCoinTx"> <input class="reset" type="button" value="Reset" onclick="valid.reset(); return false">
+    
+	</form>
+	<br/>
+	
+	<form id="to_cf_project" action="#" method="post">
+    <fieldset>
+        <legend>投资</legend>
+        
+        <div class="form-row">
+            <div class="field-label"><label for="field4">UTXO列表</label>:</div>
+            <div class="field-widget"><input name="utxos" id="field4" class="required" title=""></div>
+        </div>
+        
+        <div class="form-row">
+            <div class="field-label"><label for="field5">众筹项目id</label>:</div>
+            <div class="field-widget"><input name="cf_project_id" id="field5" class="required" title="Enter your name"></div>
+        </div> 
+        <div class="form-row">
+            <div class="field-label"><label for="field5">投资额</label>:</div>
+            <div class="field-widget"><input name="cf_project_id" id="field5" class="required" title="Enter your name"></div>
+        </div>
+		<div class="form-row">
+            <div class="field-label"><label for="field5">找零地址</label>:</div>
+            <div class="field-widget"><input name="cf_project_id" id="field5" class="required" title="Enter your name"></div>
+        </div>
+		<div class="form-row">
+            <div class="field-label"><label for="field5">赎回地址</label>:</div>
+            <div class="field-widget"><input name="cf_project_id" id="field5" class="required" title="Enter your name"></div>
+        </div>
+		
+		</fieldset>
+		<input type="submit" class="submit" name="action" value="createNormalCFBitCoinTx"> <input class="reset" type="button" value="Reset" onclick="valid.reset(); return false">
+		 
+	</form>
+	<br/>
+		<!-- 
+        <div class="form-row">
+            <div class="field-label"><label for="field6">投资额度</label>:</div>
+            <div class="field-widget">
+                <select id="field6" name="field6" class="validate-selection" title="Choose your department">
+                    <option>Select one...</option>
+                    <option>Accounts</option>
+                    <option>Human Resources</option>
+                    <option>Information Technology</option>
+                    <option>Animal Management</option>
+                    <option>Ultimate Frisby</option>
+                </select>
+            </div>
+        </div>
+		
+           
+        <div class="form-row">
+            <div class="field-label"><label for="field7">Password</label>:</div>
+            <div class="field-widget"><input type="password" name="field7" id="field7" class="required validate-password" title="Enter a password greater than 6 characters"></div>
+        </div>
+          
+        <div class="form-row">
+            <div class="field-label"><label for="field9">Confirm Password</label>:</div>
+            <div class="field-widget"><input type="password" name="field8" id="field8" class="required validate-password-confirm" title="Enter the same password for confirmation"></div>
+        </div> 
+      -->
+    
+	<form id="normal_tx" action="#" method="post">
+    <fieldset>
+        <legend>转账</legend>
+        <div class="form-row">
+            <div class="field-label"><label for="field1">utxo列表</label>:</div>
+            <div class="field-widget"><input name="field1" id="field1" class="required" title=""></div>
+        </div>
+        
+        <div class="form-row">
+            <div class="field-label"><label for="field2">输出地址</label>:</div>
+            <div class="field-widget"><input name="target_amount" id="field2" class="required" title=""></div>
+        </div>
+        
+         
+	</fieldset>
+	<input type="submit" class="submit" name="createNormalBitCoinTx" value="createNormalBitCoinTx"> <input class="reset" type="button" value="Reset" onclick="valid.reset(); return false">
+    
+	</form>
+	<br/>
+
+	
+	
+	<form id="normal_tx" action="#" method="post">
+    <fieldset>
+        <legend>造币</legend>
+        <div class="form-row">
+            <div class="field-label"><label for="field1">输入密钥</label>:</div>
+            <div class="field-widget"><input name="field1" id="field1" class="required" title=""></div>
+        </div>
+        
+        <div class="form-row">
+            <div class="field-label"><label for="field2">输出地址</label>:</div>
+            <div class="field-widget"><input name="target_amount" id="field2" class="required" title=""></div>
+        </div>
+        
+         
+	</fieldset>
+	<input type="submit" class="submit" name="createNewBitcoinTx" value="createNewBitcoinTx"> <input class="reset" type="button" value="Reset" onclick="valid.reset(); return false">
+    
+	</form>
+	<br/>
+
+
+
+
+
+
+
+
+
+
+
+
+	
+     
+    <fieldset>
+        <legend class="optional">OPTIONAL INFORMATIONS</legend>
+      
+        
+        <div class="form-row">
+            <div class="field-label"><label for="field9">City</label>:</div>
+            <div class="field-label">
+                <input name="field3" id="field9" class="optional" title="Enter your employee number, please use only alphanumeric characters">		
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="field-label"><label for="field10">Phone</label>:</div>
+            <div class="field-label"><input name="field10" id="field10" class="optional" title="Optional: Enter your age"></div>
+        </div>
+        <div class="form-row-select">
+
+            <fieldset>
+                <legend class="optional">Ocupation</legend>
+                <label class="left">
+                <input type="radio" class="radio_input" name="field11" id="field11-male" value="1">Artist <br>
+                <input type="radio" class="radio_input" name="field11" id="field11-female" value="2">Businessperson<br>
+                <input type="radio" class="radio_input" name="field11" id="field11-female" value="2">Factory worker<br>
+                <input type="radio" class="radio_input" name="field11" id="field11-female" value="2">Engineer<br>    
+                <input type="radio" class="radio_input" name="field11" id="field11-female" value="2">Journalist<br>
+               
+                </label>
+                <label class="left">
+                 <input type="radio" class="radio_input" name="field11" id="field11-female" value="2">Medical Worker<br>
+                <input type="radio" class="radio_input" name="field11" id="field11-female" value="2">Military person<br>
+                <input type="radio" class="radio_input" name="field11" id="field11-female" value="2">Political figure<br>
+                <input type="radio" class="radio_input" name="field11" id="field11-female" value="2">Scientist<br>
+                <input type="radio" class="radio_input" name="field11" id="field11-female" value="2">Undertaker
+                </label>
+                
+                <label class="left">
+                <input type="radio" class="radio_input" name="field11" id="field11-male" value="1">Artist <br>
+                <input type="radio" class="radio_input" name="field11" id="field11-female" value="2">Businessperson<br>
+                <input type="radio" class="radio_input" name="field11" id="field11-female" value="2">Founder or administrator <br>
+                <input type="radio" class="radio_input" name="field11" id="field11-female" value="2">Engineer<br>    
+                <input type="radio" class="radio_input" name="field11" id="field11-female" value="2">Journalist<br>
+               
+                </label> 
+                
+                
+                
+            </fieldset> 
+         
+        </div>
+        <div class="form-row">
+            <div class="field-label"><label for="field12">Other Details</label>:</div>
+            <div class="field-widget"><textarea class="optional"></textarea></div>
+        </div>
+        
+    </fieldset>
+    <input type="submit" class="submit" value="Submit"> <input class="reset" type="button" value="Reset" onclick="valid.reset(); return false">
+    </form>
+    </div>
+	
+{% endblock %}

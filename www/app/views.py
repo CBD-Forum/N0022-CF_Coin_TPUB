@@ -74,5 +74,25 @@ def tx():
     tx = datas.get_tx(tx_id)  
     return render_template("tx.html", tx = tx) 
     
+@app.route('/action', methods = ['GET', 'POST']) 
+def action():
+    action = request.form.get('action')
+    if not action:
+        return render_template("action.html")
+    if action == 'createNewCFBitCoinTx':
+        target_amount = request.form.get('target_amount')
+        pubkey_addr = request.form.get('pubkey_addr')
+        end_time = request.form.get('end_time')
+        pre_out_ids_for_fee = request.form.get('pre_out_ids_for_fee').split(';')
+        
+    elif action == 'createNormalCFBitCoinTx':
+        pass
+    elif action == 'createNormalBitCoinTx':
+        pass
+    elif action == 'createNewBitcoinTx':
+        pass
     
+    utxos = request.form.get('utxos')
+    print(utxos)
+    return render_template("action.html") 
     
