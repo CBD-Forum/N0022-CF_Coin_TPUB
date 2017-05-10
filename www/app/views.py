@@ -4,6 +4,7 @@ from www.app import datass,datas
 
 from www.app import app
 from pycoin.serialize import h2b
+from cmds import wwwtest
 
 @app.route('/')
 
@@ -84,15 +85,29 @@ def action():
         pubkey_addr = request.form.get('pubkey_addr')
         end_time = request.form.get('end_time')
         pre_out_ids_for_fee = request.form.get('pre_out_ids_for_fee').split(';')
-        
+        res, content = wwwtest.createNewCFBitCoinTx(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee)
+           
+      
     elif action == 'createNormalCFBitCoinTx':
-        pass
+        pre_out_ids = request.form.get('pre_out_ids') 
+        pre_cf_hash = request.form.get('pre_cf_hash') 
+        spendValue = request.form.get('spendValue') 
+        otherPublicAddrToValueArray = request.form.get('otherPublicAddrToValueArray') 
+        refund_addr = request.form.get('refund_addr') 
+        res, content = wwwtest.createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr)
+        
     elif action == 'createNormalBitCoinTx':
         pass
     elif action == 'createNewBitcoinTx':
         pass
     
-    utxos = request.form.get('utxos')
-    print(utxos)
-    return render_template("action.html") 
+    if res:
+        alert = '''<script>alert('发送成功！交易Id为%s')</script>''' % content
+    else:
+        alert = '''<script>alert('交易生成失败！请重新检查参数。')</script>'''
+    return render_template("action.html", alert_content = alert) 
     
+    
+@app.route('/demo')
+def demo():
+    return render_template("demo.html")

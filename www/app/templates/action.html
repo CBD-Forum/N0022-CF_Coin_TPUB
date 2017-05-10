@@ -35,24 +35,24 @@
         
         <div class="form-row">
             <div class="field-label"><label for="field4">UTXO列表</label>:</div>
-            <div class="field-widget"><input name="utxos" id="field4" class="required" title=""></div>
+            <div class="field-widget"><input name="pre_out_ids" id="field4" class="required" title=""></div>
         </div>
         
         <div class="form-row">
             <div class="field-label"><label for="field5">众筹项目id</label>:</div>
-            <div class="field-widget"><input name="cf_project_id" id="field5" class="required" title="Enter your name"></div>
+            <div class="field-widget"><input name="pre_cf_hash" id="field5" class="required" title="Enter your name"></div>
         </div> 
         <div class="form-row">
             <div class="field-label"><label for="field5">投资额</label>:</div>
-            <div class="field-widget"><input name="cf_project_id" id="field5" class="required" title="Enter your name"></div>
+            <div class="field-widget"><input name="spendValue" id="field5" class="required" title="Enter your name"></div>
         </div>
 		<div class="form-row">
             <div class="field-label"><label for="field5">找零地址</label>:</div>
-            <div class="field-widget"><input name="cf_project_id" id="field5" class="required" title="Enter your name"></div>
+            <div class="field-widget"><input name="otherPublicAddrToValueArray" id="field5" class="required" title="Enter your name"></div>
         </div>
 		<div class="form-row">
             <div class="field-label"><label for="field5">赎回地址</label>:</div>
-            <div class="field-widget"><input name="cf_project_id" id="field5" class="required" title="Enter your name"></div>
+            <div class="field-widget"><input name="refund_addr" id="field5" class="required" title="Enter your name"></div>
         </div>
 		
 		</fieldset>
@@ -200,5 +200,8 @@
     <input type="submit" class="submit" value="Submit"> <input class="reset" type="button" value="Reset" onclick="valid.reset(); return false">
     </form>
     </div>
+	
+	
+	
 	
 {% endblock %}
