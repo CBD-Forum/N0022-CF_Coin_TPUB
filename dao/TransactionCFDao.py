@@ -16,11 +16,11 @@ def __getSearchResultSingle(c):
 
 # 搜索指定hash的众筹交易
 def searchCFTcsByOriginal_hash(original_hash):   
-    c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where original_hash = ?', original_hash)
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where original_hash = ? and  parentBlockId != \'\'', original_hash)
     return __getSearchResult(c)
 
 def searchAllCFDict():
-    c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where type =2 and target_amount = lack_amount')
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where type =2 and target_amount = lack_amount and  parentBlockId != \'\'')
     src_cfs = __getSearchResult(c)
     allCFDict = {}
     for src_cf in src_cfs:

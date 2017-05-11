@@ -45,7 +45,7 @@ def __getSearchResultSingle(c):
     return tx
 
 def searchAll():
-    c = CoinSqlite3()._exec_sql('Select * from TransactionInfo')
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfo where parentBlockId != \'\'')
     return __getSearchResult(c)
     
 
