@@ -24,8 +24,10 @@ if(a.getAttribute("title") == title) a.disabled = false;
 <link title="style1" rel="stylesheet" href="static/css/style.css" type="text/css" />
 <link title="style2" rel="alternate stylesheet" href="static/css/style2.css" type="text/css" />
 <link title="style3" rel="alternate stylesheet" href="static/css/style3.css" type="text/css" />
+{% if alert_content %}
+	<script>alert('{{alert_content}}')</script>
 
-{{alert_content}}
+{% endif %}
 <div class="form_content">
     <form id="lunch_cf_project" action="#" method="post">
     <fieldset>
@@ -155,12 +157,12 @@ if(a.getAttribute("title") == title) a.disabled = false;
         
         <div class="form-row">
             <div class="field-label"><label for="field2">输出地址</label>:</div>
-            <div class="field-widget"><input name="action" value="publicAddrToValueArray" id="field2" class="required" title=""></div>
+            <div class="field-widget"><input name="field2" value="" id="field2" class="required" title=""></div>
         </div>
         
          
 	</fieldset>
-	<input type="submit" class="submit" name="createNewBitcoinTx" value="createNewBitcoinTx"> <input class="reset" type="button" value="Reset" onclick="valid.reset(); return false">
+	<input type="submit" class="submit" name="action" value="createNewBitcoinTx"> <input class="reset" type="button" value="Reset" onclick="valid.reset(); return false">
     
 	</form>
 	<br/>
