@@ -7,10 +7,13 @@ from pycoin.serialize import h2b
 import time
 
 @app.route('/')
-
 @app.route('/index')
 def index():
-    return render_template("index.html")
+    return render_template("index.htm")
+
+# @app.route('/index')
+# def index():
+#     return render_template("index.html")
 @app.route('/blocks')
 def blocks():
     blocks = datass.get_blocks()
@@ -146,7 +149,12 @@ def action():
 @app.route('/address')
 def address():
     return render_template("index.html")
-    
+
+
+
+@app.route('/about')
+def about():
+    return render_template("about.htm")  
     
 # @app.route('/demo')
 # def demo():

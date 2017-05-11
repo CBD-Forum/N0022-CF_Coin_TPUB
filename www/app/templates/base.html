@@ -1,14 +1,20 @@
-<!DOCTYPE html><html>
+﻿<!DOCTYPE HTML>
+<html>
 <head>
-    <title>Block Explorer - Blockchain</title>
-    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=1024" />
+<meta name="baidu-site-verification" content="3ztG4oI0ku" />
+<title>我的网站</title>
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<link rel="stylesheet" href="static/css/style11.css"  type="text/css" media="all" />
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
 <link rel="stylesheet" href="static/css/overrides.min.css">
 <script async="" src="static/js/analytics.js"></script>
 <script src="static/js/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
-<script src="static/js/shared.min.js" type="text/javascript"></script>
+<!-- <script src="static/js/shared.min.js" type="text/javascript"></script> -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
 <script src="static/analytics.js"></script>
@@ -51,56 +57,59 @@ if(a.getAttribute("title") == title) a.disabled = false;
 
 
 
-<!-- time js -->
 
 
+<!--[if lt IE 9]><script type="text/javascript" src="js/html5.js"></script><![endif]-->
 </head>
-<body>
-<div role="navigation" class="navbar navbar-default navbar-inverse bc-header bc-public-header" style="border-radius:0px; border: 0px;">
-    
-    <div class="container container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header flex-between">
-        <a class="navbar-brand" href="./blocks"><img id="logo" src="static/white-blockchain.svg" alt="Bitcoin block explorer and currency statistics"></a>
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-      </div>
+<body id="ruifoxHome">
+<header>
+	<div id="navbg"></div>
+	<div class="wrapper">
+        <h1 class="logo">
+			<span style="font-size:25px;font-weight:bold;color:white;">北京邮电大学信息安全中心</span>
+		</h1>
+		<nav>
+			<ul>
+	        <li class="home"><a href="/index" >首页</a></li>
+                <li class="client"><a href="/blocks">区块列表</a></li>
+		<li class="service"><a href="/CF_projects">众筹项目</a></li>
+                <li class="cases"><a href="/wallet">我的钱包</a></li>
+                <li class="about"><a href="/action">创建交易</a></li>
+                <li class="about"><a href="/about">关于我们</a></li>
+			</ul>
+		</nav>
+        	</div>
+</header>
+<!-- 查找最顶级栏目  -->
+<section id="banner">
+    <ul id="banner_img">
+        <li style="background-image:url(static/img/images/banner_bg1.jpg);display:block">
+        </li>
+    </ul>
+</section>
 
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="navbar-collapse collapse bg-blue" id="navbar-1">
-        <ul class="nav navbar-nav navbar-left">
-			<li class="item"><a href="./index" title="Bitcoin Wallet" class="upper">首页</a></li>
-			<li class="item"><a href="./blocks" title="Bitcoin Wallet" class="upper">区块列表</a></li>
-			<li class="item"><a href="./CF_projects" title="Bitcoin Charts" class="upper">众筹项目</a></li>
-			<li class="item"><a href="./wallet" title="Bitcoin Stats" class="upper">我的钱包</a></li>
-			<li class="item"><a href="./action" title="Bitcoin Stats" class="upper">创建交易</a></li>
-			<li class="item"><a href="./index" title="Bitcoin Stats" class="upper">关于我们</a></li>
-			<li class="item"><a href="./index" title="Bitcoin Stats" class="upper">联系我们</a></li>
-        </ul>
-        
-          <ul class="nav navbar-nav navbar-right hidden-sm">
-            <li class="hidden-md">
-              <form action="./search" method="GET" class="bc-form navbar-search">
-                <div class="group">
-                  <div class="item search">
-                    <input placeholder="搜索" name="search" id="header-search" type="text">
-                    <i class="icon-search"></i>
-                  </div>
-                </div>
-              </form>
-            </li>
-          </ul>
-        
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </div> 
-{% block content %}{% endblock %}
+{% block content%}{%endblock%}
+
+<!-- <footer>
+
+  
+			</nav>
+		</div>
+  <div id="footerinfo">
+    <div class="wrapper">
+				<h2>联系我们<strong>Contact</strong></h2>
+				<p>
+
+					&nbsp;&nbsp;&nbsp;&nbsp;电话：010-62282264<br/>                                       
+                                        &nbsp;&nbsp;&nbsp;&nbsp;电子邮件：lixiang@bupt.edu.cn<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;公司地址：北京市海淀区西土城路10号北京邮电大学新科研楼<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;Copyright © 2016 - 2017 zhanghao All rights reserved. 
+				</p>
+				<img src="static/img/images/map.png" id="homemap" width="258" height="190" alt="公司位置" />
+			</div>
+  </div>
+</footer>
+-->
 
 </body>
-
 </html>
-
