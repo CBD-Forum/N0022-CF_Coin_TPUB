@@ -26,7 +26,7 @@
                     <tr id="bi-{{block.id}}">
                         <td><a href="./block?block_hash={{block.hash.hex()}}">{{block.height}}</a>
                         </td>
-                        <td data-time="{{block.unix_time}}"></td>
+                        <td data-time={{block.unix_time}}>{{block.unix_time}}</td>
                         <td class="hidden-xs">{{block.txs_number}}</td>
                         <td class="hidden-xs"><span data-c="2866345098762">{{block.total}} CFC</span>
                         </td>

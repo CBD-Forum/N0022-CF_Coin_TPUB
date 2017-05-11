@@ -28,7 +28,7 @@ class WBlock():
         self.fees = block.fee()
         self.height = block.height
         self.timestamp = time.ctime(block.timestamp)
-        self.unix_time = block.timestamp
+        self.unix_time = time.ctime(block.timestamp)
         self.difficulty = block.difficulty
         self.version = block.version
         self.nonce = block.nonce
