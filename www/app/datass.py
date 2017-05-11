@@ -94,8 +94,12 @@ class CFProject():
         self.end_time = time.ctime(src_cf.cf_header.end_time)
         self.lack_amount = des_cf.cf_header.lack_amount
         self.progress_rate = '%.2f %%' % ((des_cf.cf_header.target_amount - des_cf.cf_header.lack_amount) / des_cf.cf_header.target_amount *100)
-        cert_obj = SecretKeyUtils.stringToCert(src_cf.cf_header.cert)
-        self.cert = Cert(cert_obj)
+        
+        if src_cf.cf_header.cert not in ('', None):
+            cert_obj = SecretKeyUtils.stringToCert(src_cf.cf_header.cert)
+            self.cert = Cert(cert_obj)
+        else:
+            self.cert = None
         '''众筹成功，众筹失败'''
         if des_cf.cf_header.lack_amount <= 0:
             self.status = '众筹成功'
