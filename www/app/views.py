@@ -141,9 +141,9 @@ def action():
         res = datass.createNewBitcoinTx(publicAddrToValueArray)
     
     if not res:
-        alert = '''<script>alert('交易生成失败！请重新检查参数。')</script>'''
+        alert = '''alert('交易生成失败！请重新检查参数。')'''
     else:
-        alert = '''<script>alert('发送成功！交易Id为%s')</script>''' % res
+        alert = '''alert('发送成功！交易Id为%s')''' % res
     return render_template("action.html", alert_content = alert) 
 
 @app.route('/address')
