@@ -74,7 +74,7 @@ def insert(tx):
 def updatePreOutState(tx):
     # 更新已有交易状态
     for tx_in in tx.txs_in:
-        TransactionOutDao.setStateUsed(tx.hash(), tx_in.previous_index)
+        TransactionOutDao.setStateUsed(tx_in.previous_hash, tx_in.previous_index)
     
 def verify(transaction):
     isNotCFTx = True        
