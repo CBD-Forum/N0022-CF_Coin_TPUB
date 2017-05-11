@@ -1,6 +1,29 @@
 {%extends 'base.html'%}
 {% block content %}
-
+<!-- form css -->
+<script src="static/js/prototype.js" type="text/javascript"></script>
+<script src="static/js/effects.js" type="text/javascript"></script>
+<script type="text/javascript" src="static/js/validation.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+<!--
+// Alternative Style: Working With Alternate Style Sheets
+// http://www.alistapart.com/articles/alternate/
+function setActiveStyleSheet(title) {
+var i, a, main;
+for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
+if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title")) {
+a.disabled = true;
+if(a.getAttribute("title") == title) a.disabled = false;
+}
+}
+}
+//-->
+//]]>
+</script>
+<link title="style1" rel="stylesheet" href="static/css/style.css" type="text/css" />
+<link title="style2" rel="alternate stylesheet" href="static/css/style2.css" type="text/css" />
+<link title="style3" rel="alternate stylesheet" href="static/css/style3.css" type="text/css" />
 <div class="form_content">
     <form id="lunch_cf_project" action="#" method="post">
     <fieldset>

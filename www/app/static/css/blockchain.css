@@ -7155,7 +7155,7 @@ form.bc-form select + .error {
   padding-top: 55px; }
 
 .pt-60 {
-  padding-top: 60px; }
+  padding-top: 30px; }
 
 .pt-65 {
   padding-top: 65px; }
@@ -7446,8 +7446,8 @@ form.bc-form select + .error {
   padding-bottom: 5px; }
 
 .pv-10 {
-  padding-top: 10px;
-  padding-bottom: 10px; }
+  padding-top: 20px;
+  padding-bottom: 20px; }
 
 .pv-15 {
   padding-top: 15px;
@@ -9935,3 +9935,5 @@ body {
 
 .modal .modal-dialog {
   margin: 30px auto; }
+  
+
