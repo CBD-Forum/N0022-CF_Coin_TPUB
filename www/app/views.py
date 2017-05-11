@@ -131,14 +131,14 @@ def action():
         pubkey_addr = request.form.get('pubkey_addr')
         
         publicAddrToValueArray = []
-        addrs = request.form.getlist('publicAddrToValueArray[]')
-        for addr in addrs:
-            if ';' not in addr:
-                continue
+        addr = request.form.get('publicAddrToValueArray')
+        if ';' not in addr:
+            res = None
+        else:
             pubkey, coin = addr.split(';')
             publicAddrToValueArray.append([pubkey, int(coin)])
             
-        res = datass.createNewBitcoinTx(publicAddrToValueArray)
+            res = datass.createNewBitcoinTx(publicAddrToValueArray)
     
     if not res:
         alert = '''交易生成失败！请重新检查参数。'''
