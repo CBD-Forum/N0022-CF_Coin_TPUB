@@ -167,11 +167,28 @@ def get_my_txs():
     return wtxs
 
 def get_my_unused_in_txs():
-    return TransactionInDao.searchMyUnUsedTxIns();
+    tx_ins = TransactionInDao.searchMyUnUsedTxIns();
+    for tx_in in tx_ins:
+        tx_in.addr = TransactionUtils.getTxinPublicAddressByPre(tx_in)
+    return tx_ins
+    
 
 '''获取可用的out节点'''
 def get_my_unused_out_txs():
-    return TransactionOutDao.searchMyUnUsedTotalTxOuts();
+    tx_outs = TransactionOutDao.searchMyUnUsedTotalTxOuts();
+    for tx_out in tx_outs:
+        tx_hash = TransactionOutDao.searchParentTransactionHash(tx_out)
+        tx = TransactionDao.searchByHash(tx_hash)
+        in_addr = []
+        for tx_in in tx.txs_in:
+            in_addr.append(TransactionUtils.getTxinPublicAddressByPre(tx_in))
+        tx_out.in_addr = in_addr
+        if TransactionUtils.isCFTransationOut(tx_out):
+            txout_type = '众筹交易'
+        else:
+            txout_type = '普通交易'
+        tx_out.type = txout_type
+    return tx_outs    
 
 '''造币交易'''
 def createNewBitcoinTx(publicAddrToValueArray):
