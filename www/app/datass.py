@@ -192,6 +192,8 @@ def get_my_unused_out_txs():
 
 '''造币交易'''
 def createNewBitcoinTx(publicAddrToValueArray):
+    if len(publicAddrToValueArray) == 0:
+        return None
     tx = TransactionUtils.createFirstTransaction(publicAddrToValueArray)
     if tx != None:
         SendMessage.broadcastTransactionMsg(tx)
@@ -199,6 +201,8 @@ def createNewBitcoinTx(publicAddrToValueArray):
 
 '''生成普通交易'''
 def createNormalBitCoinTx(pre_out_ids, publicAddrToValueArray):
+    if len(pre_out_ids) == 0 or len(publicAddrToValueArray) == 0:
+        return None
     tx = TransactionUtils.createTransaction(pre_out_ids, publicAddrToValueArray);
     if tx != None:
         SendMessage.broadcastTransactionMsg(tx)
@@ -206,6 +210,8 @@ def createNormalBitCoinTx(pre_out_ids, publicAddrToValueArray):
 
 '''生成普通众筹'''
 def createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr):
+    if len(pre_out_ids) == 0:
+        return None
     cf = TransactionUtils.createNormalCFTransaction(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr);
     if cf != None:
         SendMessage.broadcastTransactionMsg(cf)

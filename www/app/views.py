@@ -103,13 +103,13 @@ def action():
         spendValue = int(request.form.get('spendValue'))
         
         otherPublicAddrToValueArray = []
-        addrs = request.form.get('otherPublicAddrToValueArray') 
+        addrs = request.form.getlist('otherPublicAddrToValueArray[]') 
         for addr in addrs:
             if ';' not in addr:
                 continue
             pubkey, coin = addr.split(';')
             otherPublicAddrToValueArray.append([pubkey, int(coin)])
-        otherPublicAddrToValueArray = [addrs.split(';') for addrs in otherPublicAddrToValueArray]
+#         otherPublicAddrToValueArray = [addrs.split(';') for addrs in otherPublicAddrToValueArray]
         
         refund_addr = request.form.get('refund_addr') 
         res = datass.createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr)
@@ -132,12 +132,9 @@ def action():
         
         publicAddrToValueArray = []
         addr = request.form.get('publicAddrToValueArray')
-        if ';' not in addr:
-            res = None
-        else:
-            pubkey, coin = addr.split(';')
-            publicAddrToValueArray.append([pubkey, int(coin)])
-            
+        value = request.form.get('newBotcoinValue')
+        if addr != None and value != None:
+            publicAddrToValueArray.append([addr, int(value)])
             res = datass.createNewBitcoinTx(publicAddrToValueArray)
     
     if not res:

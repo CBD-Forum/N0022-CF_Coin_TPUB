@@ -74,8 +74,12 @@ if(a.getAttribute("title") == title) a.disabled = false;
             <div class="field-widget"><input name="spendValue" id="field5" class="required" title="Enter your name"></div>
         </div>
 		<div class="form-row">
-            <div class="field-label"><label for="field5">找零地址</label>:</div>
-            <div class="field-widget"><input name="otherPublicAddrToValueArray" id="field5" class="required" title="Enter your name"></div>
+            <div class="field-label"><label for="field5">找零地址1</label>:</div>
+            <div class="field-widget"><input name="otherPublicAddrToValueArray[]" id="field5" class="required" title="Enter your name"></div>
+        </div>
+		<div class="form-row">
+            <div class="field-label"><label for="field5">找零地址2</label>:</div>
+            <div class="field-widget"><input name="otherPublicAddrToValueArray[]" id="field5" class="required" title="Enter your name"></div>
         </div>
 		<div class="form-row">
             <div class="field-label"><label for="field5">赎回地址</label>:</div>
@@ -160,6 +164,10 @@ if(a.getAttribute("title") == title) a.disabled = false;
             <div class="field-widget"><input name="publicAddrToValueArray" value="" id="field2" class="required" title=""></div>
         </div>
         
+        <div class="form-row">
+            <div class="field-label"><label for="field3">造币金额</label>:</div>
+            <div class="field-widget"><input name="newBotcoinValue" value="" id="field3" class="required" title=""></div>
+        </div>
          
 	</fieldset>
 	<input type="submit" class="submit" name="action" value="createNewBitcoinTx"> <input class="reset" type="button" value="Reset" onclick="valid.reset(); return false">
