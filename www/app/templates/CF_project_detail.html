@@ -150,7 +150,11 @@
 
     <div style="width:50%; clear:both;" >
         <h2>筹款人列表</h2>
-
+			{% if not project.promoter[0] %}
+			<div id="tx-246377861" class="txdiv" >
+			此项目暂时无人筹款
+			</div>
+			{% endif %}
         
             {% for promoter in project.promoter %}
             <div id="tx-246377861" class="txdiv" >
