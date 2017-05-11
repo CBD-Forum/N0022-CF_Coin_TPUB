@@ -19,7 +19,10 @@ def blocks():
 @app.route('/block')
 #display a block's details by hash
 def block():
-    block_hash = h2b(request.args.get('block_hash'))
+    block_hash = request.args.get('block_hash')
+    if block_hash == '0'*64 or block_hash in ('', None):
+        return render_template("index.html")
+    block_hash = h2b(block_hash)
     block = datass.get_block_info(block_hash)
     return render_template("block.html", block = block)
     
@@ -72,6 +75,8 @@ def CF_project_detail():
 @app.route('/tx') 
 def tx():
     tx_id = request.args.get('tx_id')
+    if tx_id == '0'*64 or tx_id in ('', None):
+        return render_template("index.html")
     tx = datass.get_tx(h2b(tx_id))  
     return render_template("tx.html", tx = tx) 
     
@@ -137,8 +142,14 @@ def action():
     else:
         alert = '''<script>alert('发送成功！交易Id为%s')</script>''' % res
     return render_template("action.html", alert_content = alert) 
+
+@app.route('/address')
+def address():
+    return render_template("index.html")
     
     
-@app.route('/demo')
-def demo():
-    return render_template("demo.html")
+# @app.route('/demo')
+# def demo():
+#     return render_template("demo.html")
+
+

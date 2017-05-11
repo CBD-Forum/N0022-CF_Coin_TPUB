@@ -21,7 +21,7 @@
                     <th class="hidden-xs">结束时间</th>
 					<th class="hidden-xs">已筹款</th>
 					<th class="hidden-xs">筹款进度</th>
-					<th class="hidden-xs">查看证书</th>
+					<th class="hidden-xs">证书</th>
                 </tr>
 
                 
@@ -36,9 +36,9 @@
 						<td class="hidden-xs">{{project.target_amount - project.lack_amount}} CFC</td>
                         <td class="hidden-xs">{{project.progress_rate}}</td>
 						{% if project.cert %}
-						<td class="hidden-xs"></td>
+						<td class="hidden-xs">有证书</td>
 						{% else %}
-						<td class="hidden-xs"></td>
+						<td class="hidden-xs">无</td>
 						{% endif %}
                         
                         <!-- <td class="hidden-xs">
