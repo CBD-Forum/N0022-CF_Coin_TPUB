@@ -2,43 +2,58 @@
 
 @author: Administrator
 '''
-import socket
-from socketInfo import ReceiveMessage
-from time import sleep
+
+
+
 from _thread import start_new_thread
-from urllib.parse import urlencode
 import asyncio
-import threading
+import socket
 from test.libregrtest.main import printlist
-     
+import threading
+from time import sleep
+import traceback
+from urllib.parse import urlencode
+
+import Constants
+from socketInfo import ReceiveMessage
 
 
-
-    
 class SendSocket(object):
     @classmethod
-    def init(cls):
-        port = 9081  
-        cls.s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
-        cls.s.bind(('', port))
+    def init(cls): 
+        try:
+            port = Constants.SEND_PORT  
+            cls.s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
+            cls.s.bind(('', port))
+        except:  
+            traceback.print_exc() 
         
     @classmethod
-    def sendMsg(cls, json_reply, addr):
-#         s.sendto(strjson_reply, addr)
-        cls.s.sendto(str.encode(json_reply), addr)
+    def sendMsg(cls, json_reply, addr): 
+        try:
+    #         s.sendto(strjson_reply, addr)
+            cls.s.sendto(str.encode(json_reply), addr)
+        except:  
+            traceback.print_exc() 
     
     @classmethod
-    def broadcastMsg(cls, json_reply, addrs):
-        print('broadcastMsg......')
-        printlist(addrs)
-        for addr in addrs:
-            cls.s.sendto(str.encode(json_reply), addr)
+    def broadcastMsg(cls, json_reply, addrs): 
+        try:
+            print('broadcastMsg......')
+            printlist(addrs)
+            for addr in addrs:
+                cls.s.sendto(str.encode(json_reply), addr)
+        except:  
+            traceback.print_exc() 
     
     @classmethod
     def forward(cls, json_reply, addr, addrs):   
-        for tmpUrl in addrs:
-            if addr != tmpUrl:
-                cls.s.sendto(str.encode(json_reply), tmpUrl)
+        try:
+            for tmpUrl in addrs:
+                if addr != tmpUrl:
+                    cls.s.sendto(str.encode(json_reply), tmpUrl)
+        except:  
+            traceback.print_exc() 
         
 
 class ReivSocket(object):     
@@ -54,20 +69,26 @@ class ReivSocket(object):
     
     @classmethod   
     def init(cls):  
-        port = 8181  
-        cls.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
-        cls.s.bind(('', port))
-        t =threading.Thread(target=cls.receive,args=())
-        t.start()
-        print('finishing init Receiv......')
+        try:
+            port = Constants.RECEIVE_PORT  
+            cls.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
+            cls.s.bind(('', port))
+            t =threading.Thread(target=cls.receive,args=())
+            t.start()
+            print('finishing init Receiv......')
+        except:  
+            traceback.print_exc()  
             
     
     @classmethod    
     def receive(cls):
-        print('waiting messages......')
-        while True:
-            byte, addr = cls.s.recvfrom(102400)
-#             data = bytes.decode(byte)  
-            ReceiveMessage.handleReceiMsg(byte, addr)
-            sleep(100)    
+        try:
+            print('waiting messages......')
+            while True:
+                byte, addr = cls.s.recvfrom(102400)
+    #             data = bytes.decode(byte)  
+                ReceiveMessage.handleReceiMsg(byte, addr)
+                sleep(100)  
+        except:  
+            traceback.print_exc()   
   

@@ -11,6 +11,7 @@ Created on 2017年4月30日
 '''
 from time import sleep
 import time
+import traceback
 
 from pycoin.encoding import double_sha256
 from pycoin.merkle import merkle
@@ -55,6 +56,7 @@ def findBlockChain():
                 for tx in tmpBlock.txs:
                     tx.block = tmpBlock                
                 BlockchainUtils.insert(tmpBlock)
+                print('Minner a new block, block id = ' + str(tmpBlock.hash().hex()) + ' fee = ' + str(tmpBlock.fee()))
                 SendMessage.broadcastBlockMsg(tmpBlock)
                 return
 
@@ -83,7 +85,10 @@ def main():
 #     addr = ('127.0.0.1', 8181)
 #     SendMessage.searchNetNodeMsg(addr)   
     while True:
-        findBlockChain()
+        try:
+            findBlockChain()
+        except:  
+            traceback.print_exc() 
     sleep(1000)
 
 if __name__ == '__main__':
