@@ -43,6 +43,13 @@ width:150px;
 float:left;
 line-height:25px;
 }
+
+.field-label-left {
+width:90px;
+float:left;
+line-height:25px;
+}
+
 label {
 float:left;
 color:#666666;
@@ -64,6 +71,26 @@ border-left-width:2px;
 padding:5px 0 0 2px;
 float:left;
 }
+
+input.required-left{
+width:180px;
+height:22px;
+border: 1px solid #95E0EF;
+background-color:#f3fcfe;
+border-left-width:2px;
+padding:5px 0 0 2px;
+float:left;
+}
+input.required-right{
+width:90px;
+height:22px;
+border: 1px solid #95E0EF;
+background-color:#f3fcfe;
+border-left-width:2px;
+padding:5px 0 0 2px;
+float:left;
+}
+
 input.optional{
 width:300px;
 height:22px;
