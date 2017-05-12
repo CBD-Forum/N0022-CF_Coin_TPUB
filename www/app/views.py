@@ -9,7 +9,7 @@ import time
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template("index.htm")
+    return render_template("index.html")
 
 # @app.route('/index')
 # def index():
@@ -104,12 +104,9 @@ def action():
         
         otherPublicAddrToValueArray = []
         addrs = request.form.getlist('otherPublicAddrToValueArray[]') 
-        for addr in addrs:
-            if ';' not in addr:
-                continue
-            pubkey, coin = addr.split(';')
+        coin_values = request.form.getlist('coin_value[]')
+        for pubkey, coin in zip(addrs, coin_values):
             otherPublicAddrToValueArray.append([pubkey, int(coin)])
-#         otherPublicAddrToValueArray = [addrs.split(';') for addrs in otherPublicAddrToValueArray]
         
         refund_addr = request.form.get('refund_addr') 
         res = datass.createNormalCFBitCoinTx(pre_out_ids, pre_cf_hash, spendValue, otherPublicAddrToValueArray, refund_addr)
@@ -118,13 +115,10 @@ def action():
         pre_out_ids = [ int(i) for i in request.form.get('pre_out_ids').split(';')]
         
         publicAddrToValueArray = []
-        addrs = request.form.getlist('publicAddrToValueArray[]')
-        for addr in addrs:
-            if ';' not in addr:
-                continue
-            pubkey, coin = addr.split(';')
+        addrs = request.form.getlist('publicAddrToValueArray[]') 
+        coin_values = request.form.getlist('coin_value[]')
+        for pubkey, coin in zip(addrs, coin_values):
             publicAddrToValueArray.append([pubkey, int(coin)])
-
         res = datass.createNormalBitCoinTx(pre_out_ids, publicAddrToValueArray)
         
     elif action == 'createNewBitcoinTx':
@@ -132,9 +126,12 @@ def action():
         
         publicAddrToValueArray = []
         addr = request.form.get('publicAddrToValueArray')
-        value = request.form.get('newBotcoinValue')
-        if addr != None and value != None:
-            publicAddrToValueArray.append([addr, int(value)])
+        if ';' not in addr:
+            res = None
+        else:
+            pubkey, coin = addr.split(';')
+            publicAddrToValueArray.append([pubkey, int(coin)])
+            
             res = datass.createNewBitcoinTx(publicAddrToValueArray)
     
     if not res:

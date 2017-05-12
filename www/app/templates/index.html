@@ -1,60 +1,258 @@
-{% extends "base.html" %}
-{% block content %}
-  <div class="container">
+<!DOCTYPE html><html>
+<head>
+    <title>众筹币</title>
     
 
-    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="static/css/overrides.min.css">
+<script async="" src="static/js/analytics.js"></script>
+<script src="static/js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="static/js/bootstrap.min.js"></script>
+<!-- <script src="static/js/shared.min.js" type="text/javascript"></script> -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
-    <div class="flex-row flex-center flex-between upper em-500 mt-20 mb-15">
-      <span class="f-24">Latest Blocks</span>
-      <a class="f-16" href="./blocks"><b class="flex-center mr-5">See more <i class="icon-right_arrow ml-10"></i></b></a>
+<script src="static/analytics.js"></script>
+<link rel="stylesheet" href="static/css/stylesheet.css">
+
+    <script type="text/javascript" src="static/charts/highcharts.js"></script>
+    <script type="text/javascript" src="static/slick.min.js"></script>
+    <script type="text/javascript" src="static/js/homepage.min.js"></script>
+
+    <meta name="Description" content="Discover the world's most popular Bitcoin wallet. View detailed information and charts on all Bitcoin transactions and blocks. Visit today.">
+
+    <!-- <link rel="canonical" href="https://blockchain.info"> -->
+    <link rel="stylesheet" href="static/css/blockchain.css">
+<style type="text/css"> .adv{display: none;} .basic{display: inherit;} </style>
+
+<!-- form css -->
+<script src="static/js/prototype.js" type="text/javascript"></script>
+<script src="static/js/effects.js" type="text/javascript"></script>
+<script type="text/javascript" src="static/js/validation.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+<!--
+// Alternative Style: Working With Alternate Style Sheets
+// http://www.alistapart.com/articles/alternate/
+function setActiveStyleSheet(title) {
+var i, a, main;
+for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
+if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title")) {
+a.disabled = true;
+if(a.getAttribute("title") == title) a.disabled = false;
+}
+}
+}
+//-->
+//]]>
+</script>
+<link title="style1" rel="stylesheet" href="static/css/style.css" type="text/css" />
+<link title="style2" rel="alternate stylesheet" href="static/css/style2.css" type="text/css" />
+<link title="style3" rel="alternate stylesheet" href="static/css/style3.css" type="text/css" />
+
+
+
+<!-- time js -->
+
+
+</head>
+<body>
+<div role="navigation" class="navbar navbar-default navbar-inverse bc-header bc-public-header" style="border-radius:0px; border: 0px;">
+    
+    <div class="container container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header flex-between">
+        <a class="navbar-brand" href="./index"><h1>众筹币</h1></a>
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="navbar-collapse collapse bg-blue" id="navbar-1">
+        <ul class="nav navbar-nav navbar-left">
+			<li class="item"><a href="./index" title="Bitcoin Wallet" class="upper">首页</a></li>
+			<li class="item"><a href="./blocks" title="Bitcoin Wallet" class="upper">区块列表</a></li>
+			<li class="item"><a href="./CF_projects" title="Bitcoin Charts" class="upper">众筹项目</a></li>
+			<li class="item"><a href="./wallet" title="Bitcoin Stats" class="upper">我的钱包</a></li>
+			<li class="item"><a href="./action" title="Bitcoin Stats" class="upper">创建交易</a></li>
+			<li class="item"><a href="./about" title="Bitcoin Stats" class="upper">关于我们</a></li>
+			
+        </ul>
+        
+          <ul class="nav navbar-nav navbar-right hidden-sm">
+            <li class="hidden-md">
+              <form action="./search" method="GET" class="bc-form navbar-search">
+                <div class="group">
+                  <div class="item search">
+                    <input placeholder="搜索" name="search" id="header-search" type="text">
+                    <i class="icon-search"></i>
+                  </div>
+                </div>
+              </form>
+            </li>
+          </ul>
+        
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </div> 
+<div>
+	<img src="static/img/images/banner_bg1.jpg" width="100%" >
+</div>
+
+<section id="news">
+<br><br>
+<div class="newsdata">
+    <div class="cat_title wrapper">
+    <h1><strong font-color="#bbbbbb">&nbsp;&nbsp;Now</strong></h1>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;我们的作品，我们的故事<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;Our work, our stories </p>
     </div>
-    <div class="row-fluid row">
-        <div class="col-md-12">
-            <table class="table table-striped" id="blocks">
-                <tbody><tr>
-                    <th>Height</th>
-                    <th>Age</th>
-                    <th class="hidden-xs">Transactions</th>
-                    <th class="hidden-xs">Total Sent</th>
-                    <!-- <th class="hidden-xs">Relayed By</th> -->
-                    <th>Size (kB)</th>
-                </tr>
-
-                
-                {% for block in blocks %}
-                    <tr id="bi-{{block.id}}">
-                        <td><a href="./block?block_hash={{block.hash}}">{{block.height}}</a>
-                        </td>
-                        <td data-time="{{block.timestamp}}"></td>
-                        <td class="hidden-xs">{{block.txs}}</td>
-                        <td class="hidden-xs"><span data-c="2866345098762">{{block.total}} CFC</span>
-                        </td>
-                        <!-- <td class="hidden-xs">
-                            
-                                
-                                    <a href="./blocks/cfcoin.com">cfcoin.com</a>
-                                
-                                
-                            
-
-                        </td> -->
-                        <td>{{block.size}}</td>
-                    </tr>
-                
-                 {% endfor%}   
-                
-                    
-                
-            </tbody></table>
-        </div>
-    </div>
-    
+	<p><br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已有区块链项目大部分通过ICOs或IPOs的方式筹集资金<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;众筹平台或筹资人利用区块链产生代币<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;投资人通过购买代币的方式进行投资<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;筹资人利用代币换来的资金进行项目开发<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;投资人通过代币的涨价获益<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;此类众筹容易导致炒币、虚假融资等行为<br><br>
+	</p>
+    <div class="newsad1"> <img src="static/img/images/timg1.jpg"  alt="html5" width="500" height="400" /> </div>
+   
   </div>
+</section>
+    
+<section id="news">
+<br><br>
+  <div class="newsdata">
+  <div class="cat_title wrapper right-align">
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <h2><strong>What&nbsp;&nbsp;</strong></h2>
+    <p>关注我们、关注前沿&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+      Recently is to do ...&nbsp;&nbsp;&nbsp;&nbsp;</p>
+	</div>
+	<p class ="right-align"><br><br>	
+      
+	我们的众筹币是结合区块链、PKI以及权威造币机构的众筹支付系统&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+	
+	PKI可为用户提供PKI证书&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+	
+	用户在投资之前需与造币机构兑换众筹币，造币机构为用户实时造币&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+	
+        筹资人公布众筹项目，投资人对感兴趣的项目以转账的方式进行投资&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+	
+        造币机构控制众筹币的发行量与汇率，不存在炒币现象&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+	
+	投资者的回报完全依赖后期分红&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+</p>
+    <div class="newsad"><img src="static/img/images/timg2.jpg"  alt="html5" width="500" height="400" /> </div>
+   
+  </div>
+</section>
+
+<section id="news">
+<br><br>
+<div class="newsdata">
+<div class="cat_title wrapper">
+    <h2><strong>&nbsp;&nbsp;Why</strong></h2>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;我们的作品，我们的故事<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;Our work, our stories </p>
+</div>
+<p><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;众筹币与现实的货币保持真实汇率，造币机构控制众筹币的发行量与汇率<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;投资者的回报不依赖众筹币的升值，而是依赖项目的后期分红<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PKI可以向用户提供证书，但并不强制<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据筹资者是否提供证书，用户可以自行选择是否对其投资<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;众筹币系统内一般用户具有匿名性，保护用户的隐私<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;被记录在区块链上的信息公开可查，投资者可以随时跟踪项目的资金动向<br><br>
+</p>
+    <div class="newsad1"> <img src="static/img/images/timg3.jpg"  alt="html5" width="500" height="400" /> </div>
+   
+  </div>
+</section>
+
+
+<section id="news">
+<br><br>
+  <div class="newsdata">
+  <div class="cat_title wrapper right-align">
+    
+	
+	
+	<h2><strong>&nbsp;&nbsp;How&nbsp;&nbsp;</strong></h2>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;关注我们、关注前沿&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;Recently is to do ...&nbsp;&nbsp;&nbsp;&nbsp;</p>
+	</div>
+<p class="right-align"><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        众筹币利用脚本代码，设定众筹项目的时间限制和目标金额&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	矿工根据预定时间和目标金额判断众筹是否成功&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	如果在预定时间内，众筹项目的收款地址未接收到足够金额&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	那么之前针对该项目的转账交易被视为无效交易&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	进而实现在众筹失败情况下的智能退款功能&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	如果在预定时间内收到足够金额，那么针对该项目的转账交易被视为有效交易&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	此时众筹成功，且转账记录被视为投资的股份&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
+</p>
+    <div class="newsad"><img src="static/img/images/timg4.jpg"  alt="html5" width="500" height="400" /> </div>
+   
+  </div>
+<br><br>
+</section>  
   
   
   
   
- {% endblock %} 
   
- 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+<div class="footer pv-10 ph-10" data-symbol-local="{&quot;symbol&quot;:&quot;$&quot;,&quot;code&quot;:&quot;USD&quot;,&quot;symbolAppearsAfter&quot;:false,&quot;name&quot;:&quot;U.S. dollar&quot;,&quot;local&quot;:true,&quot;conversion&quot;:53811.17658138}" data-symbol-btc="{&quot;symbol&quot;:&quot;BTC&quot;,&quot;code&quot;:&quot;BTC&quot;,&quot;symbolAppearsAfter&quot;:true,&quot;name&quot;:&quot;Bitcoin&quot;,&quot;local&quot;:false,&quot;conversion&quot;:100000000.00000000}">
+      <div class="container">
+	  <div class="col-md-8 col-sm-12 col-xs-12 pln pt-60">
+        <h2>联系我们<strong>Contact</strong></h2>
+				<p class="mrl ls-label uppercase medium-blue">
+
+					&nbsp;&nbsp;&nbsp;&nbsp;电话：010-62282264<br/>                                       
+                    &nbsp;&nbsp;&nbsp;&nbsp;电子邮件：lixiang@bupt.edu.cn<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;公司地址：北京市海淀区西土城路10号北京邮电大学新科研楼<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;Copyright © 2016 - 2017 zhanghao All rights reserved. 
+				</p>
+	  
+	  
+	  </div>
+	  
+	  <div class="col-md-4 col-sm-12 col-xs-12 prn pt-60 right-align">
+          <img src="static/img/images/map.png" id="homemap" width="316" height="95" alt="公司位置" />
+          
+        </div>
+		</div>
+	  
+	  
+	  
+	  
+      
+    </div>
+
+</body>
+
+</html>
+

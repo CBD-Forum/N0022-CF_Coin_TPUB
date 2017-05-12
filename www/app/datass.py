@@ -12,29 +12,35 @@ from utils import TransactionUtils, SecretKeyUtils
 
 class WBlock():
     def __init__(self, block):
+        self.block = block
         self.id = block.uid
         self.height = block.height
         self.hash = block.hash()
-        wtxs = []
-        for tx in block.txs:
-            wtxs.append(WTransaction(tx))
-        self.txs = wtxs
-        self.count_txs = len(self.txs)
+        self.count_txs = len(block.txs)
         self.timestamp = time.ctime(block.timestamp)
         self.total = block.total_in()
         self.size = len(block.as_hex())
         
         self.txs_number = len(block.txs)
-        self.fees = block.fee()
+        
         self.height = block.height
         self.timestamp = time.ctime(block.timestamp)
-        self.unix_time = time.ctime(block.timestamp)
-        self.difficulty = block.difficulty
-        self.version = block.version
-        self.nonce = block.nonce
-        self.pre_hash = block.previous_block_hash
-        self.next_hash = block.next_block_hash
-        self.merkle_root = block.merkle_root
+        self.unix_time = block.timestamp
+        
+    
+    def get_details(self):
+        wtxs = []
+        for tx in self.block.txs:
+            wtxs.append(WTransaction(tx))
+        self.txs = wtxs
+        self.count_txs = len(self.txs)
+        self.fees = self.block.fee()
+        self.difficulty = self.block.difficulty
+        self.version = self.block.version
+        self.nonce = self.block.nonce
+        self.pre_hash = self.block.previous_block_hash
+        self.next_hash = self.block.next_block_hash
+        self.merkle_root = self.block.merkle_root
 
 class WTransaction():
     def get_detail(self, tx):
@@ -103,6 +109,7 @@ class Key():
 
 class CFProject():
     def __init__(self, cfs):
+        self.cfs = cfs
         if len(cfs) == 0:
             return
         src_cf = cfs[0]
@@ -128,14 +135,16 @@ class CFProject():
         else:
             self.status = '众筹失败'   
                 
+    def get_details(self):
+        src_cf = self.cfs[0]
+        des_cf = self.cfs[-1]
         tmpPreCF = src_cf
         promoter = []
-        for cf in cfs[1:]:
+        for cf in self.cfs[1:]:
             promoter.append([cf.hash().hex(), TransactionUtils.getTransactionAndOutTime(cf), cf.txs_out[0].address(), tmpPreCF.cf_header.lack_amount - cf.cf_header.lack_amount])
             tmpPreCF = cf
         self.promoter = promoter
         self.process_date = [['day1',20], ['day2',30]]
-#         self.cert = None
         
 def get_blocks():    
     wblocks = []
@@ -147,6 +156,7 @@ def get_blocks():
 def get_block_info(block_hash):
     block = BlockchainDao.search(block_hash)
     wblock = WBlock(block)
+    wblock.get_details()
     return wblock
 
 def get_keys():
@@ -234,7 +244,9 @@ def get_CF_projects():
 def get_CF_project(project_id):
     allCFDict = TransactionCFDao.searchAllCFDict()
     cfs = allCFDict[h2b(project_id)]
-    return CFProject(cfs)
+    project = CFProject(cfs)
+    project.get_details()
+    return project
 
 class Cert():
     def __init__(self,cert_obj):

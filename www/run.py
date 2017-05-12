@@ -1,8 +1,8 @@
 #!flask/bin/python
-from socketInfo.CoinSocket import ReivSocket, SendSocket
+# from socketInfo.CoinSocket import ReivSocket, SendSocket
 from www.app import app
 
 
-ReivSocket.init() 
-SendSocket.init()
-app.run(debug = False)
+# ReivSocket.init() 
+# SendSocket.init()
+app.run(debug = True)
