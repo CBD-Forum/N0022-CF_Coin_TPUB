@@ -1,12 +1,15 @@
 #!flask/bin/python
-from socketInfo.CoinSocket import ReivSocket, SendSocket
+import random
 import sys
-sys.path.append('.')
-sys.path.append('..')
 
+from socketInfo.CoinSocket import ReivSocket, SendSocket
 from www.app import app
 
 
-ReivSocket.init() 
+sys.path.append('.')
+sys.path.append('..')
+
+
+
 SendSocket.init()
 app.run(debug = True)

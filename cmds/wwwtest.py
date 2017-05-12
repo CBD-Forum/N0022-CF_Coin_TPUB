@@ -3,14 +3,14 @@ Created on 2017年5月7日
 
 @author: Administrator
 '''
-from socketInfo import SendMessage
-from dao import TransactionDao
 '''获取可用的out节点'''
 '''造币交易'''
 
 import time
 
-from socketInfo.CoinSocket import ReivSocket
+from dao import TransactionDao
+from socketInfo import SendMessage
+from socketInfo.CoinSocket import ReivSocket, SendSocket
 from utils import TransactionUtils
 
 
@@ -60,6 +60,5 @@ def test():
     createNormalCFBitCoinTx([tx2.txs_out[1].uid], cf2.hash(), 500, [[]], '1693NYwCPZYAdF1pYdVfrfCR6c9acpNGQd')
 
 if __name__ == '__main__':
-    ReivSocket.init()
-    SendMessage.initSendSocket()
+    SendSocket.init()
     test() 

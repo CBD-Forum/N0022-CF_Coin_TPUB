@@ -7,14 +7,13 @@
 
 from _thread import start_new_thread
 import asyncio
+import random
 import socket
 from test.libregrtest.main import printlist
 import threading
 from time import sleep
 import traceback
-from urllib.parse import urlencode
 
-import Constants
 from socketInfo import ReceiveMessage
 
 
@@ -22,11 +21,21 @@ class SendSocket(object):
     @classmethod
     def init(cls): 
         try:
-            port = Constants.SEND_PORT  
+            port = random.randrange(13000,18000)
             cls.s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
             cls.s.bind(('', port))
-        except:  
-            traceback.print_exc() 
+        except:   
+            try:
+                port = random.randrange(13000,18000)
+                cls.s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
+                cls.s.bind(('', port))
+            except:  
+                try:
+                    port = random.randrange(13000,18000)
+                    cls.s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
+                    cls.s.bind(('', port))
+                except:  
+                    traceback.print_exc() 
         
     @classmethod
     def sendMsg(cls, json_reply, addr): 
@@ -68,9 +77,8 @@ class ReivSocket(object):
     
     
     @classmethod   
-    def init(cls):  
+    def init(cls, port):  
         try:
-            port = Constants.RECEIVE_PORT  
             cls.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
             cls.s.bind(('', port))
             t =threading.Thread(target=cls.receive,args=())

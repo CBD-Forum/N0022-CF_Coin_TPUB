@@ -79,7 +79,7 @@ def insertFeeToMinner(txs):
         
         
 def main():
-    ReivSocket.init()
+    ReivSocket.init(Constants.RECEIVE_PORT)
     SendSocket.init()
     
 #     addr = ('127.0.0.1', 8181)
