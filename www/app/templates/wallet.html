@@ -51,9 +51,9 @@
                             
 							
                             <td class="txtd hidden-phone" width="500px">
-                                
-                                <a href="/address?1234567890asdfgh">{{utxo.in_addr}}</a><br>
-                                                              
+                                {% for in_addr in utxo.in_addr %}
+                                <a href="/address?addr={{in_addr}}">{{in_addr}}</a><br>
+                                {% endfor %}                              
                             </td>
 							
                             <!-- arrow img -->

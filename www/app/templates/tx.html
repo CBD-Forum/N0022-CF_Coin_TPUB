@@ -23,7 +23,13 @@
 					<td width="48px" class="hidden-phone" style="padding:4px;text-align:center;vertical-align:middle;"><img src="/static/img/arrow_right_green.png"></td>
 					<td class="txtd">
 						{% for output in tx.tx_outputs%}
-						<a href="/address?addr={{ output[0] }}">{{ output[0] }}</a> - (<a href="/tx-index/248891147" style="color:red">Spent</a>) <span class="pull-right hidden-phone"><span data-c="129654925" data-time="1494335190000">{{ output[1] }} CFC</span></span><br>
+						<a href="/address?addr={{ output[0] }}">{{ output[0] }}</a> - 
+						{% if output[4] %}
+						(<a href="" style="color:red">Spent</a>) 
+						{% else %}
+						(<a href="" style="color:green">Unspent</a>) 
+						{% endif %}
+						<span class="pull-right hidden-phone"><span data-c="129654925" data-time="1494335190000">{{ output[1] }} CFC</span></span><br>
 						{% endfor %}
 					</td>
 				</tr>

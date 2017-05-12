@@ -87,7 +87,7 @@ class WTransaction():
                 txout_type = '众筹交易'
             else:
                 txout_type = '普通交易'
-            outputs.append([txout.address(), txout.coin_value, txout_type, TransactionUtils.getTransactionAndOutTime(txout)])
+            outputs.append([txout.address(), txout.coin_value, txout_type, TransactionUtils.getTransactionAndOutTime(txout), txout.usedState])
         self.tx_outputs = outputs
         self.time = time.ctime(TransactionUtils.getTransactionAndOutTime(tx))
         self.total_coin = tx.total_in()
@@ -141,7 +141,7 @@ class CFProject():
         tmpPreCF = src_cf
         promoter = []
         for cf in self.cfs[1:]:
-            promoter.append([cf.hash().hex(), TransactionUtils.getTransactionAndOutTime(cf), cf.txs_out[0].address(), tmpPreCF.cf_header.lack_amount - cf.cf_header.lack_amount])
+            promoter.append([cf.hash().hex(), time.ctime(TransactionUtils.getTransactionAndOutTime(cf)), cf.txs_out[0].address(), tmpPreCF.cf_header.lack_amount - cf.cf_header.lack_amount])
             tmpPreCF = cf
         self.promoter = promoter
         self.process_date = [['day1',20], ['day2',30]]

@@ -143,7 +143,13 @@
                             <!-- tx_out-->
                             <td class="txtd">
                             {% for tx_output in tx.tx_outputs%}
-                                <a href="/address?{{tx_output[0]}}">{{tx_output[0]}}</a> <span class="pull-right hidden-phone"><span data-c="170251093" data-time="1493705177000" data-original-title="" title="">{{tx_output[1]}} CFC</span></span><br>
+                                <a href="/address?{{tx_output[0]}}">{{tx_output[0]}}</a> - 
+								{% if tx_output[4] %}
+								(<a href="" style="color:red">Spent</a>)
+								{% else %}
+								(<a href="" style="color:green">Unpent</a>)
+								{% endif %}
+								<span class="pull-right hidden-phone"><span data-c="170251093" data-time="1493705177000" data-original-title="" title="">{{tx_output[1]}} CFC</span></span><br>
                             {% endfor %}
                             </td>
                             
