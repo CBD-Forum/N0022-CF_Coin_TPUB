@@ -43,7 +43,7 @@ def searchMyUnUsedNomalTxOuts():    #不包含未用的众筹交易
     return __getSearchResult(c)
    
 def searchMyUnUsedTotalTxOuts():    #包含未成功的众筹交易
-    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where end_time < ? and usedState = 0', int(time.time()))
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where end_time < ? and usedState = 0 and isToMe = 1', int(time.time()))
     return __getSearchResult(c)
  
 def searchById(id):   
@@ -61,7 +61,7 @@ def searchByIndex(parentTxId, index):
     return __getSearchResultSingle(c);
 
 def search(parentBlockId, parentTxId):   
-    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where parentBlockId = ? And parentTxId = ?', parentBlockId, parentTxId)
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where parentTxId = ?', parentTxId)
     return __getSearchResult(c)
   
 def save(txOut, tx, index):
@@ -80,7 +80,7 @@ def setStateUsed(hash, index):
     CoinSqlite3().exec_sql('Update TransactionInfoOut set `usedState`=1 where `parentTxId` = ? and `index` = ?', hash, index)
 
 def deleteOld(tx, index):   
-    CoinSqlite3().exec_sql('Delete from TransactionInfoOut where parentBlockId = ? And parentTxId = ? And `Index` = ?', tx.getBlockHash(), tx.hash(), index)
+    CoinSqlite3().exec_sql('Delete from TransactionInfoOut where parentTxId = ? And `Index` = ?', tx.hash(), index)
 
 """create table if not exists TransactionInfoOut (
                 id integer primary key,
@@ -96,7 +96,7 @@ def updateAllLinkedCFTransationOut(hash):
     CoinSqlite3().exec_sql('Update TransactionInfoOut set `usedState` = 1 where `parentTxId` = ? and `index` = 0', hash)
 
 def updateEndTimeToZero(tx):
-    CoinSqlite3().exec_sql('Update TransactionInfoOut set `end_time`=0 where `parentTxId` = ?', tx.hash())
+    CoinSqlite3().exec_sql('Update TransactionInfoOut set `end_time`= ? where `parentTxId` = ? and `index` = 0', int(time.time()), tx.hash())
     
 def searchParentBlockHash(txout):
     c = CoinSqlite3()._exec_sql('Select parentBlockId from TransactionInfoOut where `id` = ?', txout.uid)

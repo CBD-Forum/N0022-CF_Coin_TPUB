@@ -45,7 +45,7 @@ def main():
 #     TransactionUtils.createCFTransaction([], cf_header, spendValue=0, publicAddrToValueDict=[[]])
 #     TransactionUtils.createFirstTransaction({"17ZaizPFAB76bVXXDZNMHunzeoFjrwGtS2":100})
     for f in args.block_bin:
-        for i in range(1,30):
+        for i in range(1,5):
             SecretKeyUtils.manageKey(10*i)
         block = Block.parse(f) 
           

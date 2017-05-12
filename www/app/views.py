@@ -99,13 +99,15 @@ def action():
       
     elif action == 'createNormalCFBitCoinTx':
         pre_out_ids = [ int(i) for i in request.form.get('pre_out_ids').split(';')]
-        pre_cf_hash = request.form.get('pre_cf_hash') 
+        pre_cf_hash = h2b(request.form.get('pre_cf_hash')) 
         spendValue = int(request.form.get('spendValue'))
         
         otherPublicAddrToValueArray = []
         addrs = request.form.getlist('otherPublicAddrToValueArray[]') 
         coin_values = request.form.getlist('coin_value[]')
         for pubkey, coin in zip(addrs, coin_values):
+            if '' == coin:
+                continue
             otherPublicAddrToValueArray.append([pubkey, int(coin)])
         
         refund_addr = request.form.get('refund_addr') 
@@ -123,16 +125,9 @@ def action():
         
     elif action == 'createNewBitcoinTx':
         pubkey_addr = request.form.get('pubkey_addr')
-        
-        publicAddrToValueArray = []
-        addr = request.form.get('publicAddrToValueArray')
-        if ';' not in addr:
-            res = None
-        else:
-            pubkey, coin = addr.split(';')
-            publicAddrToValueArray.append([pubkey, int(coin)])
-            
-            res = datass.createNewBitcoinTx(publicAddrToValueArray)
+        pubkey = request.form.get('publicAddrToValueArray')
+        coin = request.form.get('newBotcoinValue')
+        res = datass.createNewBitcoinTx([[pubkey, int(coin)]])
     
     if not res:
         alert = '''交易生成失败！请重新检查参数。'''

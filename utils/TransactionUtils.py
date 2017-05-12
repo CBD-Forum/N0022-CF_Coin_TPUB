@@ -58,6 +58,8 @@ def insert(tx):
     if isCFTransation(tx):
         if TransactionDao.isPreCFlinked(tx):
             return
+        if tx.cf_header.lack_amount <= 0:
+            tx.cf_header.end_time = int(time.time())
     
     updatePreOutState(tx)         
     # 保存新交易
@@ -65,7 +67,7 @@ def insert(tx):
     
     # 如果是众筹成功 刷新所有众筹交易的状态为不可用
     if isCFTransation(tx):
-        if tx.cf_header.lack_amount == 0:
+        if tx.cf_header.lack_amount <= 0:
             TransactionDao.updateAllLinkedCFTransationOut(tx)
             TransactionOutDao.updateEndTimeToZero(tx)
             #把众筹初始发起的tx  usedstate设置为1
@@ -80,7 +82,7 @@ def verify(transaction):
     isNotCFTx = True        
     # 如果输入小于输出，且不是最后一次众筹， 返回False                     
     if isCFTransation(transaction):
-        if transaction.cf_header.lack_amount == 0:      
+        if transaction.cf_header.lack_amount <= 0:      
             isNotCFTx = False
         
     # 脚本验证    
@@ -103,7 +105,8 @@ def verify(transaction):
 def __get_tx_ins(pre_out_ids):
     pre_out_txs = []
     for pre_out_id in pre_out_ids:
-        pre_out_txs.append(TransactionOutDao.searchById(pre_out_id))
+        if '' != pre_out_id:
+            pre_out_txs.append(TransactionOutDao.searchById(pre_out_id))
     tx_ins = []
     for pre_out_tx in pre_out_txs:
         script = b'' 
@@ -177,7 +180,27 @@ def createNormalCFTransaction(pre_out_ids, pre_cf_hash, spendValue, otherPublicA
         insert(cf)
         return cf
         
-def createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee=[], cert=''):
+def createFirstCFTransaction(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee=[], cert='''-----BEGIN CERTIFICATE-----
+MIIDLjCCAhagAwIBAgIJAKTZkez5jH1vMA0GCSqGSIb3DQEBBQUAMG8xCzAJBgNV
+BAYTAkNOMRAwDgYDVQQIDAdCZWlqaW5nMQ0wCwYDVQQKDARUUFVCMREwDwYDVQQL
+DAhTZWN1cml0eTENMAsGA1UEAwwEdHB1YjEdMBsGCSqGSIb3DQEJARYOYWRtaW5A
+dHB1Yi5jb20wHhcNMTcwNTA4MDgxMTEwWhcNMjcwNTA2MDgxMTEwWjBvMQswCQYD
+VQQGEwJDTjEQMA4GA1UECAwHQmVpamluZzENMAsGA1UECgwEVFBVQjERMA8GA1UE
+CwwIU2VjdXJpdHkxDTALBgNVBAMMBHRwdWIxHTAbBgkqhkiG9w0BCQEWDmFkbWlu
+QHRwdWIuY29tMHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEfStTpZiZKqNHJd2tYj/E
+MOGYOxFrh/TTliVA3lXadzablXdB27YqBAQirbGnw+NJuvgxa7CBi/nMqahAMTnC
+IGFBC/MLll7T4kS/f359/BiRbs4wMiuWNIzhoRugOAmgo3sweTAJBgNVHRMEAjAA
+MCwGCWCGSAGG+EIBDQQfFh1PcGVuU1NMIEdlbmVyYXRlZCBDZXJ0aWZpY2F0ZTAd
+BgNVHQ4EFgQUZ/QPXuhN9WaAjgAOUhOVNN1cELcwHwYDVR0jBBgwFoAUNUt6r4IA
+A3nI7bjzFAXN2SRaapQwDQYJKoZIhvcNAQEFBQADggEBAMlXmy0e8a+KqUKZGW6P
++arugviHapt0QLUAxdFPPwbAQm7/wJYcbguAwPvxUQlHMsdvdSqEdDQeOYiOwft8
+IGZ0dzNbynvhyH99tK42p5wgWRQyf4hMHrOnCdCgYUNOUVB0kPsSZ1R1ajSgfE/0
+Xsi5Jbhpqpzm2G8NVqnPXeYfzQPZwzSgDs9INLs4Yw6aA8ei1IT8ESPSUtCSbFiT
+HDB9G7UT/ZJBG6ZeGGONsf6ZOHZz38OkonBfL/tGS6NQzTFpr4H6yKyA3GlnYLOn
+E+FOPdz0PSfhJOsKHY+AXFWPVrKfOimfznDYHpyQ0G6X9s31MAjF1JddRG6Xo1Vl
+Ftg=
+-----END CERTIFICATE-----
+'''):
     if len(pre_out_ids_for_fee) == 0:
         tx_in = TransactionIn.coinbase_tx_in();
         tx_ins = []

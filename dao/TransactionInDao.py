@@ -8,7 +8,7 @@ from model.TransactionIn import TransactionIn
 from dao import SecretKeyDao
 
 def search(parentBlockId, parentTxId):   
-    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoIn where parentBlockId = ? And parentTxId = ?', parentBlockId, parentTxId)
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoIn where parentTxId = ?', parentTxId)
     txIns = []
     for tmp in c.fetchall():
         txIn = TransactionIn(tmp[1], tmp[2], tmp[3], tmp[4], tmp[7], tmp[0])
@@ -20,7 +20,7 @@ def save(txIn, tx, index):
     CoinSqlite3().exec_sql('INSERT INTO TransactionInfoIn(previous_hash, previous_index,script,sequence, parentBlockId,parentTxId,state,`index`, isMyTx) VALUES (?,?,?,?,?,?,?,?,?)', txIn.previous_hash, txIn.previous_index, txIn.script, txIn.sequence, tx.getBlockHash(), tx.hash(), txIn.state, index, SecretKeyDao.isMypubicAddress(txIn.address())) 
 
 def deleteOld(tx, index):   
-    CoinSqlite3().exec_sql('Delete from TransactionInfoIn where parentBlockId = ? And parentTxId = ? And `Index` = ?', tx.getBlockHash(), tx.hash(), index)
+    CoinSqlite3().exec_sql('Delete from TransactionInfoIn where parentTxId = ? And `Index` = ?', tx.hash(), index)
    
 def searchMyTxIns():
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoIn where isMyTx = 1')
