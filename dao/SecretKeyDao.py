@@ -6,6 +6,13 @@
 from dao.CoinSqlite3 import CoinSqlite3
 from model.SecretKey import SecretKey
 
+def searchCertByPubAddr(pubkey_addr):
+    c = CoinSqlite3()._exec_sql('Select cert from SecretKeyInfo where pubicAddress = ?', pubkey_addr)
+    tmp = c.fetchone()
+    if tmp == None:
+        return ''
+    else:
+        return str(tmp)
 
 def search():   
     c = CoinSqlite3()._exec_sql('Select * from SecretKeyInfo')
