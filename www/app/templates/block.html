@@ -124,7 +124,7 @@
                             <th colspan="3" align="left">
                                 <a class="hash-link" href="/tx?tx_id={{tx.tx_hash}}">{{tx.tx_hash}}</a>
 								{% if tx.tx_type == "众筹交易" %}
-								-- 前一次众筹交易(<a  href="/tx?tx_id={{tx.pre_hash}}">{{tx.pre_hash}}</a>)
+								&nbsp;-&nbsp;前一次众筹交易(<a  href="/tx?tx_id={{tx.pre_hash}}">{{tx.pre_hash}}</a>)
 								{% endif %}
 								<span class="pull-right">
 								{{ tx.tx_type }}

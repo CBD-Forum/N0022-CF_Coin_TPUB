@@ -199,7 +199,13 @@ class Block(BlockHeader):
         for tx in self.txs:
             total_in_number += tx.total_in()
         return total_in_number
-    
+ 
+    def total_out(self):
+        total_out_number = 0
+        for tx in self.txs:
+            total_out_number += tx.total_out()
+        return total_out_number
+       
     def normal_tc_number(self):
         normal_tc = 0
         for tx in self.txs:
@@ -217,6 +223,6 @@ class Block(BlockHeader):
     def fee(self):
         fee = 0
         for tx in self.txs:
-            if TransactionUtils.isCFTransation(tx):
-                fee += tx.fee()
+#             if TransactionUtils.isCFTransation(tx):
+            fee += tx.fee()
         return fee

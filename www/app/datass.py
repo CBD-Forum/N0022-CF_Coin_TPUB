@@ -18,7 +18,7 @@ class WBlock():
         self.hash = block.hash()
         self.count_txs = len(block.txs)
         self.timestamp = time.ctime(block.timestamp)
-        self.total = block.total_in()
+        self.total = block.total_out()
         self.size = len(block.as_hex())
         
         self.txs_number = len(block.txs)

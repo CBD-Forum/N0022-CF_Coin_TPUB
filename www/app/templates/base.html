@@ -56,6 +56,7 @@ if(a.getAttribute("title") == title) a.disabled = false;
 
 </head>
 <body>
+
 <div role="navigation" class="navbar navbar-default navbar-inverse bc-header bc-public-header" style="border-radius:0px; border: 0px;">
     
     <div class="container container-fluid">
@@ -98,6 +99,11 @@ if(a.getAttribute("title") == title) a.disabled = false;
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </div> 
+  
+  {% if alert %}
+	<script>alert('{{alert}}')</script>
+
+{% endif %}
 {% block content %}{% endblock %}
 
 <div class="footer pv-10 ph-10" data-symbol-local="{&quot;symbol&quot;:&quot;$&quot;,&quot;code&quot;:&quot;USD&quot;,&quot;symbolAppearsAfter&quot;:false,&quot;name&quot;:&quot;U.S. dollar&quot;,&quot;local&quot;:true,&quot;conversion&quot;:53811.17658138}" data-symbol-btc="{&quot;symbol&quot;:&quot;BTC&quot;,&quot;code&quot;:&quot;BTC&quot;,&quot;symbolAppearsAfter&quot;:true,&quot;name&quot;:&quot;Bitcoin&quot;,&quot;local&quot;:false,&quot;conversion&quot;:100000000.00000000}">
