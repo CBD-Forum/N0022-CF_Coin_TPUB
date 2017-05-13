@@ -12,6 +12,3 @@ REPLYNETNODEMSG = 4 #�ظ���ѯ�ڵ�
 REPLYBLOCKMSG = 5   #�ظ���ѯ����
 SEARCHBLOCKIDSMSG = 6   #�ظ���ѯ����
 REPLYBLOCKIDSMSG = 7   #�ظ���ѯ����
-
-
-SQLITEPATH='C:/Users/Administrator/workspace/python/test/crowd_funding_coin/dao/test.db'

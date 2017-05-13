@@ -13,3 +13,4 @@ ZERO_HASH = b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x
 DB_PATH='D:/test.db'
 SEND_PORT=9081
 RECEIVE_PORT=8181
+FILEPATH='C:/cfcoin_blocks/'

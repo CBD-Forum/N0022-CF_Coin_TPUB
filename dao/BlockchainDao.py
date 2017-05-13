@@ -4,10 +4,13 @@
 @author: Administrator
 '''
 from _ast import If
+import os
+import traceback
 
 from dao import TransactionDao
 from dao.CoinSqlite3 import CoinSqlite3
 from model.Block import Block
+import Constants
 
 
 def search(hash):       
@@ -90,3 +93,22 @@ def save(blockChain):
     
     if preBlock != None:    
         __updatePreBlock(blockChain)
+        
+    writeBlock(blockChain)
+
+
+def writeBlock(blockChain):
+    try:
+        fileParentPath = Constants.FILEPATH
+        filename = fileParentPath + str(blockChain.hash().hex()) + '.bin'
+        if not os.path.exists(fileParentPath):
+            os.mkdir(fileParentPath)
+        if os.path.exists(filename):
+            os.remove(filename)
+        output = open(filename, 'wb')
+        output.close
+        output = open(filename, 'wb')
+        blockChain.stream(output)
+        output.close
+    except:  
+        traceback.print_exc() 

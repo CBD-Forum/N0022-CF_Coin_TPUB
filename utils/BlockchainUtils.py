@@ -6,6 +6,7 @@
 from dao import BlockchainDao
 from utils import TransactionUtils
 
+
 def verify(blockchain):
     for tx in blockchain.txs:
         if not TransactionUtils.verify(tx):
@@ -24,4 +25,3 @@ def insert(blockchain):
         TransactionUtils.updatePreOutState(tx)
     
     BlockchainDao.save(blockchain)
-    
