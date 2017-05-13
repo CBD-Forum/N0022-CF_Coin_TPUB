@@ -11,7 +11,7 @@ from dao import BlockchainDao
 from dao.CoinSqlite3 import CoinSqlite3
 from model.Block import Block
 from model.Transaction import dump_tx
-from utils import SecretKeyUtils, TransactionUtils, BlockchainUtils
+from utils import SecretKeyUtils, TransactionUtils
 from model.TransactionCF import CFHeader
 
 import time
@@ -55,7 +55,6 @@ def main():
         print(tmp.hash())
         dump_block(block)
         print('')
-        BlockchainUtils.writeBlock(block)
          
 
 if __name__ == '__main__':

@@ -91,7 +91,7 @@ def action():
     if action == 'createNewCFBitCoinTx':
         target_amount = int(request.form.get('target_amount'))
         pubkey_addr = request.form.get('pubkey_addr')
-        end_time = int(time.time()) + int(request.form.get('end_time')) * 3600 *24
+        end_time = int(time.time() + float(request.form.get('end_time')) * 3600 *24)
         pre_out_ids_for_fee = request.form.get('pre_out_ids_for_fee').split(';')
 #         pre_out_ids_for_fee = [pre_out_ids_for_fee[0], int(pre_out_ids_for_fee[1])]
         res = datass.createNewCFBitCoinTx(target_amount, pubkey_addr, end_time, pre_out_ids_for_fee)

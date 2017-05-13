@@ -116,7 +116,7 @@ class CFProject():
         des_cf = cfs[-1]
         self.cf_id = src_cf.hash().hex()
         self.target_amount = src_cf.cf_header.target_amount
-        self.start_time = time.ctime(TransactionUtils.getTransactionAndOutTime(src_cf)-3600*24*5)
+        self.start_time = time.ctime(TransactionUtils.getTransactionAndOutTime(src_cf))
         self.pubkey = src_cf.cf_header.pubkey
         self.end_time = time.ctime(src_cf.cf_header.end_time)
         self.lack_amount = des_cf.cf_header.lack_amount
