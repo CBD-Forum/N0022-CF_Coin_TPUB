@@ -38,12 +38,20 @@ def block():
     except Exception:
         return render_template("index.html", alert=ALERT) 
     
-@app.route('/wallet')
+@app.route('/wallet', methods = ['GET', ])
 #display personal infomation
 def wallet():
     try:
+        display = request.args.get('display')    
+        if display == 'spent':
+            my_utxos = datass.get_my_used_out_txs()
+        elif display == 'unspent':
+            my_utxos = datass.get_my_unused_out_txs()
+        else:
+            my_utxos = datass.get_my_all_out_txs()
+            display = 'all'
         my_keys = datass.get_keys()
-        my_utxos = datass.get_my_unused_out_txs()
+        
     #     my_utxos = get_my_utxos()
     #     launched_projects = get_i_launched()
     #     participated_projects = get_i_participated()

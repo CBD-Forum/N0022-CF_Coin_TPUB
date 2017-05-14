@@ -45,7 +45,15 @@ def searchMyUnUsedNomalTxOuts():    #不包含未用的众筹交易
 def searchMyUnUsedTotalTxOuts():    #包含未成功的众筹交易
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where end_time < ? and usedState = 0 and isToMe = 1', int(time.time()))
     return __getSearchResult(c)
- 
+   
+def searchMyUsedTotalTxOuts():    #包含未成功的众筹交易
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where end_time < ? and usedState = 1 and isToMe = 1', int(time.time()))
+    return __getSearchResult(c) 
+   
+def searchMyTotalTxOuts():    #包含未成功的众筹交易
+    c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where end_time < ? and isToMe = 1', int(time.time()))
+    return __getSearchResult(c) 
+
 def searchById(id):   
     c = CoinSqlite3()._exec_sql('Select * from TransactionInfoOut where id = ? ', id)
     return __getSearchResultSingle(c);

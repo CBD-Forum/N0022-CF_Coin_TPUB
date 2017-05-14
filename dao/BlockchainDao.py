@@ -12,13 +12,23 @@ from dao.CoinSqlite3 import CoinSqlite3
 from model.Block import Block
 import Constants
 
+def __sort_txs(txs):
+    sort_txs = []
+    for tx in txs:
+        if len(tx.txs_in) == 1 and tx.txs_in[0].is_coinbase() and 0 == tx.fee():
+            sort_txs.insert(0,tx)
+        else:
+            sort_txs.append(tx)
+    return sort_txs
+            
 
 def search(hash):       
     c = CoinSqlite3()._exec_sql('Select * from BlockInfo where hash = ?', hash)
     tmp = c.fetchone()
     if tmp != None:
         txs = TransactionDao.search(hash)
-        block = Block(tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7], txs, tmp[8], tmp[9], tmp[10], tmp[0])
+        sort_txs = __sort_txs(txs)
+        block = Block(tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7], sort_txs, tmp[8], tmp[9], tmp[10], tmp[0])
         for tx in txs:
             tx.block = block
         return block
@@ -34,8 +44,9 @@ def searchAll():
     c = CoinSqlite3()._exec_sql('Select * from BlockInfo')
     blocks = []
     for tmp in c.fetchall():
-        txs = TransactionDao.search(tmp[1])
-        block = Block(tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7], txs, tmp[8], tmp[9], tmp[10], tmp[0])
+        txs = TransactionDao.search(tmp[1])        
+        sort_txs = __sort_txs(txs)
+        block = Block(tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7], sort_txs, tmp[8], tmp[9], tmp[10], tmp[0])
         for tx in txs:
             tx.block = block
         blocks.append(block)
